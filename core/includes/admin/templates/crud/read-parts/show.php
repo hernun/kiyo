@@ -16,7 +16,7 @@ if(empty($item)) {
 }
 
 $obj = new nqvElement($table,$item);
-$image = nqvMainimages::getByElementId($tablename,$id);
+$image = nqvMainImages::getByElementId($tablename,$id);
 ?>
 <?php if($tablename === 'users' && (!currentSessionTypeIs('root') && !currentSessionTypeIs('admin'))): ?>
     <?php if(nqv::getCurrentUserId() !== $item['id']):?>

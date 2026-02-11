@@ -8,7 +8,7 @@
                 foreach($images as $image) {
                     $file = ROOT_PATH . $image['filepath'];
                     if(is_file($file)) {
-                        $im = nqvMainimages::getImageByPath($file);
+                        $im = nqvMainImages::getImageByPath($file);
                         if(!$im->exists()) continue;
                         if(is_file($im->getThumbnailPath())) continue;
 

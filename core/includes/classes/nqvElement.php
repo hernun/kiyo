@@ -57,7 +57,7 @@ class nqvElement {
     }
 
     public function getMainPhoto() {
-        $mainImage = nqvMainimages::getByElementId($this->tablename,$this->getData('id'));
+        $mainImage = nqvMainImages::getByElementId($this->tablename,$this->getData('id'));
         $src = $mainImage->getSrc();
         if(empty($src)) {
             $data = $this->getData();

@@ -115,14 +115,6 @@ foreach ($pathsToCreate as $path => $mode) {
 
 define('URL','https://' . DOMAIN);
 
-$version = '2.0.0';
-$versionid = intval(str_replace('.','',$version));
-
-define('ASSETVERSION',time());
-ini_set('display_errors', '1');
-ini_set('display_startup_errors', '1');
-define('DEBUG', true);
-
 require_once $functionsFilePath;
 require_once $classesFilePath;
 require_once $vendorPath;
@@ -132,11 +124,26 @@ $dotenv = Dotenv\Dotenv::createImmutable(ROOT_PATH);
 $dotenv->load();
 
 if(empty($_ENV)) {
-    include(CORE_PATH . 'errors/envfailure.html');
+    include(CORE_PATH . 'errors/envfailure.php');
     exit;
 }
 
 define('ENV', $_ENV['ENVIRONMENT']);
+define('VERSION', $_ENV['VERSION']);
+define('VERSIONID', intval(str_replace('.','', VERSION)));
+
+if(ENV === 'dev' || ENV === 'stage') {
+    define('ASSETVERSION',time());
+    ini_set('display_errors', '1');
+    ini_set('display_startup_errors', '1');
+    define('DEBUG', true);
+} else {
+    define('ASSETVERSION',VERSIONID);
+    ini_set('display_errors', '0');
+    ini_set('display_startup_errors', '0');
+    define('DEBUG', false);
+}
+
 define('ADMIN_EMAIL',$_ENV['ADMIN_EMAIL'] ? $_ENV['ADMIN_EMAIL'] :'no-reply@' . DOMAIN);
 define('ADMIN_EMAIL_SENDER',$_ENV['EMAIL_SENDER'] ? $_ENV['EMAIL_SENDER'] :'no-reply@' . DOMAIN);
 define('ADMIN_EMAIL_SENDER_PASSWORD',$_ENV['EMAIL_SENDER_PASSWORD'] );
@@ -147,9 +154,14 @@ define('DB_NAME',$_ENV['DB_NAME']);
 define('DB_PASS',$_ENV['DB_PASS']);
 
 if(empty(DB_HOST)) {
-    include(CORE_PATH . 'errors/dbfailure.html');
+    include(CORE_PATH . 'errors/dbfailure.php');
     exit;
 }
+
+define('APP_NAME',$_ENV['APP_NAME']);
+define('APP_TITLE',$_ENV['APP_TITLE']);
+define('APP_DESCRIPTION',$_ENV['APP_DESCRIPTION']);
+define('APP_AUTHOR',$_ENV['APP_AUTHOR']);
 
 try {
     if(!nqvDB::isTable('users')) {
@@ -163,11 +175,6 @@ try {
     include(CORE_PATH . 'errors/db-bad-connection.php');
     exit;
 }
-
-define('APP_NAME',$_ENV['APP_NAME']);
-define('APP_TITLE',$_ENV['APP_TITLE']);
-define('APP_DESCRIPTION',$_ENV['APP_DESCRIPTION']);
-define('APP_AUTHOR',$_ENV['APP_AUTHOR']);
 
 nqvSession::getInstance()->open();
 nqv::parseVars();

@@ -633,7 +633,7 @@ class nqv {
                     $stmt->bind_param('si',$tablename,$element_id);
                     $imageData = (array) @nqvDB::parseSelect($stmt)[0];
                     $fileToDelete = @$imageData['filepath'];
-                    $image = new nqvMainimages(array_merge($imageData,$input));
+                    $image = new nqvMainImages(array_merge($imageData,$input));
                     if($image->upload($_FILES['main-image']['tmp_name'],$fileToDelete,false)) {
                         $saved = $image->save();
                         $image->createThumbnails();

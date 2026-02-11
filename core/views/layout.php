@@ -7,13 +7,8 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
         <meta name="description" content="<?php echo APP_DESCRIPTION ?>" />
         <meta name="author" content="<?php echo APP_AUTHOR ?>" />
-
-        <!-- Favicons -->
-        <link rel="apple-touch-icon" sizes="180x180" href="<?= getAsset('images/favicon/apple-touch-icon.png') ?>">
-        <link rel="icon" type="image/png" sizes="32x32" href="<?= getAsset('images/favicon/favicon-32x32.png') ?>">
-        <link rel="icon" type="image/png" sizes="16x16" href="<?= getAsset('images/favicon/favicon-16x16.png') ?>">
-        <link rel="manifest" href="<?= getAsset('images/favicon/manifest.json') ?>">
-        <link rel="mask-icon" href="<?= getAsset('images/favicon/safari-pinned-tab.svg') ?>">
+        
+        <?php include_template('favicon')?>
 
         <!-- CSS -->
         <link href="<?= getAsset('jquery-ui-1.13.3/jquery-ui.min.css') ?>" rel="stylesheet" />

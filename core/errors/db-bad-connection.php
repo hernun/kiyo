@@ -3,12 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <link rel="apple-touch-icon" sizes="180x180" href="/core/assets/images/favicon/apple-touch-icon.png">
-  <link rel="icon" type="image/png" href="/core/assets/images/favicon/favicon-32x32.png" sizes="32x32">
-  <link rel="icon" type="image/png" href="/core/assets/images/favicon/favicon-16x16-png" sizes="16x16">
-  <link rel="manifest" href="/core/assets/images/favicon/manifest.json">
-  <link rel="mask-icon" href="/core/assets/images/favicon/safari-pinned-tab.svg">
-  <title>ovo - Error en la DB</title>
+  <?php include_template('favicon')?>
+  <title><?php echo APP_TITLE?> - Error en la DB</title>
   <style>
     html, body {
       height: 100%;
@@ -30,21 +26,16 @@
         text-transform:uppercase;
     }
     p {
-        font-size:.9rem;
-        text-transform:uppercase;
-        margin-top: 0;
+      letter-spacing: 1px;
+      font-weight: 100;
+      margin-top: 0;
     }
   </style>
 </head>
 <body>
   <div class="container">
-    <img src="/core/assets/images/huevo-roto.png" width="150px"/>
-    <h3>Error en la DB</h3>
-    <?php if($_ENV['ENVIRONMENT'] === 'dev'):?>
-      <p><?php echo $e->getMessage()?>.</p>
-    <?php else:?>
-      <p>Error de configuración.</p>
-    <?php endif?>
+    <p><span style="text-transform:uppercase">Error en la DB</span> | Error de configuración.</p>
+    <?php if($_ENV['ENVIRONMENT'] === 'dev') echo '<p>' . $e->getMessage() . '</p>'?>
   </div>
 </body>
 </html>

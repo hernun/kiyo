@@ -18,7 +18,7 @@ $classes = [
     'nqvSearch.php',
     'nqvElement.php',
     'nqvImageProcessor.php',
-    'nqvMainimages.php',
+    'nqvMainImages.php',
     'nqvImage.php',
     'nqvHolders.php',
     'nqvActivities.php',

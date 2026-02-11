@@ -1,6 +1,6 @@
 <?php
 
-class nqvMainimages {
+class nqvMainImages {
     protected const DEFAULT_THUMBNAIL_SIZES = [
         ['size' => [90, 90], 'crop' => null],
         ['size' => [320, 128], 'crop' => ['center', 'center']],

@@ -88,7 +88,7 @@ class nqvActivities {
     }
 
     public function getMainPhoto() {
-        $mainImage = nqvMainimages::getByElementId($this->tablename,$this->get('id'));
+        $mainImage = nqvMainImages::getByElementId($this->tablename,$this->get('id'));
         $src = $mainImage->getSrc();
         if(empty($src)) {
             if($this->get('image')) $output = $this->get('image');
