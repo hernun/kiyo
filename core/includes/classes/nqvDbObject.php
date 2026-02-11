@@ -381,7 +381,8 @@ class nqvDbObject {
 
     private function prepareCreatedBy(): void {
         if (property_exists($this, 'created_by') && empty($this->created_by)) {
-            $this->created_by = nqv::getSession()->getUserId();
+            $current_user = nqv::getSession()->getUserId();
+            $this->created_by = $current_user ? $current_user:0;
         }
     }
 

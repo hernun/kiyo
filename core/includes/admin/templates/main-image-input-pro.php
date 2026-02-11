@@ -6,8 +6,14 @@
  * - $opts: array con keys 'formats', 'default_format', 'dpi_options', 'default_dpi'
  */
 
-$image = nqvMainImages::getByElementId($entity,$elementId);
-$bg = $image->getSrc();
+
+if($entity && $elementId) {
+    $image = nqvMainImages::getByElementId($entity,$elementId);
+    $bg = $image->getSrc();
+} else {
+    $image = null;
+    $bg = null;
+}
 ?>
 
 <style>
