@@ -1,0 +1,51 @@
+# --- IDEs & OS files ---
+.idea/              
+.DS_Store           
+Thumbs.db           
+
+# --- Node / Frontend tools (only if using Node) ---
+node_modules/       
+dist/               
+
+# --- Compiled / Binary / Executable files (unlikely in PHP project, but kept for caution) ---
+*.class             
+*.py[cod]           
+*.jar               
+*.app               
+*.exe               
+*.war               
+
+# --- Logs ---
+*.log
+/logs/
+
+# --- Temporary files ---
+/tmp/
+
+# --- Media files (skip if not using heavy media assets) ---
+*.mp4
+*.tiff
+*.avi
+*.flv
+*.mov
+*.wmv
+
+# --- Dependency & deployment files ---
+vendor/             
+deploy.conf         
+dbconf.php          
+
+# --- PHPUnit ---
+phpunit.xml         
+phpunit.xml.dist    
+.phpunit.result.cache
+/coverage/          
+/test-results/
+
+# --- Test artifacts ---
+TEST*.xml           
+user
+
+.env*
+core/includes/update
+uploads/

@@ -1,0 +1,14 @@
+:root {
+    --header-height-front: 56px;
+    --header-height-admin: 3.5rem;
+    --footer-height-admin: 150px;
+    --footer-height-front: 150px;
+    
+    --turquoise: rgb(14, 85, 85);
+    --main-grey: var(--bs-gray-100);
+
+    --main-color: black;
+    --main-font-family: Gotham;
+
+    --content-width: 100%;
+}
