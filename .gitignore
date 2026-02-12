@@ -43,8 +43,7 @@ phpunit.xml.dist
 /test-results/
 
 # --- Test artifacts ---
-TEST*.xml           
-user
+TEST*.xml
 
 .env*
 core/includes/update
