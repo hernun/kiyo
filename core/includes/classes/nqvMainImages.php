@@ -21,7 +21,7 @@ class nqvMainImages {
     protected ?string $modified_at = null;
     protected ?string $error = null;
 
-    public function __construct($input) {
+    public function __construct($input=[]) {
         $this->table = new nqvDbTable($this->tablename);
         $this->fields = $this->table->getTableFields();
         $this->thumbnailsSizes = self::DEFAULT_THUMBNAIL_SIZES;
@@ -31,6 +31,20 @@ class nqvMainImages {
         }
         
         $this->parseData($input);
+    }
+
+    public static function getFields(): array {
+        try {
+            $dbFields = [];
+            $table = new nqvDbTable('mainimages');
+            $fields = $table->getTableFields();
+            foreach($fields as $field) {
+                $dbFields[$field['Field']] = new nqvDbField($field,'mainimages');
+            }
+            return $dbFields;
+        } catch (Exception $e) {
+            return [];
+        }
     }
 
     protected function parseData(array $input): self {

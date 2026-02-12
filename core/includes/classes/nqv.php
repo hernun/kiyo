@@ -353,7 +353,10 @@ class nqv {
             self::$config['listcount']['value'] = 20;
         }
         if(!isset(self::$config[$slug])) return null;
-        else return (string) self::$config[$slug]['value'];
+        else {
+            if(isValidJson(self::$config[$slug]['value'])) return json_decode(self::$config[$slug]['value'],true);
+            else return (string) self::$config[$slug]['value'];
+        }
     }
 
     public static function createConfig(string $name, string $slug, string $value) {
@@ -705,46 +708,5 @@ class nqv {
                 $_POST[$field['Field']] = $value;
             }
         }
-    }
-
-    public static function parseMainHttoQuery() {
-        #_log([@$_SERVER['REQUEST_URI'],@$_SERVER['HTTP_REFERER'],@$_SERVER['REMOTE_ADDR']]);
-        $mm = self::getConfig('maintenance-mode');
-        if(!user_is_logged() && isAdmin()) {
-            if(nqv::getVars(0) === 'password-reset') $template = 'password-reset';
-            else $template = 'login';
-        } else {
-            if($mm && !user_is_logged()) {
-                if(is_template_enabled_on_maintenance(nqv::getVars(0))) $template = nqv::getVars(0);
-                else $template = nqv::getConfig('maintenance-template');
-            } else {
-                $template = nqv::getVars(0);
-                if(!empty($template)) {
-                    if(!isTemplate($template)) {
-                        $test = nqv::translate((string) $template,'es','slug',true);
-                        if(isAdmin()) {
-                            if(nqvDB::isTable($test)) {
-                                nqv::addVar('database',0);
-                                $template = 'database';
-                            }
-                        } elseif(isFront()) {
-                            if(isCategory($template)) {
-                                header('location:/category/' . $template);
-                                exit;
-                            }
-                        }
-                    } elseif($template === 'images') {
-                        include_template($template);
-                        exit;
-                    }
-                }
-            }
-            if(empty($template)) $template = 'home';
-        }
-        nqv::setReferer($template);
-        return [
-            'maintenanceMode' => $mm,
-            'template' => $template
-        ];
     }
 }

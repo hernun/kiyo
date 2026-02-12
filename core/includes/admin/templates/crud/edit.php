@@ -44,6 +44,7 @@ if(submitted($formId)) {
                     <?php foreach($fields as $field):?>
                         <?php if($field['Field'] === 'created_at') continue?>
                         <?php if($field['Field'] === 'created_by') continue?>
+                        <?php if($field['Field'] === 'modified_at') continue?>
                         <?php $f = new nqvDbField($field,$tablename)?>
                         <?php $f->setValue($item[$field['Field']])?>
                         <?php if($f->isHidden()):  echo $f;?>

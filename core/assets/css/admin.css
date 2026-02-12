@@ -11,12 +11,6 @@ footer {
     background-color: var(--main-grey);
 }
 
-main {
-    overflow-x: hidden;
-    overflow-y: auto;
-    height:100vh;
-}
-
 main.headered {
     height: calc(100vh - var(--header-height-admin));
 }

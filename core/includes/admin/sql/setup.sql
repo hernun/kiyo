@@ -62,6 +62,7 @@ INSERT INTO `config` SET `name` = 'Mostrar pie de página en Front', `slug` = 'f
 INSERT INTO `config` SET `name` = 'Mostrar encabezado de página en Admin', `slug` = 'admin_header',`value` = 1,`created_at` = NOW(), `created_by` = 0;
 INSERT INTO `config` SET `name` = 'Mostrar encabezado de página en Front', `slug` = 'front_header',`value` = 1,`created_at` = NOW(), `created_by` = 0;
 INSERT INTO `config` SET `name` = 'Configuración de correo', `slug` = 'mail-settings', `value` = '{"active":"mailhog","drivers":{"mailhog":{"type":"smtp","host":"127.0.0.1","port":1025,"smtp_auth":false,"smtp_secure":false,"smtp_auto_tls":false,"from":{"address":"no-reply@local.test","name":"Aplicación"}},"smtp":{"type":"smtp","host":"","port":587,"smtp_auth":true,"smtp_secure":"tls","smtp_auto_tls":true,"from":{"address":"","name":""}},"gmail":{"type":"gmail","host":"smtp.gmail.com","port":587,"smtp_auth":true,"smtp_secure":"tls","smtp_auto_tls":true,"from":{"address":"","name":""}},"ses":{"type":"ses","region":"","endpoint":"","from":{"address":"","name":""}}}}', `created_at` = NOW(), `created_by` = 0;
+INSERT INTO `config` SET `name` = 'Página de inicio', `slug` = 'homepage',`value` = '{"page_id":0}',`created_at` = NOW(), `created_by` = 0;
 
 CREATE TABLE `mainimages` (
  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
@@ -176,8 +177,9 @@ CREATE TABLE `widgets` (
  UNIQUE KEY `Name` (`name`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-INSERT INTO `widgets` SET `name` = 'Modo mantenimiento',`description` = 'Ocultar o publicar el front para usuarios no identificados durante las tareas de edición o mantenimiento',`slug` = 'maintenance-mode',`public` = 1, `order` = 0,`created_at` = NOW(),`created_by` = 0,`modified_at` = NOW();
-INSERT INTO `widgets` SET `name` = 'Usuarios',`description` = 'Creación, modificación o eliminación de usuarios de la sección ADMIN',`slug` = 'list-users',`public` = 1, `order` = 0,`created_at` = NOW(),`created_by` = 0,`modified_at` = NOW();
-INSERT INTO `widgets` SET `name` = 'Crear miniaturas',`description` = 'Crear miniaturas para todas las imágenes principales',`slug` = 'thumbnails-create',`public` = 1, `order` = 0,`created_at` = NOW(),`created_by` = 0,`modified_at` = NOW();
-INSERT INTO `widgets` SET `name` = 'Crear tablas SQL a partir de archivos CVS',`description` = 'Crear tablas SQL a partir de archivos CVS',`slug` = 'sql-from-cvs',`public` = 1, `order` = 0,`created_at` = NOW(),`created_by` = 0,`modified_at` = NOW();
-INSERT INTO `widgets` SET `name` = 'Eliminar todas las tablas',`description` = 'Esta acción eliminará todas las tablas de la base de datos, lo cual equivale a resetear el sistema a su estado de origen',`slug` = 'dropdatabase',`public` = 1, `order` = 0,`created_at` = NOW(),`created_by` = 0,`modified_at` = NOW();
+INSERT INTO `widgets` SET `name` = 'Página de inicio',`description` = 'Establecer un apágina como landing page del sitio',`slug` = 'homepage',`public` = 1, `order` = 0,`created_at` = NOW(),`created_by` = 0,`modified_at` = NOW();
+INSERT INTO `widgets` SET `name` = 'Modo mantenimiento',`description` = 'Ocultar o publicar el front para usuarios no identificados durante las tareas de edición o mantenimiento',`slug` = 'maintenance-mode',`public` = 1, `order` = 1,`created_at` = NOW(),`created_by` = 0,`modified_at` = NOW();
+INSERT INTO `widgets` SET `name` = 'Usuarios',`description` = 'Creación, modificación o eliminación de usuarios de la sección ADMIN',`slug` = 'list-users',`public` = 1, `order` = 2,`created_at` = NOW(),`created_by` = 0,`modified_at` = NOW();
+INSERT INTO `widgets` SET `name` = 'Crear miniaturas',`description` = 'Crear miniaturas para todas las imágenes principales',`slug` = 'thumbnails-create',`public` = 1, `order` = 3,`created_at` = NOW(),`created_by` = 0,`modified_at` = NOW();
+INSERT INTO `widgets` SET `name` = 'Crear tablas SQL a partir de archivos CVS',`description` = 'Crear tablas SQL a partir de archivos CVS',`slug` = 'sql-from-cvs',`public` = 1, `order` = 4,`created_at` = NOW(),`created_by` = 0,`modified_at` = NOW();
+INSERT INTO `widgets` SET `name` = 'Eliminar todas las tablas',`description` = 'Esta acción eliminará todas las tablas de la base de datos, lo cual equivale a resetear el sistema a su estado de origen',`slug` = 'dropdatabase',`public` = 1, `order` = 5,`created_at` = NOW(),`created_by` = 0,`modified_at` = NOW();

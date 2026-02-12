@@ -114,12 +114,8 @@ function getBanner($options = []) {
 function getAsset(string $path): string {
     $userPath = USER_PATH . 'assets/' . ltrim($path, '/');
     $corePath = CORE_PATH . 'assets/' . ltrim($path, '/');
-
-    if (is_file($userPath)) {
-        return str_replace(ROOT_PATH, '/', $userPath);
-    }
-
-    return str_replace(ROOT_PATH, '/', $corePath) . '?v=' . ASSETVERSION;
+    $path = is_file($userPath) ? $userPath:$corePath;
+    return str_replace(ROOT_PATH, '/', $path) . '?v=' . ASSETVERSION;
 }
 
 
@@ -222,6 +218,11 @@ function isFront() {
 function isCategory($slug) {
     $cat = new nqvCategories(['slug'=>$slug]);
     return $cat->exists();
+}
+
+function isPage($slug) {
+    $page = getPageBySlug($slug);
+    return !empty($page);
 }
 
 function isActivity($slug,$status = 'active') {
@@ -348,4 +349,18 @@ function hasFooter() {
 
 function getAdminUrl() {
     return nqv::url(ROOT_PATH) . 'admin/';
+}
+
+function getPageById(int $id) {
+    $stmt = nqvDB::prepare('SELECT * FROM `pages` WHERE `id` = ?');
+    $stmt->bind_param('i',$id);
+    $pages = nqvDB::parseSelect($stmt);
+    return empty($pages[0]) ? []:$pages[0]; 
+}
+
+function getPageBySlug(string $slug) {
+    $stmt = nqvDB::prepare('SELECT * FROM `pages` WHERE `slug` = ?');
+    $stmt->bind_param('s',$slug);
+    $pages = nqvDB::parseSelect($stmt);
+    return empty($pages[0]) ? []:$pages[0]; 
 }

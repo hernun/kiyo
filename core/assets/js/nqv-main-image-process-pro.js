@@ -116,13 +116,14 @@ document.addEventListener('DOMContentLoaded', () => {
             let ratio = 1;
 
             if(format === 'square'){
-                w = h = Math.min(300, MAX_WIDTH, currentFileWidth);
+                w = h = Math.min(300, MAX_WIDTH);
+                if(currentFile)  w = h = Math.min(h, currentFileWidth);
             } else if(format === 'banner'){
                 ratio = 3040 / 1020;
-                w = Math.min(MAX_WIDTH, 3040, currentFileWidth);
+                w = Math.min(MAX_WIDTH, 3040);
+                if(currentFile)  w = Math.min(w, currentFileWidth);
                 h = w / ratio;
-
-                if(h > MAX_HEIGHT){
+                if(h > MAX_HEIGHT) {
                     h = MAX_HEIGHT;
                     w = h * ratio;
                 }

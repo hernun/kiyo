@@ -87,12 +87,26 @@ if(submitted($formId)) {
     <?php endif?>
 </div>
 <script>
-    $(document).ready( function () {
-        $('#title-input').on('input', function () {
-            let slug = $(this).val().toLowerCase().trim().replace(/[\s\W-]+/g, '-');
-            $('#slug-input').val(slug);
+    document.addEventListener('DOMContentLoaded', () => {
+        const titleInput = document.getElementById('title-input');
+        const slugInput  = document.getElementById('slug-input');
+
+        if (!titleInput || !slugInput) return;
+
+        const removeAccents = (str = '') =>
+            str.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+
+        titleInput.addEventListener('input', () => {
+            const slug = removeAccents(titleInput.value)
+                .toLowerCase()
+                .trim()
+                .replace(/[\s\W-]+/g, '-')
+                .replace(/^-+|-+$/g, '');
+
+            slugInput.value = slug;
         });
     });
+
 
    document.addEventListener('DOMContentLoaded', function () {
     const editor = new EditorJS({

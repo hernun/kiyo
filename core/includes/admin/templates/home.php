@@ -1,7 +1,5 @@
 <?php 
 $widgets = nqv::getConfig('home-widgets');
-if(isValidJson($widgets)) $widgets = json_decode($widgets,true);
-else $widgets = [];
 if(user_is_logged()):?>
     <div class="h-100 px-4">
         <div class="container h-100">

@@ -5,8 +5,6 @@ if(!nqv::userCan(['crud','config'])) {
 }
 
 $homeWidgets = nqv::getConfig('home-widgets');
-if(isValidJson($homeWidgets)) $homeWidgets = json_decode($homeWidgets,true);
-else $homeWidgets = [];
 
 $widgets = array_filter(nqv::get('widgets'),function($w) use ($homeWidgets){
     return !in_array($w['id'],(array) $homeWidgets);

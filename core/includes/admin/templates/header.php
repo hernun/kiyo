@@ -84,7 +84,7 @@ $exludedTables = [
                                 <ul class="navbar-nav mb-2 mb-lg-0">
                                     <li class="nav-item dropdown">
                                         <a class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                            Base de datos
+                                            Contenido
                                         </a>
                                         <ul class="dropdown-menu dropdown-menu-end">
                                             <?php foreach($items as $k => $item):?>

@@ -1,8 +1,6 @@
 <?php nqv::setAccess(['crud','permissions'])?>
 <?php
-$permissions = nqv::getConfig('permissions');
-if(empty($permissions)) $perms = [];
-else $perms = json_decode($permissions,true);
+$perms = nqv::getConfig('permissions');
 
 $permsTypes = ['create','read','update','delete','crud'];
 $types = nqv::getSessionTypes();
