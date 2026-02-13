@@ -10,7 +10,7 @@ class nqvDbObject {
     protected int $created_by;
 
     protected $type_id;
-    protected $name;
+    protected ?string $name;
     // protected ?string $slug;
 
     protected static $main_field = 'id';
@@ -313,7 +313,13 @@ class nqvDbObject {
             else $this->dbData = @array_values((array) @nqv::get($this->tbl_name, $data))[0];
             if (!empty($this->dbData)) $this->exists = true;
             foreach ((array) $this->dbData as $k => $v) {
-                if(property_exists($this,$k)) $this->$k = $v;
+                if(property_exists($this,$k)) {
+                    $reflection = new ReflectionProperty(get_called_class(), $k);
+                    $type = $reflection->getType();
+                    #settype($v,$type->getName());
+                    if($type->getName() === 'array' && isValidJson($v)) $this->$k = json_decode($v,true);
+                    else $this->$k = $v;
+                }
             }
             $this->data = $this->dbData;
             $this->setData($data);

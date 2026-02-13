@@ -2,8 +2,8 @@
     
     class nqvSessionType extends nqvDbObject {
         protected static string $tablename = 'session_types';
-        protected $name;
-        protected $world;
+        protected ?string  $name;
+        protected ?string  $world;
         
         public function get_name(): ?string {
             return $this->name;

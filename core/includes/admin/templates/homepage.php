@@ -1,7 +1,7 @@
 <?php
 $formId = 'homepage-selector-form';
 if(submitted($formId)) {
-    $value = json_encode(['pages_id'=>intval($_POST['pages_id'])]);
+    $value = json_encode(['pages_id'=>intval($_POST['pages_id'])], JSON_UNESCAPED_UNICODE);
     nqv::setConfig('homepage', $value);
     header('location:');
     exit;
@@ -23,7 +23,7 @@ $src = !empty($current_page['slug']) ? '/' . $current_page['slug']:'/';
                     <option value="">Plantilla de inicio</option>
                     <?php foreach($pages as $page):?>
                         <?php $selected = $current_page_id === intval($page['id']) ? 'selected="selected"':'';?>
-                        <option value="<?php echo $page['id']?>" data-slug="<?php echo $page['slug']?>" <?php echo $selected?>><?php echo $page['title']?></option>
+                        <option value="<?php echo $page['id']?>" data-slug="<?php echo $current_page['slug']?>" <?php echo $selected?>><?php echo $page['title']?></option>
                     <?php endforeach?>
                 </select>
             </div>

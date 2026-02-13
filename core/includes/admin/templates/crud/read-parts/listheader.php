@@ -2,7 +2,10 @@
     <div>
         <div class="list-title d-flex justify-content-start align-items-center gap-3">
             <div class="button-new-item"><?php echo $this->getNewButton()?></div>
+            <!--
+            TODO: bulk deletion
             <div class="button-new-item"><?php echo $this->getRemoveButton()?></div>
+            -->
             <div class="title-container">
                 <span class="title"><a href="<?php echo getAdminUrl()?>database/<?php echo $this->getTablename()?>"><?php echo $this->getTitle()?></a></span> <span class="separator">|</span> <span class="subtitle"><?php echo $this->getSubTitle()?>
                 <?php if($fl = $this->getCurrentFilterLabel()) echo ' <span class="separator">|</span> ' .$fl?></span>

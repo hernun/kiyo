@@ -48,3 +48,4 @@ TEST*.xml
 .env*
 core/includes/update
 uploads/
+ovo-bkp

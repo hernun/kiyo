@@ -319,29 +319,4 @@ class nqvDB {
             throw new Exception('La transacción no es válida o nunca se inició');
         }
     }
-
-    public static function createUniqueSlug(string $text, string $tablename, string $separator = '-'): ?string {
-        if(!self::isTable($tablename)) return null;
-        $baseSlug = createSlug($text, $separator);
-        $slug = $baseSlug;
-        $pattern = $baseSlug . '%';
-
-        $stmt = self::prepare('SELECT `slug` FROM ' . $tablename . ' WHERE `slug` LIKE ?');
-        $stmt->bind_param('s',$pattern);
-        $existing = self::parseSelect($stmt);
-
-        // Si no existe ninguno igual, devolvemos el baseSlug
-        if (!in_array($slug, array_column($existing, 'slug'))) return $slug;
-
-        // Extraer números existentes al final del slug y calcular el siguiente
-        $max = 0;
-        foreach ($existing as $exist) {
-            if (preg_match('/^' . preg_quote($baseSlug, '/') . $separator . '(\d+)$/', $exist['slug'], $matches)) {
-                $num = (int)$matches[1];
-                if ($num > $max) $max = $num;
-            }
-        }
-
-        return $baseSlug . $separator . ($max + 1);
-    }
 }

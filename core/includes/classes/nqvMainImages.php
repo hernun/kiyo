@@ -21,6 +21,49 @@ class nqvMainImages {
     protected ?string $modified_at = null;
     protected ?string $error = null;
 
+    protected const VARIANT_SIZES = [
+        'banner' => [
+            'size' => [3040, 1020],
+            'mode' => 'cover',   // rellena todo el canvas, recortando si hace falta
+        ],
+        'square' => [
+            'size' => [512, 512],
+            'mode' => 'cover', // mantiene proporción, no amplía, puede dejar espacio vacío
+        ],
+    ];
+
+
+    public function getVariantPath(string $variant): string {
+
+        $base = $this->getBaseFilepath();
+        $info = pathinfo($base);
+
+        return $info['dirname'] . '/' . $info['filename'] . '-' . $variant . '.' . $info['extension'];
+    }
+
+    public function createVariants(): int {
+        $count = 0;
+        $ext = $this->get_extension(true);
+
+        foreach (self::VARIANT_SIZES as $variant => $cfg) {
+            $variantPath = dirname($this->getBaseFilepath()) . '/' .
+                pathinfo($this->getBaseFilepath(), PATHINFO_FILENAME) . '-' . $variant . '.' . $ext;
+
+            if (nqvImageProcessor::createVariant(
+                $this->getBaseFilepath(),
+                $variantPath,
+                $cfg['size'],
+                $cfg['mode'],
+                $ext
+            )) {
+                $count++;
+            }
+        }
+
+        return $count;
+    }
+
+
     public function __construct($input=[]) {
         $this->table = new nqvDbTable($this->tablename);
         $this->fields = $this->table->getTableFields();
@@ -74,7 +117,7 @@ class nqvMainImages {
     }
 
     public function save(?array $data = []): int|bool {
-        $this->slug = nqvDB::createUniqueSlug(pathinfo($this->get('name'),PATHINFO_FILENAME),'mainimages');
+        $this->slug = createSlug(pathinfo($this->get('name'),PATHINFO_FILENAME),'-','mainimages',$this->slug);
         $slug = $this->get_slug();
 
         $types = 's';
@@ -161,8 +204,10 @@ class nqvMainImages {
         return $paths;
     }
 
-    public function getSrc(?string $path = null): ?string {
+    public function getSrc(?string $sufix = null, ?string $path = null, string $glue = '-'): ?string {
         $path = is_null($path) ? $this->getBaseFilepath():$path;
+        $info = pathinfo($path);
+        if($sufix) $path = $info['dirname'].'/'.$info['filename'].$glue.$sufix.'.'.$info['extension'];
         if(!is_file($path)) return null;
         return url($path) . '?v=' . filemtime($path);
     }
@@ -275,6 +320,7 @@ class nqvMainImages {
             if ($size[0] / $size[1] !== 1.0 && $crop) {
                 $this->crop();
             }
+            $this->createVariants();
         }
 
         return true;
@@ -295,4 +341,5 @@ class nqvMainImages {
         if ($ext === 'jpg') nqvImageProcessor::cropJPG($this->getBaseFilepath());
         elseif ($ext === 'png') nqvImageProcessor::cropPNG($this->getBaseFilepath());
     }
+
 }

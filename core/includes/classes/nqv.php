@@ -593,69 +593,95 @@ class nqv {
     }
 
     public static function parseImagesFilesUpload(string $tablename,int $element_id) {
+        if(!nqvDB::isTable($tablename)) throw new Exception($tablename . ' no es una tabla');
+        $stmt = nqvDB::prepare('SELECT * FROM `' . $tablename . '` WHERE `id` = ?');
+        $stmt->bind_param('i',$element_id);
+        $result = nqvDB::parseSelect($stmt);
+        $element = $result[0] ?? null;
+        if(!$element) throw new Exception('No existe un elemento con id ' . $element_id . ' en ' . $$tablename);
+        $mainImageName = $element['slug'];
+
         if(!filesIsEmpty()) {
-            $images_saved = 0;
-            $images_deleted = 0;
-            $images = nqvImage::getByElementId($tablename,$element_id);
+
             foreach($_FILES as $k => $f) {
-                $fileToDelete = null;
-                $isImageFile = preg_match('/^image-[0-9]+$/',$k);
-                $isGallerFile = strpos($k,'gallery-files') !== false;
-                if($isImageFile || $isGallerFile) {
-                    foreach((array) $_FILES[$k]['name'] as $m => $name) {
-                        if($_FILES[$k]['error'][$m] === UPLOAD_ERR_NO_FILE) continue;
-                        $filepath = UPLOADS_PATH . 'images/' . $tablename . '/' . $element_id . '/' . createImageSlug($name);
-                        $input = [
-                            'filepath' => $filepath,
-                            'tablename' => $tablename,
-                            'element_id' => $element_id
-                        ];
-                        $image = new nqvImage($input);
-                        $fileToDelete = @array_map(function($a) use ($filepath){
-                            if($a->get('filepath') === str_replace(ROOT_PATH,'',$filepath)) return $a->get('filepath');
-                        },$images)[0];
-                        if($image->upload($_FILES[$k]['tmp_name'][$m],$fileToDelete)) {
-                            $saved = $image->save();
-                        } else {
-                            nqvNotifications::add('No se pudo subir el archivo de la imagen ' . $k,'error');
-                            break;
-                        }
-                        if(empty($saved)) {
-                            nqvNotifications::add('La imagen ' . $name . ' no se pudo guardar','error');
-                            break;
-                        }
-                        else $images_saved ++;
-                    }
-                } elseif($k === 'main-image' && !empty($_FILES['main-image']['size'])) {
-                    $input = [
-                        'name' => $_FILES['main-image']['name'],
-                        'tablename' => $tablename,
-                        'element_id' => $element_id
-                    ];
+
+                /* =========================
+                * MAIN IMAGE
+                * ========================= */
+
+                if($k === 'main-image-original' && !empty($_FILES[$k]['size'])) {
+
                     $stmt = nqvDB::prepare('SELECT * FROM `mainimages` WHERE `tablename` = ? and `element_id` = ?');
                     $stmt->bind_param('si',$tablename,$element_id);
                     $imageData = (array) @nqvDB::parseSelect($stmt)[0];
+
                     $fileToDelete = @$imageData['filepath'];
+
+                    $originalFile = $_FILES['main-image-original']['name'];
+                    
+                    $extension    = strtolower(pathinfo($originalFile, PATHINFO_EXTENSION));
+
+                    if (!$extension) {
+                        nqvNotifications::add('El archivo no tiene una extensión válida','error');
+                        continue;
+                    }
+
+                    /*
+                    |--------------------------------------------------------------------------
+                    | Usar slug del elemento como base
+                    |--------------------------------------------------------------------------
+                    */
+
+                    $baseName = $mainImageName;
+
+                    /*
+                    |--------------------------------------------------------------------------
+                    | Generar nombre único en mainimages.name
+                    |--------------------------------------------------------------------------
+                    */
+
+                    $filename = createSlug(
+                        $baseName,
+                        '_',                 // separador normal del slug base
+                        'mainimages',        // tabla
+                        null,                // exclude
+                        'name'               // columna
+                    );
+
+                    $originalName = $filename . '.' . $extension;
+
+
+                    $input = [
+                        'name'       => $originalName,
+                        'tablename'  => $tablename,
+                        'element_id' => $element_id
+                    ];
+
                     $image = new nqvMainImages(array_merge($imageData,$input));
-                    if($image->upload($_FILES['main-image']['tmp_name'],$fileToDelete,false)) {
-                        $saved = $image->save();
-                        $image->createThumbnails();
-                    } else nqvNotifications::add('No se pudo subir el archivo de la imagen','error');
-                    if(empty($saved)) nqvNotifications::add('La imagen no se pudo guardar','error');
-                    else nqvNotifications::add('La imagen se ha guardado','success');
+
+                    if(!$image->upload($_FILES['main-image-original']['tmp_name'],$fileToDelete,false)) {
+                        nqvNotifications::add('No se pudo subir la imagen principal','error');
+                        continue;
+                    }
+
+                    $saved = $image->save();
+
+                    if(empty($saved)) {
+                        nqvNotifications::add('La imagen principal no se pudo guardar','error');
+                        continue;
+                    }
+
+                    $originalPath = ROOT_PATH . $image->get('filepath');
+                    $pathInfo = pathinfo($originalPath);
+
+                    $image->createThumbnails();
+
+                    nqvNotifications::add('La imagen principal se ha guardado correctamente','success');
                 }
-            }
-            if($images_saved) nqvNotifications::add('Se guardaron ' . $images_saved . ' imágenes.','success');
-            if(!empty($_POST['files-to-delete'])) {
-                foreach(array_unique(array_filter(explode(',',$_POST['files-to-delete']))) as $did) {
-                    $dim = new nqvImage(['id' => $did]);
-                    if($dim->delete()) $images_deleted ++;
-                }
-                if($images_deleted === 1) nqvNotifications::add('Se eliminó una imagen.','success');
-                elseif($images_deleted) nqvNotifications::add('Se eliminaron ' . $images_deleted . ' imágenes.','success');
             }
         }
     }
+
 
     public static function getActivitiesByHolder(int $holder_id,?array $excludes) {
         $sql = 'SELECT * FROM `activities` WHERE `holders_id` = ?';

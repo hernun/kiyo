@@ -34,6 +34,12 @@ $image = nqvMainImages::getByElementId($tablename,$id);
         <div class="p-4 ps-0">
             <img style="width:150px" src="<?php echo $image->getSrc()?>">
         </div>
+        <?php if($tablename === 'pages'):?>
+            <div class="p-4 ps-0">
+                <?php $url = 'https://' . DOMAIN . '/' . $item['slug']?>
+                <div class="single-page-url"><a href="<?php echo $url;?>" target="_blank"><?php echo $url;?></a></div>
+            </div>
+        <?php endif?>
         <?php foreach($item as $k => $v):?>
             <?php if($k === 'password') continue?>
             <?php 
@@ -55,19 +61,6 @@ $image = nqvMainImages::getByElementId($tablename,$id);
             <?php if($tablename === 'inscriptions'):?>
                 <?php $inscription = new nqvInscription(['id'=>$id])?>
                 <?php if($inscription->isReady()):?>
-                    <a class="btn btn-sm btn-success" href="<?php echo getAdminUrl() . $tablename ?>/publish/<?php echo $id?>">Publicar</a>
-                <?php endif?>
-            <?php endif?>
-            <?php if($tablename === 'activities'):?>
-                <?php $activity = new nqvActivities(['id'=>$id])?>
-                <?php if(!$activity->isPublic()):?>
-                    <a class="btn btn-sm btn-success" href="<?php echo getAdminUrl() . $tablename ?>/publish/<?php echo $id?>">Publicar</a>
-                <?php endif?>
-            <?php endif?>
-
-            <?php if($tablename === 'standapplications'):?>
-                <?php $stand = new nqvStandapplications(['id'=>$id])?>
-                <?php if(!$stand->isPublic()):?>
                     <a class="btn btn-sm btn-success" href="<?php echo getAdminUrl() . $tablename ?>/publish/<?php echo $id?>">Publicar</a>
                 <?php endif?>
             <?php endif?>

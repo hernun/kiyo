@@ -195,3 +195,46 @@ function createSlug(str = '') {
         .replace(/[^a-z0-9]+/g, '-')
         .replace(/^-+|-+$/g, '');
 }
+
+function parseSlugOnForm(exclude) {
+    document.addEventListener('DOMContentLoaded', () => {
+        const titleInput = document.getElementById('title-input');
+        const slugInput  = document.getElementById('slug-input');
+
+        if (!titleInput || !slugInput) return;
+
+        const removeAccents = (str = '') =>
+            str.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+
+        let timeout;
+
+        titleInput.addEventListener('input', () => {
+
+            const baseSlug = removeAccents(titleInput.value)
+                .toLowerCase()
+                .trim()
+                .replace(/[\s\W-]+/g, '-')
+                .replace(/^-+|-+$/g, '');
+
+            clearTimeout(timeout);
+
+            timeout = setTimeout(() => {
+
+                fetch('/admin/check-slug', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        slug: baseSlug,
+                        table: 'pages',
+                        exclude: exclude,
+                    })
+                })
+                .then(res => res.json())
+                .then(data => {
+                    slugInput.value = data.slug;
+                });
+
+            }, 300); // debounce
+        });
+    });
+}

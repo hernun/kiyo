@@ -455,30 +455,112 @@ function createImageSlug(string $string) {
     return createSlug(pathinfo($string,PATHINFO_FILENAME));
 }
 
-function createSlug(string $text, string $separator = '-'): string {
-    // Convert to lowercase
+function createSlug(
+    string $text,
+    string $separator = '-',
+    ?string $table = null,
+    ?string $exclude = null,
+    string $column = 'slug'
+): string {
+
+    /*
+    |--------------------------------------------------------------------------
+    | 1. Normalización base (igual que tu función actual)
+    |--------------------------------------------------------------------------
+    */
+
     $slug = mb_strtolower($text, 'UTF-8');
-
-    // Transliterate to ASCII (remove accents)
     $slug = iconv('UTF-8', 'ASCII//TRANSLIT', $slug);
-
-    // Replace parentheses with the separator
     $slug = str_replace(['(', ')'], $separator, $slug);
-
-    // Remove all characters that are not alphanumeric, whitespace, or separator
     $slug = preg_replace('/[^a-z0-9\s' . preg_quote($separator, '/') . ']/', '', $slug);
-
-    // Replace all whitespace with the separator
     $slug = preg_replace('/\s+/', $separator, $slug);
-
-    // Replace multiple separators with a single one
     $slug = preg_replace('/' . preg_quote($separator, '/') . '+/', $separator, $slug);
-
-    // Trim leading and trailing separators
     $slug = trim($slug, $separator);
 
-    return $slug;
+    /*
+    |--------------------------------------------------------------------------
+    | 2. Si no hay tabla → devolver slug simple
+    |--------------------------------------------------------------------------
+    */
+
+    if (!$table || !nqvDB::isTable($table)) {
+        return $slug;
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | 3. Normalizar base (quitar sufijos existentes)
+    |--------------------------------------------------------------------------
+    */
+
+    $base = preg_replace('/_[0-9]+$/', '', $slug);
+    $base = rtrim($base, '_');
+
+    if (!empty($exclude) && $exclude === $base) {
+        return $base;
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | 4. Escapar comodines LIKE
+    |--------------------------------------------------------------------------
+    */
+
+    $escapedBase = str_replace(
+        ['\\', '_', '%'],
+        ['\\\\', '\\_', '\\%'],
+        $base
+    );
+
+    $pattern = $escapedBase . '\_%';
+
+    /*
+    |--------------------------------------------------------------------------
+    | 5. Query dinámica por columna
+    |--------------------------------------------------------------------------
+    */
+
+    $sql = "SELECT `$column`
+            FROM `$table`
+            WHERE `$column` = ?
+               OR `$column` LIKE ?";
+
+    $stmt = nqvDB::prepare($sql);
+    $stmt->bind_param('ss', $base, $pattern);
+    $result = nqvDB::parseSelect($stmt);
+
+    if (empty($result)) {
+        return $base;
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | 6. Calcular siguiente sufijo
+    |--------------------------------------------------------------------------
+    */
+
+    $max = 0;
+
+    foreach ($result as $row) {
+
+        $current = $row[$column];
+
+        if ($current === $base) {
+            $max = max($max, 0);
+            continue;
+        }
+
+        if (preg_match('/^' . preg_quote($base, '/') . '_([0-9]+)$/', $current, $m)) {
+            $num = (int)$m[1];
+            $max = max($max, $num);
+        }
+    }
+
+    return $max === 0
+        ? $base . '_1'
+        : $base . '_' . ($max + 1);
 }
+
 
 function htmlToEditorJS($html) {
     $doc = new DOMDocument();

@@ -4,6 +4,9 @@ if(!empty($page_id)) {
 } else {
     $page = getPageBySlug(nqv::getVars(0));
 }
+$properties = isValidJson($page['properties']) ? json_decode($page['properties'],true):[];
+$image = nqvMainImages::getByElementId('pages',$page['id']);
+$mainimageformat = $properties['mainimageformat'] ?? null;
 ?>
 
 <?php if(empty($page)):?>
@@ -11,8 +14,11 @@ if(!empty($page_id)) {
         404 | La página que buscás no existe.
     </div>
 <?php else:?>
-    <div class="">
-        <h1><?php echo $page['title']?></h1>
+    <div class="page">
+        <?php if($image):?>
+        <div class="main-image format-<?php echo $mainimageformat?>"><img src="<?php echo $image->getSrc($mainimageformat);?>" /></div>
+        <?php endif?>
+        <?php if(@$properties['showtitle'] === 'on'):?><h1><?php echo $page['title']?></h1><?php endif?>
         <section id="page-content"></section>
     </div>
 <?php endif?>

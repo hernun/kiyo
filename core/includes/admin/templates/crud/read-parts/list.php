@@ -28,7 +28,7 @@ if($tablename === 'activities') {
 } elseif($tablename === 'tags') {
     $options['include'] = ['mainfield'];
 } elseif($tablename === 'pages') {
-    $options['exclude'] = ['content'];
+    $options['exclude'] = ['content','properties'];
 }
 
 $options['exclude'] = array_merge($options['exclude'],['mainfield','modified_at','created_by','created_at'])

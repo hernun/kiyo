@@ -5,7 +5,10 @@ $table = new nqvDbTable($tablename);
 $fields = $table->getTableFields();
 $formId = 'create-' . $tablename;
 $object = new nqvPages(['id'=>$id]);
-$item = $object->getData();
+$page = $object->getData();
+$properties = $object->getProperties();
+$showtitle = empty($properties['showtitle']) ? 'off':'on';
+$mainimageformat = empty($properties['mainimageformat']) ? 'full':$properties['mainimageformat'];
 
 if(submitted($formId)) {
     try {
@@ -33,6 +36,18 @@ if(submitted($formId)) {
         // 3. Volver a JSON limpio para guardar
         $cleanJson = json_encode($data, JSON_UNESCAPED_UNICODE);
 
+        foreach($properties as $k => $v) {
+            if(isset($_POST[$k])) {
+                $properties[$k] = $_POST[$k];
+                unset($_POST[$k]);
+            }
+            else $properties[$k] = null;
+        }
+
+        if(isset($_POST['mainimageformat'])) $properties['mainimageformat'] = $_POST['mainimageformat'];
+
+        $_POST['properties'] = json_encode($properties, JSON_UNESCAPED_UNICODE);
+
         // Guardar $cleanJson en la DB
         $_POST['content'] = $cleanJson;
 
@@ -59,20 +74,27 @@ if(submitted($formId)) {
             <form id="<?php echo $formId?>" class="needs-validation" method="post" accept-charset="utf8" enctype="multipart/form-data" novalidate>
                 <input type="hidden" name="form-token" value="<?php echo get_token($formId)?>" />
                 <div class="row my-lg-4">
-                    <div class="form-group mb-3 mb-lg-0 col-lg">
+                    <div class="form-group mb-3 mb-lg-0 col-lg d-flex flex-column">
                         <label style="width:200px;text-align:center">Imagen principal</label>
-                        <?php echo get_main_image_input_pro($tablename, $id, null, null)?>
+                        <?php echo get_main_image_input_pro($tablename, $id, ['format'=>$mainimageformat], null)?>
                     </div>
                 </div>
                 <div class="row" style="max-width:1400px">
+                    <div class="col-12 pages-title-field mb-3"><?php echo $object->getShowtitleInput($showtitle);?></div>
                     <?php $f = new nqvDbField($fields['title'],$tablename);?>
-                    <div class="col-12 pages-title-field col-lg-6 col-xl-6"><?php echo $f->setValue($item['title']);?></div>
+                    <div class="col-12 pages-title-field col-lg-6 col-xl-6"><?php echo $f->setValue($page['title']);?></div>
                     <?php $f = new nqvDbField($fields['slug'],$tablename);?>
-                    <div class="col-12 pages-slug-field col-lg-6 col-xl-6"><?php echo $f->setValue($item['slug']);?></div>
+                    <div class="col-12 pages-slug-field col-lg-6 col-xl-6">
+                        <?php echo $f->setValue($page['slug']);?>
+                        <?php $url = 'https://' . DOMAIN . '/' . $page['slug']?>
+                        <div class="single-page-url"><a href="<?php echo $url;?>" target="_blank"><?php echo $url;?></a></div>
+                    </div>
+                    
                     <?php $f = new nqvDbField($fields['description'],$tablename);?>
-                    <div class="col-12 pages-description-field"><?php echo $f->setValue($item['description']);?></div>
+                    <div class="col-12 pages-description-field"><?php echo $f->setValue($page['description']);?></div>
                     <?php foreach($fields as $field):?>
                         <?php if($field['Field'] === 'title') continue?>
+                        <?php if($field['Field'] === 'properties') continue?>
                         <?php if($field['Field'] === 'slug') continue?>
                         <?php if($field['Field'] === 'description') continue?>
                         <?php if($field['Field'] === 'created_at') continue?>
@@ -80,7 +102,7 @@ if(submitted($formId)) {
                         <?php if($field['Field'] === 'modified_at') continue?>
                         <?php if($field['Field'] === 'content') continue?>
                         <?php $f = new nqvDbField($field,$tablename)?>
-                        <?php $f->setValue($item[$field['Field']])?>
+                        <?php $f->setValue($page[$field['Field']])?>
                         <?php if(!currentSessionTypeIs('root') && $field['Field'] === 'slug') $f->setHtmlInputType('hidden')?>
                         <?php if($f->isHidden()):  echo $f;?>
                         <?php else:?>
@@ -104,29 +126,11 @@ if(submitted($formId)) {
     <?php endif?>
 </div>
 <script>
-    document.addEventListener('DOMContentLoaded', () => {
-        const titleInput = document.getElementById('title-input');
-        const slugInput  = document.getElementById('slug-input');
-
-        if (!titleInput || !slugInput) return;
-
-        const removeAccents = (str = '') =>
-            str.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
-
-        titleInput.addEventListener('input', () => {
-            const slug = removeAccents(titleInput.value)
-                .toLowerCase()
-                .trim()
-                .replace(/[\s\W-]+/g, '-')
-                .replace(/^-+|-+$/g, '');
-
-            slugInput.value = slug;
-        });
-    });
+    parseSlugOnForm('<?php echo $page['slug']?>');
 
     window.editorJsData = <?php
-        echo !empty($item['content'])
-            ? $item['content']
+        echo !empty($page['content'])
+            ? $page['content']
             : 'null';
     ?>;
 

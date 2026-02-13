@@ -61,6 +61,153 @@ class nqvImageProcessor {
         return self::createThumbnailGeneric('png', $srcPath, $destPath, $size, $crop);
     }
 
+    public static function createVariant(
+    string $srcPath,
+    string $destPath,
+    array $size,
+    string $mode = 'contain',
+    string $type = 'jpg' // jpg o png
+): bool {
+
+    $createFn = $type === 'png' ? 'imagecreatefrompng' : 'imagecreatefromjpeg';
+    $saveFn   = $type === 'png' ? 'imagepng' : 'imagejpeg';
+    $quality  = $type === 'png' ? null : 90;
+
+    $src = $createFn($srcPath);
+    $srcW = imagesx($src);
+    $srcH = imagesy($src);
+
+    $maxW = $size[0];
+    $maxH = $size[1];
+
+    // no amplía
+    if ($srcW <= $maxW && $srcH <= $maxH) {
+        return copy($srcPath, $destPath);
+    }
+
+    // calcular proporción
+    $srcRatio = $srcW / $srcH;
+    $destRatio = $maxW / $maxH;
+
+    if ($mode === 'cover') {
+        // cubrir todo el canvas
+        if ($srcRatio > $destRatio) {
+            $cropH = $srcH;
+            $cropW = (int)($srcH * $destRatio);
+            $srcX = (int)(($srcW - $cropW) / 2);
+            $srcY = 0;
+        } else {
+            $cropW = $srcW;
+            $cropH = (int)($srcW / $destRatio);
+            $srcX = 0;
+            $srcY = (int)(($srcH - $cropH) / 2);
+        }
+        $targetW = $maxW;
+        $targetH = $maxH;
+
+    } else {
+        // contain
+        $ratio = min($maxW / $srcW, $maxH / $srcH);
+        $targetW = (int)($srcW * $ratio);
+        $targetH = (int)($srcH * $ratio);
+        $srcX = 0;
+        $srcY = 0;
+        $cropW = $srcW;
+        $cropH = $srcH;
+    }
+
+    $dest = imagecreatetruecolor($targetW, $targetH);
+
+    if ($type === 'png') {
+        imagealphablending($dest, false);
+        imagesavealpha($dest, true);
+        $transparent = imagecolorallocatealpha($dest, 0, 0, 0, 127);
+        imagefill($dest, 0, 0, $transparent);
+    }
+
+    imagecopyresampled(
+        $dest,
+        $src,
+        0, 0,
+        $srcX, $srcY,
+        $targetW, $targetH,
+        $cropW, $cropH
+    );
+
+    $saveFn($dest, $destPath, $quality);
+
+    unset($src, $dest);
+
+    return true;
+}
+
+
+    protected static function createVariantGeneric(
+        string $type,
+        string $srcPath,
+        string $destPath,
+        array $maxSize
+    ): bool {
+
+        $createFn = $type === 'png' ? 'imagecreatefrompng' : 'imagecreatefromjpeg';
+        $saveFn   = $type === 'png' ? 'imagepng' : 'imagejpeg';
+        $quality  = $type === 'png' ? null : 90;
+
+        $src = $createFn($srcPath);
+
+        $srcW = imagesx($src);
+        $srcH = imagesy($src);
+
+        $maxW = $maxSize[0];
+        $maxH = $maxSize[1];
+
+        /*
+        --------------------------------------------------
+        1️⃣  Si la imagen es más chica que el límite → NO ampliar
+        --------------------------------------------------
+        */
+        if ($srcW <= $maxW && $srcH <= $maxH) {
+
+            // simplemente copiar original
+            return copy($srcPath, $destPath);
+        }
+
+        /*
+        --------------------------------------------------
+        2️⃣  Calcular tamaño proporcional sin ampliar
+        --------------------------------------------------
+        */
+        $ratio = min($maxW / $srcW, $maxH / $srcH);
+
+        $targetW = (int)($srcW * $ratio);
+        $targetH = (int)($srcH * $ratio);
+
+        $dest = imagecreatetruecolor($targetW, $targetH);
+
+        if ($type === 'png') {
+            imagealphablending($dest, false);
+            imagesavealpha($dest, true);
+            $transparent = imagecolorallocatealpha($dest, 0, 0, 0, 127);
+            imagefill($dest, 0, 0, $transparent);
+        }
+
+        imagecopyresampled(
+            $dest,
+            $src,
+            0, 0,
+            0, 0,
+            $targetW, $targetH,
+            $srcW, $srcH
+        );
+
+        $saveFn($dest, $destPath, $quality);
+
+        unset($src, $dest);
+
+        return true;
+    }
+
+
     protected static function createThumbnailGeneric(
     string $type,
     string $srcPath,
@@ -146,4 +293,21 @@ class nqvImageProcessor {
             default => (int)(($srcSize - $cropSize) / 2),
         };
     }
+
+    public static function createVariantJpg(
+        string $srcPath,
+        string $destPath,
+        array $size
+    ): bool {
+        return self::createVariantGeneric('jpg', $srcPath, $destPath, $size);
+    }
+
+    public static function createVariantPng(
+        string $srcPath,
+        string $destPath,
+        array $size
+    ): bool {
+        return self::createVariantGeneric('png', $srcPath, $destPath, $size);
+    }
+
 }

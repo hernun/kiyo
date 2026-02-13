@@ -4,6 +4,10 @@ $table = new nqvDbTable($tablename);
 $fields = $table->getTableFields();
 $formId = 'create-' . $tablename;
 
+$properties = nqv::getConfig('pagesdefaultproperties');
+$showtitle = empty($properties['showtitle']) ? 'off':'on';
+$object = new nqvPages();
+
 if(submitted($formId)) {
     try {
         nqv::parseTags($tablename);
@@ -30,6 +34,16 @@ if(submitted($formId)) {
 
         // 3. Volver a JSON limpio para guardar
         $cleanJson = json_encode($data, JSON_UNESCAPED_UNICODE);
+
+        foreach($properties as $k => $v) {
+            if(isset($_POST[$k])) {
+                $properties[$k] = $_POST[$k];
+                unset($_POST[$k]);
+            }
+            else $properties[$k] = null;
+        }
+
+        $_POST['properties'] = json_encode($properties, JSON_UNESCAPED_UNICODE);
 
         // Guardar $cleanJson en la DB
         $_POST['content'] = $cleanJson;
@@ -64,6 +78,7 @@ if(submitted($formId)) {
                     </div>
                 </div>
                 <div class="row" style="max-width:1400px">
+                    <div class="col-12 pages-title-field mb-3"><?php echo $object->getShowtitleInput($showtitle);?></div>
                     <?php $f = new nqvDbField($fields['title'],$tablename);?>
                     <div class="col-12 pages-title-field col-lg-6 col-xl-6"><?php echo $f;?></div>
                     <?php $f = new nqvDbField($fields['slug'],$tablename);?>
@@ -87,26 +102,7 @@ if(submitted($formId)) {
     <?php endif?>
 </div>
 <script>
-    document.addEventListener('DOMContentLoaded', () => {
-        const titleInput = document.getElementById('title-input');
-        const slugInput  = document.getElementById('slug-input');
-
-        if (!titleInput || !slugInput) return;
-
-        const removeAccents = (str = '') =>
-            str.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
-
-        titleInput.addEventListener('input', () => {
-            const slug = removeAccents(titleInput.value)
-                .toLowerCase()
-                .trim()
-                .replace(/[\s\W-]+/g, '-')
-                .replace(/^-+|-+$/g, '');
-
-            slugInput.value = slug;
-        });
-    });
-
+    parseSlugOnForm();
 
    document.addEventListener('DOMContentLoaded', function () {
     const editor = new EditorJS({
@@ -117,7 +113,7 @@ if(submitted($formId)) {
                 ui: {
                     "blockTunes": {
                         "toggler": {
-                            "Click to tune": "Configurar bloque",
+                            "Click to tune": "Configurar bloque",   
                             "or drag to move": "o arrastrar para mover"
                         }
                     },

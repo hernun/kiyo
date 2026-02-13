@@ -68,6 +68,10 @@ footer .logo img {
     max-height: none;
 }
 
+.main-image.format-banner {
+	aspect-ratio: 3040 / 1020;
+}
+
 @media (max-width: 1400px) {
 	footer .logos {
 		margin-bottom:0;

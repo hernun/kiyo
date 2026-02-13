@@ -1,10 +1,10 @@
 <?php
 class nqvAdvertisers extends nqvDbObject {
-    protected $name = '';
-    protected $lastname = '';
-    protected $company_name = '';
-    protected $email = '';
-    protected $cellphone;
+    protected ?string  $name = '';
+    protected ?string  $lastname = '';
+    protected ?string  $company_name = '';
+    protected ?string  $email = '';
+    protected ?string  $cellphone;
     protected ?string $created_at;
     protected int $created_by;
     

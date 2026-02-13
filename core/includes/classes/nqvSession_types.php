@@ -1,7 +1,7 @@
 <?php
     
     class nqvSession_types extends nqvDbObject {
-        protected $name;
+        protected ?string $name;
         protected ?string $slug;
         protected static $main_field = 'name';
 

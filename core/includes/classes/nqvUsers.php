@@ -1,15 +1,15 @@
 <?php
     class nqvUsers extends nqvDbObject {
-        protected $name = '';
-        protected $lastname = '';
-        protected $password = '';
-        protected $email = '';
-        protected $session_types_id;
-        protected $session_type;
-        protected $status;
-        protected $token;
-        protected $home_widgets;
-        protected $database_popup_items;
+        protected ?string $name = '';
+        protected ?string  $lastname = '';
+        protected ?string  $password = '';
+        protected ?string  $email = '';
+        protected ?int $session_types_id;
+        protected ?object  $session_type;
+        protected ?string  $status;
+        protected ?string  $token;
+        protected ?string  $home_widgets;
+        protected ?string  $database_popup_items;
         protected ?string $created_at;
         protected int $created_by;
         
