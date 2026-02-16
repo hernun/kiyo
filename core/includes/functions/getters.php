@@ -341,9 +341,11 @@ function hasHeader() {
 }
 
 function hasFooter() {
-    if(nqv::getConfig('maintenance-mode') || !user_is_logged()) return false;
+    if(nqv::getConfig('maintenance-mode') && !user_is_logged()) return false;
     elseif(isAdmin() && nqv::getConfig('admin_footer')) return true;
-    elseif(isFront() && nqv::getConfig('front_footer')) return true;
+    elseif(isFront() && nqv::getConfig('front_footer')) {
+        return true;
+    }
     return false;
 }
 

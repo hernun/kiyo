@@ -25,6 +25,7 @@
         <link href="<?= getAsset('css/globals.css') ?>" rel="stylesheet" />
         <link href="<?= getAsset('css/main.css') ?>" rel="stylesheet" />
         <link href="<?= getAsset('css/' . nqv::getSection() . '.css') ?>" rel="stylesheet" />
+        <link href="<?= getAsset('css/user.css') ?>" rel="stylesheet" />
 
         <!-- JS -->
         <script src="<?= getAsset('js/jquery-3.7.1.min.js') ?>"></script>
@@ -46,7 +47,6 @@
         <main class="<?php echo implode(' ', $mainClass) ?>">
             <?php if (is_null(include_template($template))) include_template('error') ?>
         </main>
-
         <?php if (hasFooter()) getFooter(); ?>
     </body>
 </html>

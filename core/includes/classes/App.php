@@ -9,7 +9,6 @@ class App {
         // --- Legacy routing ---
         [$mm, $template] = array_values(self::parseMainHttoQuery());
         $mainClass = ['ovo'];
-
         // --- Layout state ---
         if (hasHeader()) $mainClass[] = 'headered';
         if (hasFooter()) $mainClass[] = 'footered';

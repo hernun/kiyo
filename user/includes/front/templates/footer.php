@@ -1,0 +1,3 @@
+<footer>
+    User Footer
+</footer>

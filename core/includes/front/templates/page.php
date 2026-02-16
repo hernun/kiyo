@@ -7,6 +7,10 @@ if(!empty($page_id)) {
 $properties = isValidJson($page['properties']) ? json_decode($page['properties'],true):[];
 $image = nqvMainImages::getByElementId('pages',$page['id']);
 $mainimageformat = $properties['mainimageformat'] ?? null;
+
+
+        global $test;
+        $test = 'momo';
 ?>
 
 <?php if(empty($page)):?>
@@ -22,13 +26,13 @@ $mainimageformat = $properties['mainimageformat'] ?? null;
         <section id="page-content"></section>
     </div>
 <?php endif?>
-        <script src="https://cdn.jsdelivr.net/npm/editorjs-html@3.0.3/build/edjsHTML.browser.js"></script>
-        <script>
-            const edjsParser = edjsHTML();
+<script src="https://cdn.jsdelivr.net/npm/editorjs-html@3.0.3/build/edjsHTML.browser.js"></script>
+<script>
+    const edjsParser = edjsHTML();
 
-            // Obtenemos el string JSON desde PHP
-            const savedData = JSON.parse(`<?= $page['content'] ?>`);
+    // Obtenemos el string JSON desde PHP
+    const savedData = JSON.parse(`<?= $page['content'] ?>`);
 
-            const html = edjsParser.parse(savedData); // Devuelve un array de bloques HTML
-            document.getElementById('page-content').innerHTML = html.join('');
-        </script>
+    const html = edjsParser.parse(savedData); // Devuelve un array de bloques HTML
+    document.getElementById('page-content').innerHTML = html.join('');
+</script>

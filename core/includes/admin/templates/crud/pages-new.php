@@ -43,6 +43,8 @@ if(submitted($formId)) {
             else $properties[$k] = null;
         }
 
+        if(isset($_POST['mainimageformat'])) $properties['mainimageformat'] = $_POST['mainimageformat'];
+        
         $_POST['properties'] = json_encode($properties, JSON_UNESCAPED_UNICODE);
 
         // Guardar $cleanJson en la DB
