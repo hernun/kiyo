@@ -75,5 +75,6 @@ $translations = [
     'mainimages' => 'imágenes principales',
     'main image' => 'imagen principal',
     'tags' => 'etiquetas',
-    'pages' => 'páginas'
+    'pages' => 'páginas',
+    'the page you are looking for does not exist' => 'La página que buscás no existe'
 ];

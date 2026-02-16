@@ -39,14 +39,21 @@
         <script src="<?= getAsset('js/nqv-swap.js') ?>"></script>
         <script src="<?= getAsset('js/nqv.js') ?>"></script>
         <script src="<?= getAsset('js/nqv-image-preview.js') ?>"></script>
+
+        <style><?php foreach(getEnabledLangs() as $lang){
+            if ($lang === $_SESSION['CURRENT_LANGUAGE']) continue;
+                echo '.lang' . $lang . ' {display:none;}';
+            }
+        ?></style>
     </head>
 
-    <body>
+    <body class="<?php echo nqv::getSection()?>">
         <?php if (hasHeader()) getHeader(); ?>
 
         <main class="<?php echo implode(' ', $mainClass) ?>">
             <?php if (is_null(include_template($template))) include_template('error') ?>
         </main>
+
         <?php if (hasFooter()) getFooter(); ?>
     </body>
 </html>

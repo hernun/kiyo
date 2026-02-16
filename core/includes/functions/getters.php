@@ -115,6 +115,7 @@ function getAsset(string $path): string {
     $userPath = USER_PATH . 'assets/' . ltrim($path, '/');
     $corePath = CORE_PATH . 'assets/' . ltrim($path, '/');
     $path = is_file($userPath) ? $userPath:$corePath;
+    if(!is_file($path)) return '';
     return str_replace(ROOT_PATH, '/', $path) . '?v=' . ASSETVERSION;
 }
 
@@ -343,9 +344,7 @@ function hasHeader() {
 function hasFooter() {
     if(nqv::getConfig('maintenance-mode') && !user_is_logged()) return false;
     elseif(isAdmin() && nqv::getConfig('admin_footer')) return true;
-    elseif(isFront() && nqv::getConfig('front_footer')) {
-        return true;
-    }
+    elseif(isFront() && nqv::getConfig('front_footer')) return true;
     return false;
 }
 
@@ -353,16 +352,33 @@ function getAdminUrl() {
     return nqv::url(ROOT_PATH) . 'admin/';
 }
 
-function getPageById(int $id) {
-    $stmt = nqvDB::prepare('SELECT * FROM `pages` WHERE `id` = ?');
-    $stmt->bind_param('i',$id);
+function getPageById(int $id, $lang = null) {
+    if(!$lang) $lang = $_SESSION['CURRENT_LANGUAGE'];
+    $stmt = nqvDB::prepare('SELECT * FROM `pages` WHERE `id` = ? AND lang = ?');
+    $stmt->bind_param('is',$id,$lang);
     $pages = nqvDB::parseSelect($stmt);
     return empty($pages[0]) ? []:$pages[0]; 
 }
 
-function getPageBySlug(string $slug) {
-    $stmt = nqvDB::prepare('SELECT * FROM `pages` WHERE `slug` = ?');
-    $stmt->bind_param('s',$slug);
+function getPageBySlug(string $slug, $lang = null) {
+    if(!$lang) $lang = $_SESSION['CURRENT_LANGUAGE'];
+    $stmt = nqvDB::prepare('SELECT * FROM `pages` WHERE `slug` = ? AND `lang` = ?');
+    $stmt->bind_param('ss',$slug,$lang);
     $pages = nqvDB::parseSelect($stmt);
     return empty($pages[0]) ? []:$pages[0]; 
+}
+
+function getEnabledLangs() {
+    $langs = explode(',',ENABLED_LANGUAGES);
+    return array_combine($langs, $langs);
+}
+
+function getLaguageSelector() {
+    $lis = ['<div class="language-selector"><details><summary>' . $_SESSION['CURRENT_LANGUAGE'] . '</summary><div class="lang-options">'];
+    foreach(getEnabledLangs() as $lang) {
+        if($lang === $_SESSION['CURRENT_LANGUAGE']) continue;
+        $lis[] = '<a class="lang-item" href="/switchlang/' . $lang . '">' . $lang . '</a>';
+    }
+    array_push($lis,' </div></details></div>');
+    return implode($lis);
 }

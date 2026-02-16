@@ -129,8 +129,15 @@ if(empty($_ENV)) {
 }
 
 define('ENV', $_ENV['ENVIRONMENT']);
-define('VERSION', $_ENV['VERSION']);
-define('VERSIONID', intval(str_replace('.','', VERSION)));
+
+$versionFilePath = 'version.json';
+if(is_file($versionFilePath)){
+    # Leer versión del proyecto si existe
+    $conf = file_get_contents($versionFilePath);
+    $version = json_decode($conf,true)['version'] ?? '0';
+}
+
+define('VERSIONID', intval(str_replace('.','', $version)));
 
 if(ENV === 'dev' || ENV === 'stage') {
     define('ASSETVERSION',time());
@@ -178,6 +185,10 @@ try {
 
 nqvSession::getInstance()->open();
 nqv::parseVars();
+
+if(empty($_ENV['DEFAULT_LANGAGUE'])) $_SESSION['CURRENT_LANGUAGE'] = $_SESSION['CURRENT_LANGUAGE'] ?? 'ES';
+
+define('ENABLED_LANGUAGES', empty($_ENV['LANGS']) ? 'ES':strtoupper($_ENV['LANGS']));
 
 if(userIs('holder')) define('DESKTOP_PATH',DASHBOARD_PATH);
 else define('DESKTOP_PATH',ADMIN_PATH);

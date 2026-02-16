@@ -29,7 +29,7 @@ try {
         <select class="form-select required form-control form-control-sm" id="month-<?php echo $this->getHtmlInputId()?>">
             <?php for($i = 1; $i <= 12;$i++):?>
                 <?php $selected  = intval($month) === $i ? 'selected="selected"':null;?>
-                <option value="<?php echo str_pad($i,2,'0',STR_PAD_LEFT)?>" <?php echo $selected?>><?php echo ucfirst(nqv::getMonth($i,'es'))?></option>
+                <option value="<?php echo str_pad($i,2,'0',STR_PAD_LEFT)?>" <?php echo $selected?>><?php echo ucfirst(nqv::getMonth($i,'ES'))?></option>
             <?php endfor?>
         </select>
     </div>

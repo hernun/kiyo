@@ -514,7 +514,7 @@ class nqvDbObject {
     }
 
     public static function getLabel($k){
-        return nqv::translate($k,'es','label');
+        return nqv::translate($k,'ES','label');
     }
 
     protected function get_slug_sufix(): string {

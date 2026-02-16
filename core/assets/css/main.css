@@ -43,16 +43,18 @@ body {
 	font-size:14px;
 }
 
-header {
+header.ovo {
 	display: flex;
 	flex-direction: row;
 	justify-content: center;
 	align-items: center;
     height: var(--header-height-front);
 	width: 100%;
+	background-color: var(--header-bg-color);;
+	color:white;
 }
 
-header nav {
+header.ovo nav {
 	width:100%;
 }
 
@@ -257,7 +259,71 @@ label .required-mark {
     background-color:rgb(171, 30, 30);
 }
 
+footer.ovo {
+	background-color: var(--footer-bg-color);
+	height: var(--footer-height-front);
+	color: white;
+	display:flex;
+	justify-content: center;
+	align-items: center;
+}
 
+.ovo-social img {
+	max-width:50px;
+	opacity:.8;
+}
+
+.ovo-social img:hover {
+	opacity:1;
+}
+
+/* LANGUAGE SELECTOR */
+
+.language-selector {
+  position: relative;
+  display: inline-block;
+  font-family: inherit;
+  text-transform: uppercase;
+  font-weight: bold;
+  z-index:999;
+}
+
+/* Quitar flecha nativa */
+.language-selector summary {
+	list-style: none;
+	cursor: pointer;
+}
+
+.language-selector summary::-webkit-details-marker {
+	display: none;
+}
+
+/* Estilo del botón visible */
+.language-selector summary {
+	padding: 6px 10px;
+}
+
+/* Contenedor dropdown */
+.language-selector .lang-options {
+	position: absolute;
+	background-color: var(--header-bg-color);
+	min-width:100px;
+	border-radius:5px;
+	border:1px solid #efefef;
+}
+
+/* Links */
+.language-selector .lang-options a {
+	display: block;
+	padding: 6px 10px;
+	text-decoration: none;
+	color: inherit;
+}
+
+.language-selector .lang-options a:hover {
+	background-color: #f8f8f8;
+	color:black;
+}
 
 @media screen and (max-width: 1680px) {
 	:root {

@@ -16,6 +16,8 @@ if(submitted($formId)) {
 
         // Suponiendo que recibís el JSON desde el input hidden
         $rawContent = $_POST['content'] ?? '{}';
+        $_POST['lang'] = $_POST['lang'] ? strtoupper($_POST['lang']):$_SESSION['CURRENT_LANGUAGE'];
+
         // 1. Convertir a objeto PHP
         $data = json_decode($rawContent, true);
 
@@ -82,16 +84,24 @@ if(submitted($formId)) {
                 <div class="row" style="max-width:1400px">
                     <div class="col-12 pages-title-field mb-3"><?php echo $object->getShowtitleInput($showtitle);?></div>
                     <?php $f = new nqvDbField($fields['title'],$tablename);?>
-                    <div class="col-12 pages-title-field col-lg-6 col-xl-6"><?php echo $f->setValue($page['title']);?></div>
+                    <div class="col-12 pages-title-field col-lg-6 col-xl-4"><?php echo $f->setValue($page['title']);?></div>
                     <?php $f = new nqvDbField($fields['slug'],$tablename);?>
-                    <div class="col-12 pages-slug-field col-lg-6 col-xl-6">
+                    <div class="col-12 pages-slug-field col-lg-6 col-xl-4">
                         <?php echo $f->setValue($page['slug']);?>
                         <?php $url = 'https://' . DOMAIN . '/' . $page['slug']?>
-                        <div class="single-page-url"><a href="<?php echo $url;?>" target="_blank"><?php echo $url;?></a></div>
+                        <div class="single-page-url mb-3 mb-lg-0"><a href="<?php echo $url;?>" target="_blank"><?php echo $url;?></a></div>
                     </div>
+                    <?php $f = new nqvDbField($fields['lang'],$tablename)?>
+                    <?php 
+                        $f->setHtmlInputType('select');
+                        $f->setCanBeNull(false);
+                        $f->setOptions(getEnabledLangs());
+                    ?>
+                    <div class="col-12 pages-slug-field col-lg-6 col-xl-4"><?php echo $f->setValue($page['lang']);?></div>
                     
                     <?php $f = new nqvDbField($fields['description'],$tablename);?>
                     <div class="col-12 pages-description-field"><?php echo $f->setValue($page['description']);?></div>
+
                     <?php foreach($fields as $field):?>
                         <?php if($field['Field'] === 'title') continue?>
                         <?php if($field['Field'] === 'properties') continue?>
@@ -101,6 +111,8 @@ if(submitted($formId)) {
                         <?php if($field['Field'] === 'created_by') continue?>
                         <?php if($field['Field'] === 'modified_at') continue?>
                         <?php if($field['Field'] === 'content') continue?>
+                        <?php if($field['Field'] === 'lang') continue?>
+
                         <?php $f = new nqvDbField($field,$tablename)?>
                         <?php $f->setValue($page[$field['Field']])?>
                         <?php if(!currentSessionTypeIs('root') && $field['Field'] === 'slug') $f->setHtmlInputType('hidden')?>

@@ -48,11 +48,11 @@ $image = nqvMainImages::getByElementId($tablename,$id);
                 $v = $field->getHumanValue();
             ?>
             <div class="">
-                <span class="label fw-bold"><?php echo ucfirst(nqv::translate($k,'es','label'))?>:</span>
+                <span class="label fw-bold"><?php echo ucfirst(nqv::translate($k,'ES','label'))?>:</span>
                 <?php if(userIs('root')):?>
                     <span class="label fw-normal"><small>(<?php echo $k?>)</small></span>
                 <?php endif?>
-                <span><?php echo nqv::translate((string) $v,'es')?></span>
+                <span><?php echo nqv::translate((string) $v,'ES')?></span>
             </div>
         <?php endforeach?>
         <?php if($tablename === 'activities' || $tablename === 'holders') getImageGallery($tablename,$id);?>

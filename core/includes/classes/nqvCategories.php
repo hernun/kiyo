@@ -36,7 +36,7 @@ class nqvCategories {
             $dbData = (array) @nqvDB::parseSelect($stmt)[0];
             if(empty($dbData)) {
                 $stmt = nqvDB::prepare($sql);
-                $slug = nqv::translate($data['slug'],'es','slug',true);
+                $slug = nqv::translate($data['slug'],'ES','slug',true);
                 $stmt->bind_param('s',$slug);
                 $dbData = (array) @nqvDB::parseSelect($stmt)[0];
             }
@@ -87,6 +87,6 @@ class nqvCategories {
     public function get_menu_label(): string {
         if(!empty($this->altname)) $output = $this->altname;
         else $output = $this->name;
-        return nqv::translate($output,'es','category-label');
+        return nqv::translate($output,'ES','category-label');
     }
 }

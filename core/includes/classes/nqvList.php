@@ -294,12 +294,12 @@ class nqvList {
     }
 
     public function getName() {
-        if(empty($this->name)) $this->setName(nqv::translate($this->getTablenameLabel(),'es','plural'));
+        if(empty($this->name)) $this->setName(nqv::translate($this->getTablenameLabel(),'ES','plural'));
         return $this->name;
     }
 
     public function getSingularName() {
-        if(empty($this->singularName)) $this->singularName = nqv::translate($this->getTablenameLabel(),'es','singular');
+        if(empty($this->singularName)) $this->singularName = nqv::translate($this->getTablenameLabel(),'ES','singular');
         return $this->singularName;
     }
 

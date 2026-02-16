@@ -4,6 +4,139 @@ a {
 	font-weight:bold;
 }
 
+/* HEADER */
+
+header {
+    margin:0;
+}
+
+header .header-container {
+    flex-direction: row;
+    display: flex;
+    width:1200px;
+}
+
+header #branding {
+    height: var(--header-height-front);
+    flex: 1 0 auto;   /* ocupa el espacio disponible */
+}
+
+header nav {
+    height: var(--header-height-front);
+}
+
+header nav ul {
+    color:white;
+    height: var(--header-height-front);
+    margin:0;
+    list-style: none;
+    display:flex;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+header .logo {
+    height: 100%;
+    position: relative;
+    padding: 1rem;;
+}
+
+header .logo img {
+    height:100%;
+}
+
+header nav ul a {
+    color:inherit;
+    text-transform: uppercase;
+    padding:0 10px;
+    font-size:.9rem;
+    font-weight:600;
+    opacity: 1;
+}
+
+header nav ul a:hover {
+    opacity:.8;
+}
+
+header nav.mobile .lang-button {
+    color:white;
+}
+
+header nav.mobile {
+    display: flex;
+}
+
+header nav .hamburger {
+    padding:10px;
+    cursor: pointer;
+}
+
+header nav .hamburger svg {
+    fill:white;
+    width:100%;
+    height:100%;
+}
+
+.mobile-menu {
+    position:fixed;
+    top:0;
+    left:0;
+    width:100vw;
+    height:100vh;
+    background:white;
+    z-index:9999;
+    overflow: hidden;
+    transform: translateX(-100%);
+    transition: transform 0.35s ease-out;
+    will-change: transform;
+}
+
+.mobile-menu.open {
+    transform: translateX(0);
+    transition: transform 0.35s ease-out;
+    will-change: transform;
+}
+
+header nav .mobile-menu  ul {
+    color: black;
+    flex-direction: column;
+    align-items: start;
+    justify-content: start;
+    padding:2rem;
+    height:100vh;
+}
+
+header nav .mobile-menu  ul li a {
+    padding:1rem;
+    display: inline-block;
+    width:100vw;
+}
+
+
+header nav .mobile-menu  ul li a:hover {
+    background-color: #f3f3f3;
+    border-radius: 5px;;
+}
+
+header nav .mobile-menu  ul .close {
+    align-self: end;
+}
+
+header nav .mobile-menu  ul .close-button {
+    font-weight: bold;
+    cursor:pointer;
+    border-radius: 50%;
+    display: flex;
+    width:40px;
+    height:40px;
+    justify-content: center;
+    align-items: center;
+}
+
+header nav .mobile-menu  ul .close-button:hover {
+    background-color: #f3f3f3;
+}
+
 #home {
 	min-height: 500px;
 	display: flex;
@@ -27,45 +160,26 @@ a {
     vertical-align: -.125em;
     fill: currentcolor;
 }
+/* FOOTER */
 
-footer {
-    width: 100vw;  
-	position: relative;
-	text-align:center;
-	background-color:#FFF;
-    height: var(--footer-height-front);
+footer.ovo {
+    position: relative;
+    background-color: #222;
+    color: black;
+    padding: 2rem;
+    border-top: 2px solid #c0c0c0;
 }
 
-footer .logos-container {
-    width: 100vw;
-    display: flex;
-    justify-content: center;
-	position:absolute;
-	bottom:0;
+footer .ovo-social {
+    justify-content: flex-start;
+    display:flex;
+    gap:1rem;
+    flex-wrap:wrap;
 }
 
-footer .logos {
-    display: flex;
-    bottom: 10px;
-    z-index: 2;  justify-content: space-evenly;
-    max-width: 1920px;
-	width:100%;
-    flex-wrap: wrap;
-    gap: 40px;  
-	padding: 40px;
-	margin-bottom:40px;
-}
-
-footer .logo {
-	text-align:center;
-}
-
-footer .logo img {
-    width: auto;
-    height: 3vw;
-	max-height:70px;
-    max-width: none;
-    max-height: none;
+footer .ovo-social img {
+    max-width:30px;
+    margin-right:1rem;
 }
 
 .main-image.format-banner {
@@ -89,9 +203,7 @@ footer .logo img {
 }
 
 @media (max-width: 991px) {
-	footer {
-		min-height: 600px;
-	}
+
 }
 
 @media (max-width: 767px)  {	

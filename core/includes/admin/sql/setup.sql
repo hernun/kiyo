@@ -62,8 +62,8 @@ INSERT INTO `config` SET `name` = 'Mostrar pie de página en Front', `slug` = 'f
 INSERT INTO `config` SET `name` = 'Mostrar encabezado de página en Admin', `slug` = 'admin_header',`value` = 1,`created_at` = NOW(), `created_by` = 0;
 INSERT INTO `config` SET `name` = 'Mostrar encabezado de página en Front', `slug` = 'front_header',`value` = 1,`created_at` = NOW(), `created_by` = 0;
 INSERT INTO `config` SET `name` = 'Configuración de correo', `slug` = 'mail-settings', `value` = '{"active":"mailhog","drivers":{"mailhog":{"type":"smtp","host":"127.0.0.1","port":1025,"smtp_auth":false,"smtp_secure":false,"smtp_auto_tls":false,"from":{"address":"no-reply@local.test","name":"Aplicación"}},"smtp":{"type":"smtp","host":"","port":587,"smtp_auth":true,"smtp_secure":"tls","smtp_auto_tls":true,"from":{"address":"","name":""}},"gmail":{"type":"gmail","host":"smtp.gmail.com","port":587,"smtp_auth":true,"smtp_secure":"tls","smtp_auto_tls":true,"from":{"address":"","name":""}},"ses":{"type":"ses","region":"","endpoint":"","from":{"address":"","name":""}}}}', `created_at` = NOW(), `created_by` = 0;
-INSERT INTO `config` SET `name` = 'Página de inicio', `slug` = 'homepage',`value` = '{"page_id":0}',`created_at` = NOW(), `created_by` = 0;
-INSERT INTO `config` SET `name` = 'Propiedades por defecto en Páginas', `slug` = 'pagesdefaultproperties',`value` = '{"showtitle":"on"}',`created_at` = NOW(), `created_by` = 0;
+INSERT INTO `config` SET `name` = 'Página de inicio', `slug` = 'homepage',`value` = '{"ES":{"page_id":0}}',`created_at` = NOW(), `created_by` = 0;
+INSERT INTO `config` SET `name` = 'Propiedades por defecto en Páginas', `slug` = 'pagesdefaultproperties',`value` = '{"showtitle":"on","mainimageformat":"banner"}',`created_at` = NOW(), `created_by` = 0;
 
 CREATE TABLE `mainimages` (
  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
@@ -132,6 +132,7 @@ CREATE TABLE IF NOT EXISTS `pages` (
     `description` text CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci,
     `slug` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
     `properties` text CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci,
+    `lang` varchar(2) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci,
     `created_at` DATETIME DEFAULT CURRENT_TIMESTAMP,
     `modified_at` DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     `created_by` bigint unsigned NOT NULL,

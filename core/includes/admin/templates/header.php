@@ -7,7 +7,7 @@ $exludedTables = [
     'advertisers'
 ];
 ?>
-<header>
+<header class="ovo">
     <nav class="navbar navbar-expand-lg bg-body-tertiary" data-bs-theme="dark">
         <div class="container-fluid">
             <a class="navbar-brand" href="/" target="_blank"><?php echo APP_NAME?></a>
@@ -112,6 +112,8 @@ $exludedTables = [
             </div>
             <?php if(user_is_logged()):?>
                 <ul class="navbar-nav mb-2 mb-lg-0 tablet desktop">
+
+                    <li class="nav-item"><?php echo getLaguageSelector()?></li>
                     <li class="nav-item">
                         <span class="nav-link"><small>v<?php echo nqv::getConfig('version')?></small></span>
                     </li>

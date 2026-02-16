@@ -209,3 +209,7 @@ main.headered.footered {
 .alert:not(:last-of-type) {
     margin-bottom:0;
 }
+
+#homepage-selector-form {
+    min-height:calc(100vh - var(--header-height-admin) * 2);
+}

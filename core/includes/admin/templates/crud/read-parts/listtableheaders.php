@@ -6,7 +6,7 @@ $mainFieldLabel = $this->getDbTable()->getMainFieldName();
 if(is_array($mainFieldLabel)) {
     if(in_array('name',$mainFieldLabel) && in_array('lastname',$mainFieldLabel)) $mainFieldLabel = 'Nombre y apellido';
     else $mainFieldLabel = implode(' + ',array_map(function($value){
-        return nqv::translate($value,'es','label');
+        return nqv::translate($value,'ES','label');
     },$mainFieldLabel));
 }
 $fiealdNames = [];
@@ -26,7 +26,7 @@ usort($fields, function ($a, $b) use ($include) {
     <tr>
         <th>Id</th>
         <?php if(!in_array('mainfield',$exclude)):?>
-            <th><?php echo ucwords((string) nqv::translate((string) $mainFieldLabel,'es','label'))?></th>
+            <th><?php echo ucwords((string) nqv::translate((string) $mainFieldLabel,'ES','label'))?></th>
         <?php endif?>
         <?php foreach($fields as $field): ?>
             <?php if(in_array($field['Field'],$exclude)) continue; ?>
@@ -34,7 +34,7 @@ usort($fields, function ($a, $b) use ($include) {
                 <?php if(!in_array($field['Field'],$include)) continue;?>
             <?php endif?>
             <?php if($field['Field'] === 'password') continue?>
-            <th><?php echo ucfirst(nqv::translate($field['Field'],'es','label'))?></th>
+            <th><?php echo ucfirst(nqv::translate($field['Field'],'ES','label'))?></th>
         <?php endforeach?>
         <th data-dt-order="disable">Acciones</th>
         <th data-dt-order="disable"></th>

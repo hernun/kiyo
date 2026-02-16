@@ -9,6 +9,7 @@ class App {
         // --- Legacy routing ---
         [$mm, $template] = array_values(self::parseMainHttoQuery());
         $mainClass = ['ovo'];
+
         // --- Layout state ---
         if (hasHeader()) $mainClass[] = 'headered';
         if (hasFooter()) $mainClass[] = 'footered';
@@ -37,7 +38,7 @@ class App {
                 $template = \nqv::getVars(0);
                 if(!empty($template)) {
                     if(!isTemplate($template)) {
-                        $test = \nqv::translate((string) $template,'es','slug',true);
+                        $test = \nqv::translate((string) $template,'ES','slug',true);
                         if(isAdmin()) {
                             if(\nqvDB::isTable($test)) {
                                 \nqv::addVar('database',0);

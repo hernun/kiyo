@@ -1,16 +1,18 @@
 <?php
 $formId = 'homepage-selector-form';
+$current_homepage = nqv::getConfig('homepage');
 if(submitted($formId)) {
-    $value = json_encode(['pages_id'=>intval($_POST['pages_id'])], JSON_UNESCAPED_UNICODE);
+    $current_homepage[$_SESSION['CURRENT_LANGUAGE']]['pages_id'] = intval($_POST['pages_id']);
+    $value = json_encode($current_homepage, JSON_UNESCAPED_UNICODE);
     nqv::setConfig('homepage', $value);
     header('location:');
     exit;
 }
-$pages = nqv::get('pages');
-$current_homepage = nqv::getConfig('homepage');
-$current_page_id = intval(@$current_homepage['pages_id']);
+$pages = nqv::get('pages',['lang'=>$_SESSION['CURRENT_LANGUAGE']]);
+$current_page_id = intval(@$current_homepage[$_SESSION['CURRENT_LANGUAGE']]['pages_id']);
 $current_page = getPageById($current_page_id);
 $src = !empty($current_page['slug']) ? '/' . $current_page['slug']:'/';
+
 ?>
 
 <div class="my-4">
@@ -23,7 +25,7 @@ $src = !empty($current_page['slug']) ? '/' . $current_page['slug']:'/';
                     <option value="">Plantilla de inicio</option>
                     <?php foreach($pages as $page):?>
                         <?php $selected = $current_page_id === intval($page['id']) ? 'selected="selected"':'';?>
-                        <option value="<?php echo $page['id']?>" data-slug="<?php echo $current_page['slug']?>" <?php echo $selected?>><?php echo $page['title']?></option>
+                        <option value="<?php echo $page['id']?>" data-slug="<?php echo $page['slug']?>" <?php echo $selected?>><?php echo $page['title']?></option>
                     <?php endforeach?>
                 </select>
             </div>

@@ -14,6 +14,7 @@ if(submitted($formId)) {
 
         // Suponiendo que recibís el JSON desde el input hidden
         $rawContent = $_POST['content'] ?? '{}';
+        $_POST['lang'] = $_POST['lang'] ? strtoupper($_POST['lang']):$_SESSION['CURRENT_LANGUAGE'];
 
         // 1. Convertir a objeto PHP
         $data = json_decode($rawContent, true);
@@ -42,9 +43,9 @@ if(submitted($formId)) {
             }
             else $properties[$k] = null;
         }
-
-        if(isset($_POST['mainimageformat'])) $properties['mainimageformat'] = $_POST['mainimageformat'];
         
+        if(isset($_POST['mainimageformat'])) $properties['mainimageformat'] = $_POST['mainimageformat'];
+
         $_POST['properties'] = json_encode($properties, JSON_UNESCAPED_UNICODE);
 
         // Guardar $cleanJson en la DB
@@ -82,9 +83,17 @@ if(submitted($formId)) {
                 <div class="row" style="max-width:1400px">
                     <div class="col-12 pages-title-field mb-3"><?php echo $object->getShowtitleInput($showtitle);?></div>
                     <?php $f = new nqvDbField($fields['title'],$tablename);?>
-                    <div class="col-12 pages-title-field col-lg-6 col-xl-6"><?php echo $f;?></div>
+                    <div class="col-12 pages-title-field col-lg-6 col-xl-4"><?php echo $f;?></div>
                     <?php $f = new nqvDbField($fields['slug'],$tablename);?>
-                    <div class="col-12 pages-slug-field col-lg-6 col-xl-6"><?php echo $f;?></div>
+                    <div class="col-12 pages-slug-field col-lg-6 col-xl-4"><?php echo $f;?></div>
+                    <?php $f = new nqvDbField($fields['lang'],$tablename)?>
+                    <?php 
+                        $f->setHtmlInputType('select');
+                        $f->setCanBeNull(false);
+                        $f->setOptions(getEnabledLangs());
+                    ?>
+                    <div class="col-12 pages-slug-field col-lg-6 col-xl-4"><?php echo $f->setValue($_SESSION['CURRENT_LANGUAGE']);?></div>
+
                     <?php $f = new nqvDbField($fields['description'],$tablename);?>
                     <div class="col-12 pages-description-field"><?php echo $f;?></div>
                     <div class="col-12 pages-content-field">

@@ -10,6 +10,21 @@ $(function(){
             openModal(this);
         }
     })
+
+    $('body').on({
+        click: function(e) {
+            e.preventDefault();
+            $.ajax({
+                url: '/siwtchlang',
+                method: 'PUT',
+                data: { language: e.target.text }
+            }).done(function(res) {
+                console.log(res);
+            }).always(function(){
+                location.reload();
+            });
+        }
+    },'a.lang-item')
 });
 
 function getBgImageByElelemntId(elementId) {

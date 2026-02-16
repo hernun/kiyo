@@ -581,9 +581,9 @@ class nqvDbField {
                 $fk = array_filter($fks,function($a) use ($value) {
                     return intval($a['value']) === intval($value);
                 });
-                return nqv::translate(array_values($fk)[0]['label'],'es');
+                return nqv::translate(array_values($fk)[0]['label'],'ES');
             } else return nqv::translate($fks[$this->getValue()]);
-        } else return empty($value) ? $value:nqv::translate($value, 'es');
+        } else return empty($value) ? $value:nqv::translate($value, 'ES');
     }
 
     public function setCssClasses($classes): nqvDbField {

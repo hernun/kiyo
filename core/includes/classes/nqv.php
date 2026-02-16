@@ -36,8 +36,12 @@ class nqv {
         }
     }
 
-    public static function translate(string $str, string $lang = 'es', ?string $context = '', bool $inverse = false): string  {
-        include($_SERVER['DOCUMENT_ROOT'] . '/core/translations/' . strtolower($lang) . '.php');
+    public static function translate(string $str, string $lang = 'ES', ?string $context = '', bool $inverse = false): string  {
+        $userFilepath = USER_PATH . 'translations/' . strtoupper($lang) . '.php';
+        $coreFilepath = CORE_PATH . 'translations/' . strtoupper($lang) . '.php';
+        if(is_file($userFilepath)) include($userFilepath);
+        elseif(is_file($coreFilepath)) include($coreFilepath);
+        else return $str;
         if($inverse) {
             $output = @array_flip($translations)[$str];
             if(empty($output)) $output = $str;
@@ -455,8 +459,8 @@ class nqv {
         return url($path);
     }
 
-    public static function getMonth($i, $lang='es') {
-        if($lang === 'en') return self::$months[$i-1];
+    public static function getMonth($i, $lang='ES') {
+        if($lang === 'EN') return self::$months[$i-1];
         else return self::$meses[$i-1];
     }
 
@@ -519,7 +523,7 @@ class nqv {
             $stmt = nqvDB::prepare($sql);
             $result = nqvDB::parseSelect($stmt);
             array_walk($result, function(&$i,$k) use ($tablename) {
-                $i['category'] = ['slug' => nqv::translate($tablename,'es','slug'),'label' => nqv::translate($tablename)];
+                $i['category'] = ['slug' => nqv::translate($tablename,'ES','slug'),'label' => nqv::translate($tablename)];
                 $i['tablename'] = $tablename;
                 $result[$k] = $i;
             },$result);
@@ -534,7 +538,7 @@ class nqv {
         foreach($categories as $category) {
             $activities = self::getActivitiesByCategory($category,$status);
             array_walk($activities, function(&$i,$k) use ($category) {
-                $i['category'] = ['slug' => nqv::translate($category['slug'],'es','slug'),'label' => nqv::translate($category['name'])];
+                $i['category'] = ['slug' => nqv::translate($category['slug'],'ES','slug'),'label' => nqv::translate($category['name'])];
                 $tags = array_unique(array_filter(explode(',',(string) $i['tags'])));
                 array_walk($tags,function(&$a){
                     if(is_numeric($a)) {
@@ -587,7 +591,7 @@ class nqv {
             else $tablenames = [];
         }
         foreach($tablenames as $tablename) {
-            $output[$tablename] = nqv::translate($tablename,'es','adminheader');
+            $output[$tablename] = nqv::translate($tablename,'ES','adminheader');
         }
         return $output;
     }

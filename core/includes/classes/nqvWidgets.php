@@ -72,7 +72,7 @@ class nqvWidgets {
             $dbData = (array) @nqvDB::parseSelect($stmt)[0];
             if(empty($dbData)) {
                 $stmt = nqvDB::prepare($sql);
-                $slug = nqv::translate($data['slug'],'es','slug',true);
+                $slug = nqv::translate($data['slug'],'ES','slug',true);
                 $stmt->bind_param('s',$slug);
                 $dbData = (array) @nqvDB::parseSelect($stmt)[0];
             }
@@ -123,6 +123,6 @@ class nqvWidgets {
     public function get_menu_label(): string {
         if(!empty($this->name)) $output = $this->name;
         else $output = $this->name;
-        return empty($output) ? '':nqv::translate($output,'es','widget-label');
+        return empty($output) ? '':nqv::translate($output,'ES','widget-label');
     }
 }
