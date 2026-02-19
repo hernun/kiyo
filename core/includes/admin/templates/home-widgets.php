@@ -12,37 +12,35 @@ $widgets = array_filter(nqv::get('widgets'),function($w) use ($homeWidgets){
 
 $indexes = [];
 ?>
-
-<main class="px-4">
-    <div class="container">
-        <h1 class="my-5">Home Widgets</h1>
-        <div id="widgets-menu-manager" class="d-flex flex-colun justify-content-between mb-5 gap-4">
-            <div id="origin" class="border rounded p-3 w-100">
-                <?php foreach($widgets as $k => $widget_array):?>
-                    <?php if(in_array($widget_array['id'],(array) $widgets)):?>
-                        <?php $indexes[$widget_array['id']] =  $k?>
-                        <?php continue?>
-                    <?php endif?>
-                    <?php $widget = new nqvWidgets($widget_array)?>
-                    <div class="item" data-value="<?php echo $widget->get('id')?>" data-index="<?php echo $k?>">
-                        <div class="label"><?php echo ucfirst($widget->get_menu_label())?></div>
-                        <div class="remove"><i class="bi bi-trash"></i></div>
-                    </div>
-                <?php endforeach?>
-            </div>
-                    
-            <div id="destiny" class="border rounded p-3 w-100">
-                <?php foreach($homeWidgets as $item_id):?>
-                    <?php $item = new nqvWidgets(['id' => $item_id])?> 
-                    <div class="item" data-value="<?php echo $item->get('id')?>" data-index="<?php echo @$indexes[$item_id]?>">
-                        <div class="label"><?php echo ucfirst((string) $item->get_menu_label())?></div>
-                        <div class="remove"><i class="bi bi-trash"></i></div>
-                    </div>
-                <?php endforeach?>
-            </div>
+<div class="container">
+    <h1 class="my-5">Home Widgets</h1>
+    <div id="widgets-menu-manager" class="d-flex flex-colun justify-content-between mb-5 gap-4">
+        <div id="origin" class="border rounded p-3 w-100">
+            <?php foreach($widgets as $k => $widget_array):?>
+                <?php if(in_array($widget_array['id'],(array) $widgets)):?>
+                    <?php $indexes[$widget_array['id']] =  $k?>
+                    <?php continue?>
+                <?php endif?>
+                <?php $widget = new nqvWidgets($widget_array)?>
+                <div class="item" data-value="<?php echo $widget->get('id')?>" data-index="<?php echo $k?>">
+                    <div class="label"><?php echo ucfirst($widget->get_menu_label())?></div>
+                    <div class="remove"><i class="bi bi-trash"></i></div>
+                </div>
+            <?php endforeach?>
+        </div>
+                
+        <div id="destiny" class="border rounded p-3 w-100">
+            <?php foreach($homeWidgets as $item_id):?>
+                <?php $item = new nqvWidgets(['id' => $item_id])?> 
+                <div class="item" data-value="<?php echo $item->get('id')?>" data-index="<?php echo @$indexes[$item_id]?>">
+                    <div class="label"><?php echo ucfirst((string) $item->get_menu_label())?></div>
+                    <div class="remove"><i class="bi bi-trash"></i></div>
+                </div>
+            <?php endforeach?>
         </div>
     </div>
-</main>
+</div>
+
 <script type="text/javascript">
     function insertAtIndex(obj,i) {
         let ref;

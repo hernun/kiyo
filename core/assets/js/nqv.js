@@ -10,21 +10,6 @@ $(function(){
             openModal(this);
         }
     })
-
-    $('body').on({
-        click: function(e) {
-            e.preventDefault();
-            $.ajax({
-                url: '/siwtchlang',
-                method: 'PUT',
-                data: { language: e.target.text }
-            }).done(function(res) {
-                console.log(res);
-            }).always(function(){
-                location.reload();
-            });
-        }
-    },'a.lang-item')
 });
 
 function getBgImageByElelemntId(elementId) {
@@ -215,16 +200,19 @@ function parseSlugOnForm(exclude) {
     document.addEventListener('DOMContentLoaded', () => {
         const titleInput = document.getElementById('title-input');
         const slugInput  = document.getElementById('slug-input');
+        const langInput  = document.getElementById('lang-input');
 
         if (!titleInput || !slugInput) return;
+        
+        
 
         const removeAccents = (str = '') =>
             str.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
 
         let timeout;
 
-        titleInput.addEventListener('input', () => {
-
+        function checkSlug() {
+            const lang = langInput ? langInput.value:null;
             const baseSlug = removeAccents(titleInput.value)
                 .toLowerCase()
                 .trim()
@@ -234,7 +222,6 @@ function parseSlugOnForm(exclude) {
             clearTimeout(timeout);
 
             timeout = setTimeout(() => {
-
                 fetch('/admin/check-slug', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
@@ -242,6 +229,7 @@ function parseSlugOnForm(exclude) {
                         slug: baseSlug,
                         table: 'pages',
                         exclude: exclude,
+                        lang: lang
                     })
                 })
                 .then(res => res.json())
@@ -250,6 +238,15 @@ function parseSlugOnForm(exclude) {
                 });
 
             }, 300); // debounce
-        });
+        }
+
+        titleInput.addEventListener('input', () => checkSlug() );
+        if(langInput) langInput.addEventListener('change', () => checkSlug() );
     });
+}
+
+function escapeHtml(text) {
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
 }

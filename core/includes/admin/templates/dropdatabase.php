@@ -19,18 +19,16 @@
         }
         nqv::back();
     }
-?>
-<main class="m-4">
-    <div class="comntainer center-center">
-        <form accept-charset="utf-8" method="post">
-            <input type="hidden" name="form-token" value="<?php echo get_token('dropdatabase')?>" />
-            <input type="submit" class="btn btn-danger" value="Eliminar todas las tablas de la base de datos" />
-        </form>
-    </div>
-</main>
+?>ç
+<div class="comntainer center-center">
+    <form accept-charset="utf-8" method="post">
+        <input type="hidden" name="form-token" value="<?php echo get_token('dropdatabase')?>" />
+        <input type="submit" class="btn btn-danger" value="Eliminar todas las tablas de la base de datos" />
+    </form>
+</div>
 <?php else:?>
     <?php 
-        nqvNotifications::add('No tenés permisos suficientes para borrar la base de datos','error');
+        nqvNotifications::add(nqv::translate('You do not have permission to access this section'),'error');
         nqv::back();
     ?>
 <?php endif?>

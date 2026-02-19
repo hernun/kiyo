@@ -1,5 +1,3 @@
-<main class="px-4">
-    <div class="center-center">
-        <h4>404</h4>
-    </div>
-</main>
+<div class="center-center">
+    <p class="fs-5">404 | <?php echo nqv::translate('the view you request does not exist');?></p>
+</div>

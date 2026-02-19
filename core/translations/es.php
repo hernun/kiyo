@@ -76,5 +76,26 @@ $translations = [
     'main image' => 'imagen principal',
     'tags' => 'etiquetas',
     'pages' => 'páginas',
-    'the page you are looking for does not exist' => 'La página que buscás no existe'
+    'the page you are looking for does not exist' => 'La página que buscás no existe',
+    'the view you request does not exist' => 'La vista que solicitaste no existe',
+    'You do not have permission to access this section' => 'No tenés permiso para acceder a esta sección',
+    'You do not have sufficient permissions to delete the database' => 'No tenés permisos suficientes para borrar la base de datos',
+    'You do not have permission to view this item' => 'No tenés permiso para ver este elemento',
+    'Use like' => 'Usar como',
+    'session_types' => 'Tipos de usuario',
+    'The password must be at least 8 characters long, using lowercase letters, uppercase letters, numbers, and symbols' => 'La contraseña debe tener al menos 8 caracteres usando minúsculas, mayúsculas, números y signos',
+    // Labels y placeholders
+    'Your name' => 'Tu nombre',
+    'Email' => 'Correo electrónico',
+    'name@example.com' => 'nombre@ejemplo.com',
+    'Message subject' => 'Asunto del mensaje',
+    'Message' => 'Mensaje',
+    'Write your message here...' => 'Escribe tu mensaje aquí...',
+    'Send' => 'Enviar',
+
+    // Mensajes de validación
+    'Please enter your name.' => 'Por favor ingresa tu nombre.',
+    'Please enter a valid email.' => 'Por favor ingresa un correo válido.',
+    'Please enter a subject.' => 'Por favor ingresa un asunto.',
+    'Please enter a message.' => 'Por favor ingresa un mensaje.'
 ];

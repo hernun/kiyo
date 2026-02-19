@@ -268,6 +268,10 @@ class nqvMainImages {
         return $this->createThumbnails();
     }
 
+    public function getThumbnailsSizes() {
+        return $this->thumbnailsSizes;
+    }
+
     public function createThumbnails(): int {
         $count = 0;
         foreach ($this->thumbnailsSizes as $thSize) {
@@ -276,7 +280,7 @@ class nqvMainImages {
         return $count;
     }
 
-    protected function createThumbnail(?array $size, ?array $crop): bool {
+    public function createThumbnail(?array $size, ?array $crop): bool {
         try {
             $ext = $this->get_extension(true);
             if ($ext === 'jpg') {

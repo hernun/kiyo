@@ -1,5 +1,4 @@
-<main class="px-4">
-    <div class="center-center">
-        <h4><?php echo $e->getMessage()?></h4>
-    </div>
-</main>
+
+<div class="center-center">
+    <p class="fs-5"><?php echo nqv::translate($e->getMessage())?></p>
+</div>

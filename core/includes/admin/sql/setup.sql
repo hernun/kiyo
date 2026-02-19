@@ -53,10 +53,10 @@ INSERT INTO `config` SET `name` = 'version', `slug` = 'version',`value` = '2.0.0
 INSERT INTO `config` SET `name` = 'Modo Mantenimiento', `slug` = 'maintenance-mode',`value` = '1',`created_at` = NOW(), `created_by` = 0;
 INSERT INTO `config` SET `name` = 'Vistas accesibles en modo mantenimiento', `slug` = 'maintenance-enabled-templates',`value` = 'login,password-reset',`created_at` = NOW(), `created_by` = 0;
 INSERT INTO `config` SET `name` = 'Plantilla del Modo Mantenimiento', `slug` = 'maintenance-template',`value` = 'maintenance',`created_at` = NOW(), `created_by` = 0;
-INSERT INTO `config` SET `name` = 'Permisos', `slug` = 'permissions',`value` = '{"admin":{"crud":["adds","advertisers","config","images","mainimages","tags","users"]}}',`created_at` = NOW(), `created_by` = 0;
+INSERT INTO `config` SET `name` = 'Permisos', `slug` = 'permissions',`value` = '{"admin":{"crud":["adds","advertisers","pages","images","mainimages","tags","users"]}}',`created_at` = NOW(), `created_by` = 0;
 INSERT INTO `config` SET `name` = 'Permisos adicionales', `slug` = 'additional-permissions',`value` = 'tables,permissions',`created_at` = NOW(), `created_by` = 0;
 INSERT INTO `config` SET `name` = 'Home Widgets', `slug` = 'home-widgets',`value` = '[1,2]',`created_at` = NOW(), `created_by` = 0;
-INSERT INTO `config` SET `name` = 'Items en menú Contenido', `slug` = 'items-admin',`value` = '',`created_at` = NOW(), `created_by` = 0;
+INSERT INTO `config` SET `name` = 'Items en menú Contenido', `slug` = 'items-admin',`value` = '{"admin":["pages","advertisers","pages"]}',`created_at` = NOW(), `created_by` = 0;
 INSERT INTO `config` SET `name` = 'Mostrar pie de página en Admin', `slug` = 'admin_footer',`value` = 0,`created_at` = NOW(), `created_by` = 0;
 INSERT INTO `config` SET `name` = 'Mostrar pie de página en Front', `slug` = 'front_footer',`value` = 1,`created_at` = NOW(), `created_by` = 0;
 INSERT INTO `config` SET `name` = 'Mostrar encabezado de página en Admin', `slug` = 'admin_header',`value` = 1,`created_at` = NOW(), `created_by` = 0;
@@ -64,6 +64,7 @@ INSERT INTO `config` SET `name` = 'Mostrar encabezado de página en Front', `slu
 INSERT INTO `config` SET `name` = 'Configuración de correo', `slug` = 'mail-settings', `value` = '{"active":"mailhog","drivers":{"mailhog":{"type":"smtp","host":"127.0.0.1","port":1025,"smtp_auth":false,"smtp_secure":false,"smtp_auto_tls":false,"from":{"address":"no-reply@local.test","name":"Aplicación"}},"smtp":{"type":"smtp","host":"","port":587,"smtp_auth":true,"smtp_secure":"tls","smtp_auto_tls":true,"from":{"address":"","name":""}},"gmail":{"type":"gmail","host":"smtp.gmail.com","port":587,"smtp_auth":true,"smtp_secure":"tls","smtp_auto_tls":true,"from":{"address":"","name":""}},"ses":{"type":"ses","region":"","endpoint":"","from":{"address":"","name":""}}}}', `created_at` = NOW(), `created_by` = 0;
 INSERT INTO `config` SET `name` = 'Página de inicio', `slug` = 'homepage',`value` = '{"ES":{"page_id":0}}',`created_at` = NOW(), `created_by` = 0;
 INSERT INTO `config` SET `name` = 'Propiedades por defecto en Páginas', `slug` = 'pagesdefaultproperties',`value` = '{"showtitle":"on","mainimageformat":"banner"}',`created_at` = NOW(), `created_by` = 0;
+INSERT INTO `config` SET `name` = 'Activar publicidades', `slug` = 'adds-enabled',`value` = 0,`created_at` = NOW(), `created_by` = 0;
 
 CREATE TABLE `mainimages` (
  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
@@ -137,7 +138,7 @@ CREATE TABLE IF NOT EXISTS `pages` (
     `modified_at` DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     `created_by` bigint unsigned NOT NULL,
     PRIMARY KEY (`id`),
-    UNIQUE KEY `slug` (`slug`)
+    UNIQUE INDEX `unique_slug_lang` (`slug`,`lang`);
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
 
 CREATE TABLE `tags` (
@@ -180,9 +181,10 @@ CREATE TABLE `widgets` (
  UNIQUE KEY `Name` (`name`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-INSERT INTO `widgets` SET `name` = 'Página de inicio',`description` = 'Establecer un apágina como landing page del sitio',`slug` = 'homepage',`public` = 1, `order` = 0,`created_at` = NOW(),`created_by` = 0,`modified_at` = NOW();
+INSERT INTO `widgets` SET `name` = 'Página de inicio',`description` = 'Establecer una página como landing page del sitio para cada idioma habilitado',`slug` = 'homepage',`public` = 1, `order` = 0,`created_at` = NOW(),`created_by` = 0,`modified_at` = NOW();
 INSERT INTO `widgets` SET `name` = 'Modo mantenimiento',`description` = 'Ocultar o publicar el front para usuarios no identificados durante las tareas de edición o mantenimiento',`slug` = 'maintenance-mode',`public` = 1, `order` = 1,`created_at` = NOW(),`created_by` = 0,`modified_at` = NOW();
 INSERT INTO `widgets` SET `name` = 'Usuarios',`description` = 'Creación, modificación o eliminación de usuarios de la sección ADMIN',`slug` = 'list-users',`public` = 1, `order` = 2,`created_at` = NOW(),`created_by` = 0,`modified_at` = NOW();
 INSERT INTO `widgets` SET `name` = 'Crear miniaturas',`description` = 'Crear miniaturas para todas las imágenes principales',`slug` = 'thumbnails-create',`public` = 1, `order` = 3,`created_at` = NOW(),`created_by` = 0,`modified_at` = NOW();
 INSERT INTO `widgets` SET `name` = 'Crear tablas SQL a partir de archivos CVS',`description` = 'Crear tablas SQL a partir de archivos CVS',`slug` = 'sql-from-cvs',`public` = 1, `order` = 4,`created_at` = NOW(),`created_by` = 0,`modified_at` = NOW();
 INSERT INTO `widgets` SET `name` = 'Eliminar todas las tablas',`description` = 'Esta acción eliminará todas las tablas de la base de datos, lo cual equivale a resetear el sistema a su estado de origen',`slug` = 'dropdatabase',`public` = 1, `order` = 5,`created_at` = NOW(),`created_by` = 0,`modified_at` = NOW();
+INSERT INTO `widgets` SET `name` = 'Test Mail & Password Reset', `description` = 'Permite probar el envío de emails y el flujo de recuperación de contraseña', `slug` = 'test-mail-reset', `public` = 1, `order` = 6, `created_at` = NOW(), `created_by` = 0, `modified_at` = NOW();

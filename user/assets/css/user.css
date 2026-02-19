@@ -2,20 +2,24 @@ html, body {
   margin: 0;
 }
 
-body {
+body.front {
     min-height: 100vh;
     display: flex;
     flex-direction: column;
     overflow-x:hidden;
     font-size:16px;
+    align-items: center;
+    justify-content: space-between;
 }
 
 header.front {
-    background: #222;
+    background: #ececec;
     margin:0;
     height: var(--header-height-front);
     display:flex;
     justify-content: center;
+    width: 100%;
+    border-bottom:2px solid #e3e3e3;
 }
 
 header.front .header-container {
@@ -34,7 +38,7 @@ header.front nav {
 }
 
 header.front nav ul {
-    color:white;
+    color:black;
     height: var(--header-height-front);
     margin:0;
     list-style: none;
@@ -67,7 +71,15 @@ header.front nav ul a:hover {
 }
 
 header.front nav.mobile .lang-button {
-    color:white;
+    color:black;
+}
+
+.navbar-nav {
+    align-items: center;
+}
+
+.language-selector .lang-options {
+    background-color:white;
 }
 
 body.front main {
@@ -89,12 +101,18 @@ main.headered.footered {
     padding-bottom:2rem;
 }
 
+.page .main-image img {
+    border-radius: 10px;
+}
+
 footer.ovo {
     position: relative;
     background-color: #ececec;
     color: black;
     padding: 2rem;
-    border-top: 2px solid #c0c0c0;
+    border-top: 2px solid #e3e3e3;
+    width: 100%;
+    height:auto;
 }
 
 footer .ovo-social {
@@ -109,6 +127,11 @@ footer .ovo-social img {
     margin-right:1rem;
 }
 
+footer .footer-column {
+    display:flex;
+    gap:1rem;
+}
+
 header.front nav.mobile {
     display: flex;
 }
@@ -119,7 +142,7 @@ header.front nav .hamburger {
 }
 
 header.front nav .hamburger svg {
-    fill:white;
+    fill:black;
     width:100%;
     height:100%;
 }
@@ -188,11 +211,26 @@ header.front nav .mobile-menu  ul .close-button:hover {
 
 @media screen and (max-width: 1440px)  {
     footer .ovo-social {
-        flex-direction: column;
+        justify-content: start;
         align-items: start;
     }
 
     header.front {
         padding:0 2rem;
+    }
+}
+
+@media screen and (max-width: 960px) {
+    footer.ovo {
+        justify-content: start;
+        flex-direction: column;
+    }
+
+    footer .footer-column {
+        flex-direction: column;
+    }
+
+    #page-content {
+        margin-top: 2rem;
     }
 }

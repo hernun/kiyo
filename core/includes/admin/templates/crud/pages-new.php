@@ -1,4 +1,5 @@
 <?php
+getOvoEditor();
 $tablename = nqv::getVars(1);
 $table = new nqvDbTable($tablename);
 $fields = $table->getTableFields();
@@ -59,14 +60,6 @@ if(submitted($formId)) {
     exit;
 }
 ?>
-<script src="https://cdn.jsdelivr.net/npm/@editorjs/editorjs@latest/dist/editorjs.umd.min.js"></script>
-<!-- Herramientas (plugins) UMD -->
-<script src="https://cdn.jsdelivr.net/npm/@editorjs/header@latest/dist/header.umd.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@editorjs/paragraph@latest/dist/paragraph.umd.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@editorjs/list@latest/dist/list.umd.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@editorjs/link@2.5.0"></script>
-
-
 <div class="my-4">
     <?php if(nqv::userCan(['create',$tablename])):?>
         <?php $list = new nqvList($tablename)?>
@@ -109,99 +102,14 @@ if(submitted($formId)) {
             </form>
         </div>
     <?php else:?>
-        <h4>No tenés permiso para acceder a esta sección</h4>
+        <div class="center-center">
+            <p class="fs-5"><?php echo nqv::translate('You do not have permission to access this section')?></p>
+        </div>
     <?php endif?>
 </div>
 <script>
     parseSlugOnForm();
-
-   document.addEventListener('DOMContentLoaded', function () {
-    const editor = new EditorJS({
-        holder: 'editorjs-content',
-
-        i18n: {
-            messages: {
-                ui: {
-                    "blockTunes": {
-                        "toggler": {
-                            "Click to tune": "Configurar bloque",   
-                            "or drag to move": "o arrastrar para mover"
-                        }
-                    },
-                    "inlineToolbar": {
-                        "converter": "Convertir"
-                    },
-                    "toolbar": {
-                        "toolbox": {
-                            "Add": "Agregar"
-                        }
-                    }
-                },
-
-                toolNames: {
-                    "Text": "Texto",
-                    "Heading": "Encabezado",
-                    "List": "Lista",
-                    "Quote": "Cita",
-                    "Bold": "Negrita",
-                    "Italic": "Cursiva",
-                    "Link": "Enlace"
-                },
-
-                tools: {
-                    "list": {
-                        "Ordered": "Lista numerada",
-                        "Unordered": "Lista con viñetas"
-                    },
-                    "header": {
-                        "Heading 1": "Encabezado 1",
-                        "Heading 2": "Encabezado 2",
-                        "Heading 3": "Encabezado 3"
-                    }
-                },
-
-                blockTunes: {
-                    "delete": {
-                        "Delete": "Eliminar"
-                    },
-                    "moveUp": {
-                        "Move up": "Mover arriba"
-                    },
-                    "moveDown": {
-                        "Move down": "Mover abajo"
-                    },
-
-                    "convertTo": {
-                        "Convert to": "Convertir a"
-                    }
-                }
-            }
-        },
-
-        tools: {
-            header: Header,
-            list: List,
-            paragraph: {
-                class: Paragraph,
-                inlineToolbar: true
-            }
-        }
-    });
-
-
-    // Submit del formulario
-    const form = document.getElementById('<?php echo $formId ?>');
-    form.addEventListener('submit', function (e) {
-        e.preventDefault();
-
-        editor.save().then((outputData) => {
-            document.getElementById('editorjs-input').value =
-                JSON.stringify(outputData);
-            form.submit();
-        });
-    });
-
-});
-
-
+    window.editorJsData = null; // no hay contenido aún
+    window.ovoFormId = '<?= $formId ?>';
 </script>
+<script src="/core/assets/js/editor/ovo-editor-init.js"></script>

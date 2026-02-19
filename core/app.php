@@ -183,12 +183,14 @@ try {
     exit;
 }
 
+define('ENABLED_LANGUAGES', empty($_ENV['LANGS']) ? 'ES':strtoupper($_ENV['LANGS']));
+
 nqvSession::getInstance()->open();
 nqv::parseVars();
 
 if(empty($_ENV['DEFAULT_LANGAGUE'])) $_SESSION['CURRENT_LANGUAGE'] = $_SESSION['CURRENT_LANGUAGE'] ?? 'ES';
+else $_SESSION['CURRENT_LANGUAGE'] = empty($_SESSION['CURRENT_LANGUAGE']) ? strtoupper($_ENV['DEFAULT_LANGAGUE']):strtoupper($_SESSION['CURRENT_LANGUAGE']);
 
-define('ENABLED_LANGUAGES', empty($_ENV['LANGS']) ? 'ES':strtoupper($_ENV['LANGS']));
 
 if(userIs('holder')) define('DESKTOP_PATH',DASHBOARD_PATH);
 else define('DESKTOP_PATH',ADMIN_PATH);

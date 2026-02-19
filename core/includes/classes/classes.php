@@ -34,7 +34,9 @@ $classes = [
     'nqvWidgets.php',
     'nqvMdParser.php',
     'nqvHtmlParser.php',
-    'nqvPages.php'
+    'nqvPages.php',
+    'nqvPasswordResetService.php',
+    'nqvMailConfig.php'
 ];
 
 foreach ($classes as $class) {

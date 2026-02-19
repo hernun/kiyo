@@ -58,6 +58,10 @@ header.ovo nav {
 	width:100%;
 }
 
+header.ovo nav .dropdown-item.active, .dropdown-item:active {
+	background-color: var(--header-active-color);
+}
+
 .navbar-nav .dropdown-menu {
 	max-width: none;
 }
@@ -280,12 +284,13 @@ footer.ovo {
 /* LANGUAGE SELECTOR */
 
 .language-selector {
-  position: relative;
-  display: inline-block;
-  font-family: inherit;
-  text-transform: uppercase;
-  font-weight: bold;
-  z-index:999;
+	position: relative;
+	display: inline-block;
+	font-family: inherit;
+	text-transform: uppercase;
+	font-weight: bold;
+	z-index:999;
+	font-size:.9rem;
 }
 
 /* Quitar flecha nativa */
@@ -300,7 +305,7 @@ footer.ovo {
 
 /* Estilo del botón visible */
 .language-selector summary {
-	padding: 6px 10px;
+	/* padding: 6px 10px; */
 }
 
 /* Contenedor dropdown */
@@ -310,6 +315,7 @@ footer.ovo {
 	min-width:100px;
 	border-radius:5px;
 	border:1px solid #efefef;
+	margin-top: 3px;
 }
 
 /* Links */

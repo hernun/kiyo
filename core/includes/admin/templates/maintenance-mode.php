@@ -29,31 +29,29 @@ if(submitted($formId)) {
 
 if(empty($maintenanceTemplate)) $maintenanceTemplate = 'maintenance';
 ?>
-<main class="px-4">
-    <div class="container">
-        <h1 class="my-5">Modo Mantenimiento</h1>
-        <form id="<?php echo $formId?>" method="post" class="col-lg-6 col-12" accept-charset="utf-8">
-            <input type="hidden" name="form-token" value="<?php echo get_token($formId)?>" />
-            <div class="form-check form-switch mt-5">
-                <?php $checked = $maintenanceMode ? 'checked':null;?>
-                <input class="form-check-input" type="checkbox" name="mm" role="switch" id="mm-input" <?php echo $checked?>>
-                <label class="form-check-label" for="mm-input">Activar el modo mantenimiento</label>
-            </div>
+<div class="container">
+    <h1 class="my-5">Modo Mantenimiento</h1>
+    <form id="<?php echo $formId?>" method="post" class="col-lg-6 col-12" accept-charset="utf-8">
+        <input type="hidden" name="form-token" value="<?php echo get_token($formId)?>" />
+        <div class="form-check form-switch mt-5">
+            <?php $checked = $maintenanceMode ? 'checked':null;?>
+            <input class="form-check-input" type="checkbox" name="mm" role="switch" id="mm-input" <?php echo $checked?>>
+            <label class="form-check-label" for="mm-input">Activar el modo mantenimiento</label>
+        </div>
 
-            <div class="mt-5">
-                <label for="maintenance-template-input">Plantillas</label>
-                <div id="templateHelp" class="form-text mb-3">Seleccioná la plantilla que se mostrará cuando el modo mantenimiento esté activado.</div>
-                <select id="maintenance-template-input" name="maintenance-template" class="form-select" aria-label="Seleccionar plantilla de modo mantenimiento">
-                    <?php foreach($templates as $template):?>
-                        <?php $selected = ($maintenanceTemplate === $template) ? 'selected':''?>
-                        <option value="<?php echo $template?>" <?php echo $selected?>><?php echo $template?></option>
-                    <?php endforeach?>
-                </select>
-            </div>
+        <div class="mt-5">
+            <label for="maintenance-template-input">Plantillas</label>
+            <div id="templateHelp" class="form-text mb-3">Seleccioná la plantilla que se mostrará cuando el modo mantenimiento esté activado.</div>
+            <select id="maintenance-template-input" name="maintenance-template" class="form-select" aria-label="Seleccionar plantilla de modo mantenimiento">
+                <?php foreach($templates as $template):?>
+                    <?php $selected = ($maintenanceTemplate === $template) ? 'selected':''?>
+                    <option value="<?php echo $template?>" <?php echo $selected?>><?php echo $template?></option>
+                <?php endforeach?>
+            </select>
+        </div>
 
-            <div class="my-4 mx-0">
-                <button type="submit" class="btn btn-success btn-sm">Guardar</button>
-            </div>
-        </form>
-    </div>
-</main>
+        <div class="my-4 mx-0">
+            <button type="submit" class="btn btn-success btn-sm">Guardar</button>
+        </div>
+    </form>
+</div>

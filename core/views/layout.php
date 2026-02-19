@@ -7,7 +7,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
         <meta name="description" content="<?php echo APP_DESCRIPTION ?>" />
         <meta name="author" content="<?php echo APP_AUTHOR ?>" />
-        
+        <link rel="alternate" hreflang="<?= $_SESSION['CURRENT_LANGUAGE'] ?>" href="<?= URL . $_SERVER['REQUEST_URI'] ?>" />
         <?php include_template('favicon')?>
 
         <!-- CSS -->
@@ -47,7 +47,7 @@
         ?></style>
     </head>
 
-    <body class="<?php echo nqv::getSection()?>">
+    <body class="<?= nqv::getSection() ?>">
         <?php if (hasHeader()) getHeader(); ?>
 
         <main class="<?php echo implode(' ', $mainClass) ?>">

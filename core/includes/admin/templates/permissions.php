@@ -24,54 +24,53 @@ if(submitted($formid)) {
 $tables = array_merge(nqvDB::getTablenames(),explode(',',(string) nqv::getConfig('additional-permissions')));
 sort($tables);
 ?>
-<main class="px-2">
-    <div class="container my-4">
-        <h1 class="my-3">Permisos</h1>
-        <form id="<?php echo $formid?>" method="post" accept-charset="utf8">
-            <input type="hidden" name="form-token" value="<?php echo get_token($formid)?>" />
-                <div class="row">
-                    <div class="col-4">
-                        <div class="mb-3">
-                            <label for="sessions-type-input" class="form-label">Tipos de usuario</label>
-                            <select id="sessions-type-input" name="sessions-type" class="form-select" aria-label="Usertypes select">
-                                <option value="" disabled selected>Seleccioná un tipo de usuario</option>
-                                <?php foreach($types as $type):?>
-                                    <option value="<?php echo $type['slug']?>"><?php echo $type['name']?></option>
-                                <?php endforeach?>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="col-4">
-                        <div class="mb-3">
-                            <label for="permissions-type-input" class="form-label">Permisos</label>
-                            <select id="permissions-type-input" name="permissions-type" class="form-select" aria-label="Actions select">
-                                <option value="" disabled selected>Seleccioná una acción</option>
-                                <?php foreach($permsTypes as $permsType):?>
-                                    <option value="<?php echo $permsType?>"><?php echo $permsType?></option>
-                                <?php endforeach?>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="col-12">
-                        <div class="mb-3">
-                            <label for="table-filter" class="form-label">Buscar tablas</label>
-                            <input id="table-filter" class="form-control mb-2" type="text" placeholder="Filtrar tablas...">
-
-                            <label for="tables-input" class="form-label">Permisos</label>
-                            <select id="tables-input" name="tables[]" class="form-select" size="15" multiple>
-                                <?php foreach($tables as $table): ?>
-                                    <option id="<?= $table ?>-option" value="<?= $table ?>" disabled><?= $table ?></option>
-                                <?php endforeach; ?>
-                            </select>
-                        </div>
+<div class="container my-4">
+    <h1 class="my-3">Permisos</h1>
+    <form id="<?php echo $formid?>" method="post" accept-charset="utf8">
+        <input type="hidden" name="form-token" value="<?php echo get_token($formid)?>" />
+            <div class="row">
+                <div class="col-4">
+                    <div class="mb-3">
+                        <label for="sessions-type-input" class="form-label">Tipos de usuario</label>
+                        <select id="sessions-type-input" name="sessions-type" class="form-select" aria-label="Usertypes select">
+                            <option value="" disabled selected>Seleccioná un tipo de usuario</option>
+                            <?php foreach($types as $type):?>
+                                <option value="<?php echo $type['slug']?>"><?php echo $type['name']?></option>
+                            <?php endforeach?>
+                        </select>
                     </div>
                 </div>
-            <div class="col-auto my-4">
-                <button type="submit" class="btn btn-sm btn-primary mb-3">Enviar</button>
+                <div class="col-4">
+                    <div class="mb-3">
+                        <label for="permissions-type-input" class="form-label">Permisos</label>
+                        <select id="permissions-type-input" name="permissions-type" class="form-select" aria-label="Actions select">
+                            <option value="" disabled selected>Seleccioná una acción</option>
+                            <?php foreach($permsTypes as $permsType):?>
+                                <option value="<?php echo $permsType?>"><?php echo $permsType?></option>
+                            <?php endforeach?>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-12">
+                    <div class="mb-3">
+                        <label for="table-filter" class="form-label">Buscar tablas</label>
+                        <input id="table-filter" class="form-control mb-2" type="text" placeholder="Filtrar tablas...">
+
+                        <label for="tables-input" class="form-label">Permisos</label>
+                        <select id="tables-input" name="tables[]" class="form-select" size="15" multiple>
+                            <?php foreach($tables as $table): ?>
+                                <option id="<?= $table ?>-option" value="<?= $table ?>" disabled><?= $table ?></option>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
+                </div>
             </div>
-        </form>
-    </div>
-</main>
+        <div class="col-auto my-4">
+            <button type="submit" class="btn btn-sm btn-primary mb-3">Enviar</button>
+        </div>
+    </form>
+</div>
+
 <script type="text/javascript">
 document.addEventListener('DOMContentLoaded', function () {
     const typesSelect = document.getElementById('sessions-type-input');

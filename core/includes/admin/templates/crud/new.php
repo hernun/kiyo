@@ -33,7 +33,9 @@ if(submitted($formId)) {
             </form>
         </div>
     <?php else:?>
-        <h4>No tenés permiso para acceder a esta sección</h4>
+        <div class="center-center">
+            <p class="fs-5"><?php echo nqv::translate('You do not have permission to access this section')?></p>
+        </div>
     <?php endif?>
 </div>
 <script>

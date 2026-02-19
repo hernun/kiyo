@@ -3,14 +3,17 @@ nqv::cleanView();
 
 $data  = json_decode(file_get_contents('php://input'), true);
 
-$input   = $data['slug'] ?? '';
-$table   = $data['table'] ?? '';
+$input   = $data['slug'] ?? 'test';
+$table   = $data['table'] ?? 'pages';
 $exclude = $data['exclude'] ?? '';
+$lang = $data['lang'] ?? '';
 
 if (!$input || !$table) {
     echo json_encode(['slug' => $input]);
     exit;
 }
+
+//$tableObj = new nqvDbTable($table);
 
 if (!nqvDB::isTable($table)) {
     echo json_encode(['slug' => $input]);
@@ -50,13 +53,18 @@ $pattern = $escapedBase . '\_%';
 | 3. Query
 |--------------------------------------------------------------------------
 */
-$sql = "SELECT `slug`
-        FROM `$table`
-        WHERE slug = ?
-           OR slug LIKE ?";
+$sql = "SELECT `id`,`slug` FROM `$table` WHERE (slug = ? OR slug LIKE ?)";
+$types = 'ss';
+$vars = [$base, $pattern];
+
+if($lang) {
+    $sql .= ' AND `lang` = ?';
+    $types .= 's';
+    $vars[] = $lang;
+}
 
 $stmt = nqvDB::prepare($sql);
-$stmt->bind_param('ss', $base, $pattern);
+$stmt->bind_param($types, ... $vars);
 $result = nqvDB::parseSelect($stmt);
 
 /*

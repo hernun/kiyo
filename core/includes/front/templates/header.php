@@ -5,7 +5,8 @@
         </div>
         <nav class="desktop">
             <ul class="langES">
-                <li><a href="">Contacto</a></li>
+                <li><?= getPageLink('contact') ?></li>
+                <li><?= getPageLink('cucu') ?></li>
                 <li><?php echo getLaguageSelector()?></li>
             </ul>
             <ul class="langEN">
@@ -21,7 +22,7 @@
             <div class="mobile-menu">
                 <ul class="langES">
                     <li class="close"><div class="close-button">X</div></li>
-                    <li><a href="">Contacto</a></li>
+                    <li><?= getPageLink('contact') ?></li>
                 </ul>
                 <ul class="langEN">
                     <li class="close"><div class="close-button">X</div></li>

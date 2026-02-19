@@ -20,20 +20,18 @@ $image = nqvMainImages::getByElementId($tablename,$id);
 ?>
 <?php if($tablename === 'users' && (!currentSessionTypeIs('root') && !currentSessionTypeIs('admin'))): ?>
     <?php if(nqv::getCurrentUserId() !== $item['id']):?>
-        <main>
-            <div class="my-4 center-center container">
-                <h2>No tenés permiso para ver este elemento</h2>
-            </div>
-        </main>
+        <div class="my-4 center-center container">
+            <p class="fs-5"><?php echo nqv::translate('You do not have permission to view this item')?></p>
+        </div>
         <?php return?>
     <?php endif?>
 <?php endif ?>
-<main id="show-template" class="px-4">
+<div id="show-template" class="px-4">
     <div class="my-4 container">
         <h1><?php echo $obj?></h1>
-        <div class="p-4 ps-0">
-            <img style="width:150px" src="<?php echo $image->getSrc()?>">
-        </div>
+        <?php if($image):?>
+        <div class="p-4 ps-0"><img style="width:150px" src="<?php echo $image->getSrc()?>"></div>
+        <?php endif?>
         <?php if($tablename === 'pages'):?>
             <div class="p-4 ps-0">
                 <?php $url = 'https://' . DOMAIN . '/' . $item['slug']?>
@@ -66,4 +64,4 @@ $image = nqvMainImages::getByElementId($tablename,$id);
             <?php endif?>
         </div>
     </div>
-</main>
+</div>

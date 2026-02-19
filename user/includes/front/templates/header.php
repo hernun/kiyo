@@ -1,17 +1,17 @@
 <header class="front">
     <div class="header-container">
         <div id="branding">
-            <div class="logo"><img src="<?php echo getAsset('images/logo-white.png')?>" /></div>
+            <div class="logo"><a href="/"><img src="<?php echo getAsset('images/logo.png')?>" /></a></div>
         </div>
         <nav class="desktop">
             <ul>
-                <li><a href="/trabajos-realizado">Trabajos realizados</a></li>
-                <li><a href="">Estudio velador</a></li>
-                <li><a href="">Formación</a></li>
-                <li><a href="">Servicios</a></li>
-                <li><a href="">Kiyo música</a></li>
-                <li><a href="">Bio</a></li>
-                <li><a href="">Contacto</a></li>
+                <li><?= getPageLink('completed-work') ?></li>
+                <li><?= getPageLink('velador-studio') ?></li>
+                <li><?= getPageLink('education') ?></li>
+                <li><?= getPageLink('services') ?></li>
+                <li><?= getPageLink('kiyo-music') ?></li>
+                <li><?= getPageLink('bio') ?></li>
+                <li><?= getPageLink('contact') ?></li>
                 <li><?php echo getLaguageSelector()?></li>
             </ul>
         </nav>
@@ -23,13 +23,13 @@
             <div class="mobile-menu">
                 <ul>
                     <li class="close"><div class="close-button">X</div></li>
-                    <li><a href="/trabajos-realizado">Trabajos realizados</a></li>
-                    <li><a href="">Estudio velador</a></li>
-                    <li><a href="">Formación</a></li>
-                    <li><a href="">Servicios</a></li>
-                    <li><a href="">Kiyo música</a></li>
-                    <li><a href="">Bio</a></li>
-                    <li><a href="">Contacto</a></li>
+                    <li><?= getPageLink('completed-work') ?></li>
+                    <li><?= getPageLink('velador-studio') ?></li>
+                    <li><?= getPageLink('education') ?></li>
+                    <li><?= getPageLink('services') ?></li>
+                    <li><?= getPageLink('kiyo-music') ?></li>
+                    <li><?= getPageLink('bio') ?></li>
+                    <li><?= getPageLink('contact') ?></li>
                 </ul>
             </div>
         </nav>

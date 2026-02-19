@@ -186,6 +186,39 @@ footer .ovo-social img {
 	aspect-ratio: 3040 / 1020;
 }
 
+.page {
+    position:relative;
+}
+
+/* OVO EMBED */
+
+.ovo-embed-responsive {
+    position: relative;
+    width: 300px;
+    padding-bottom: 56.25%;
+    padding-bottom: 200px;
+    height: 0;
+    overflow: hidden;
+    margin: 2rem 0;
+}
+
+.ovo-embed-responsive iframe {
+    position: absolute;
+    width: 300px;
+    left: 0;
+    top: 0;
+    height: 200px;
+}
+
+.ovo-embed-responsive iframe,
+.ovo-spotify-embed {
+    position: relative;
+    width: 300px;
+    left: 0;
+    top: 0;
+    height: 200px;
+}
+
 @media (max-width: 1400px) {
 	footer .logos {
 		margin-bottom:0;

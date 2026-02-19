@@ -36,7 +36,8 @@ class nqv {
         }
     }
 
-    public static function translate(string $str, string $lang = 'ES', ?string $context = '', bool $inverse = false): string  {
+    public static function translate(string $str, string $lang = '', ?string $context = '', bool $inverse = false): string  {
+        if(empty($lang)) $lang = $_SESSION['CURRENT_LANGUAGE'];
         $userFilepath = USER_PATH . 'translations/' . strtoupper($lang) . '.php';
         $coreFilepath = CORE_PATH . 'translations/' . strtoupper($lang) . '.php';
         if(is_file($userFilepath)) include($userFilepath);
@@ -48,9 +49,16 @@ class nqv {
             elseif(!empty($context)) $output = str_replace('-'.$context,'',$output);
             return empty($output) ? $str:$output;
         }
-        if (isset($translations[strtolower($str) . '-' . strtolower($context)])) return @$translations[strtolower($str) . '-' . strtolower($context)];
-        if (isset($translations[strtolower($str)])) return @$translations[strtolower($str)];
-        else return $str;
+        $keys = [
+            strtolower($str) . '-' . strtolower($context),
+            $str . '-' . $context,
+            strtolower($str),
+            $str
+        ];
+        foreach($keys as $k) {
+            if(isset($translations[$k])) return $translations[$k];
+        }
+        return $str;
     }
 
     public static function cleanView() {
@@ -150,6 +158,12 @@ class nqv {
         $parsed = parse_url($_SERVER['REQUEST_URI']);
         $current = @$parsed['path'];
         $vars = (array) array_values(array_filter(explode('/',(string) @$current)));
+        $first = $vars[0] ?? '';
+
+        if(in_array(strtoupper($first),getEnabledLangs())) {
+            $_SESSION['CURRENT_LANGUAGE'] = strtoupper(array_shift($vars));
+        }
+
         if (in_array('logout', $vars)) self::getSession()->destroy();
         elseif(@$vars[0] === 'ajax') {
             setIsAjax(true);
@@ -162,7 +176,13 @@ class nqv {
             if(@$vars[0] === 'admin') {
                 array_shift($vars);
                 self::setAdmin();
-                if(!isTemplate((string)@$vars[0]) && nqvDB::isTable((string) @$vars[0])) array_unshift($vars,'database');
+
+                if(!empty($vars[0])) {
+                    if(!empty($vars[1])) {
+                        if(!isTemplate($vars[0] . '/' . $vars[1]) && nqvDB::isTable($vars[0] . '/' . $vars[1])) array_unshift($vars,'database');
+                    }
+                    if(!isTemplate($vars[0]) && nqvDB::isTable($vars[0])) array_unshift($vars,'database');
+                }
             }
             self::$vars = self::$vars + $vars;
         }
@@ -404,7 +424,7 @@ class nqv {
     }
 
     public static function setAccess(array $perms) {
-        if(!self::userCan($perms)) throw new Exception('No tenés permiso para acceder a esta sección.');
+        if(!self::userCan($perms)) throw new Exception(nqv::translate('You do not have permission to access this section'));
     }
 
     public static function getCurrentSessionPermissions(): array {
@@ -424,9 +444,9 @@ class nqv {
         if(nqv::getCurrentUserType() === 'root') return true;
         else {
             $conf = self::getConfig('permissions');
+
             if(empty($conf)) return false;
             else {
-                $conf = json_decode($conf,true);
                 $type = nqv::getCurrentSessionTypeName();
                 if(isValidJson(@$conf[$type]['crud'])) $crud = json_decode($conf[$type]['crud'],true);
                 else $crud =  @$conf[$type]['crud'];
@@ -576,22 +596,19 @@ class nqv {
         },explode(',',$list)));
     }
 
-    public static function getDatabasePupupItems() {
+    public static function getDatabasePupupItems(): array {
         $output = [];
         $items = nqv::getConfig('items-admin');
-        if(isValidJson($items)) {
-            $tablenames = json_decode($items,true);
-            if(currentSessionTypeIs('root')) {
-                $tablenames['-'] = '--';
-                $tablenames = array_merge($tablenames,array_diff(nqvDB::getTablenames(),$tablenames));
-            }
-        }
-        else {
-            if(currentSessionTypeIs('root')) $tablenames = nqvDB::getTablenames();
-            else $tablenames = [];
+        if(currentSessionTypeIs('root')) {
+            if(isset($items['admin'])) $tablenames = $items['admin'];
+            $tablenames['-'] = '--';
+            $tablenames = array_merge($tablenames,array_diff(nqvDB::getTablenames(),$tablenames));
+        } else {
+            if(!isset($items[nqv::getCurrentSessionTypeName()])) return [];
+            $tablenames = $items[nqv::getCurrentSessionTypeName()];
         }
         foreach($tablenames as $tablename) {
-            $output[$tablename] = nqv::translate($tablename,'ES','adminheader');
+            $output[$tablename] = nqv::translate($tablename,$_SESSION['CURRENT_LANGUAGE'],'adminheader');
         }
         return $output;
     }

@@ -1,12 +1,3 @@
-<?php
-$exludedTables = [
-    'users',
-    'session_types',
-    'config',
-    'adds',
-    'advertisers'
-];
-?>
 <header class="ovo">
     <nav class="navbar navbar-expand-lg bg-body-tertiary" data-bs-theme="dark">
         <div class="container-fluid">
@@ -21,7 +12,7 @@ $exludedTables = [
                     </li>
                     <?php if(currentSessionTypeIs('root')):?>
                         <li class="nav-item">
-                            <a class="nav-link active" aria-current="page" href="<?php echo nqv::url(ROOT_PATH)?>admin/setup">Setup</a>
+                            <a class="nav-link active" aria-current="page" href="<?php echo nqv::url(ROOT_PATH)?>admin/widgets-view">Widgets</a>
                         </li>
                     <?php endif?>
                     <?php if(nqv::userCan(['crud','config'])):?>
@@ -34,23 +25,9 @@ $exludedTables = [
                             <a class="nav-link active" aria-current="page" href="<?php echo nqv::url(ROOT_PATH)?>admin/permissions">Permisos</a>
                         </li>
                     <?php endif?>
-                    <?php if(nqv::userCan(['crud','users'])):?>
-                        <li class="nav-item">
-                            <ul class="navbar-nav mb-2 mb-lg-0">
-                                <li class="nav-item dropdown">
-                                    <a class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                        Usuarios
-                                    </a>
-                                    <ul class="dropdown-menu dropdown-menu-end">
-                                        <li><a class="dropdown-item" href="<?php echo nqv::url(ROOT_PATH)?>admin/users">Usuarios</a></li>
-                                        <li><a class="dropdown-item" href="<?php echo nqv::url(ROOT_PATH)?>admin/session_types">Tipos de usuario</a></li>
-                                    </ul>
-                                </li>
-                            </ul>
-                        </li>
-                    <?php endif?>
+            
                     <?php if(currentSessionTypeIs('admin')):?>
-                        <?php if(nqvDB::isTable('adds') && nqvDB::isTable('advertisers')): ?>
+                        <?php if(nqvDB::isTable('adds') && nqvDB::isTable('advertisers') && nqv::getConfig('adds-enabled')): ?>
                             <li class="nav-item">
                                 <ul class="navbar-nav mb-2 mb-lg-0">
                                     <li class="nav-item dropdown">
@@ -88,7 +65,6 @@ $exludedTables = [
                                         </a>
                                         <ul class="dropdown-menu dropdown-menu-end">
                                             <?php foreach($items as $k => $item):?>
-                                                <?php if(in_array($k,$exludedTables)) continue?>
                                                 <?php if(!nqv::userCan(['read',$k])) continue?>
                                                 <li><a class="dropdown-item" href="/admin/database/<?php echo $k?>"><?php echo ucfirst($item)?></a></li>
                                             <?php endforeach?>
@@ -101,9 +77,9 @@ $exludedTables = [
                     <li class="mobile"><hr class="dropdown-divider"></li>
                     <li class="mobile nav-item"><a class="dropdown-item nav-link" href="/admin/profile">Perfil</a></li>
                     <?php if(userIs('root')):?>
-                        <li class="mobile nav-item"><a class="dropdown-item nav-link" href="/admin/toggletype/root">Use like Root</a></li>
-                        <li class="mobile nav-item"><a class="dropdown-item nav-link" href="/admin/toggletype/admin">Use like Admin</a></li>
-                        <li class="mobile nav-item"><a class="dropdown-item nav-link" href="/admin/toggletype/contributor">Use like Contributor</a></li>
+                        <li class="mobile nav-item"><a class="dropdown-item nav-link" href="/admin/toggletype/root"><?php echo nqv::translate('Use like')?> Root</a></li>
+                        <li class="mobile nav-item"><a class="dropdown-item nav-link" href="/admin/toggletype/admin"><?php echo nqv::translate('Use like')?> Admin</a></li>
+                        <li class="mobile nav-item"><a class="dropdown-item nav-link" href="/admin/toggletype/contributor"><?php echo nqv::translate('Use like')?> Contributor</a></li>
                     <?php endif?>
                     <li class="mobile nav-item"><hr class="dropdown-divider"></li>
                     <li class="mobile"><hr class="dropdown-divider"></li>
@@ -130,9 +106,9 @@ $exludedTables = [
                         <ul class="dropdown-menu dropdown-menu-end">
                             <li><a class="dropdown-item" href="/admin/profile">Perfil</a></li>
                             <?php if(userIs('root')):?>
-                                <li><a class="dropdown-item" href="/admin/toggletype/root">Use like Root</a></li>
-                                <li><a class="dropdown-item" href="/admin/toggletype/admin">Use like Admin</a></li>
-                                <li><a class="dropdown-item" href="/admin/toggletype/contributor">Use like Contributor</a></li>
+                                <li><a class="dropdown-item" href="/admin/toggletype/root"><?php echo nqv::translate('Use like')?> Root</a></li>
+                                <li><a class="dropdown-item" href="/admin/toggletype/admin"><?php echo nqv::translate('Use like')?> Admin</a></li>
+                                <li><a class="dropdown-item" href="/admin/toggletype/contributor"><?php echo nqv::translate('Use like')?> Contributor</a></li>
                             <?php endif?>
                             <li><hr class="dropdown-divider"></li>
                             <li><a class="dropdown-item" href="/logout">Cerrar sesión</a></li>

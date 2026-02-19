@@ -21,6 +21,11 @@ if($tablename === 'config' && $item['slug'] === 'home-widgets') {
     return;
 }
 
+if($tablename === 'config' && $item['slug'] === 'mail-settings') {
+    include_template('mail-settings',$item);
+    return;
+}
+
 if(empty($item)) {
     nqvNotifications::add($tablename . ' con id ' . $id . ' no existe.' ,'error');
     header('location:' . getAdminUrl());
@@ -59,7 +64,9 @@ if(submitted($formId)) {
             </form>
         </div>
     <?php else:?>
-        <h4>No tenés permiso para acceder a esta sección</h4>
+        <div class="center-center">
+            <p class="fs-5"><?php echo nqv::translate('You do not have permission to access this section')?></p>
+        </div>
     <?php endif?>
 </div>
 <script>

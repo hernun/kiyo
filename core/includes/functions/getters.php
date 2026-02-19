@@ -244,10 +244,10 @@ function getBreadcrumb() {
 function isTemplate(string $filename) {
     if(!defined('TEMPLATES_PATH') || !defined('USER_TEMPLATES_PATH')) return null;
     $coreFilename = str_replace(TEMPLATES_PATH,'',$filename);
-    $coreFilepath = TEMPLATES_PATH . $filename . '.php';
+    $coreFilepath = TEMPLATES_PATH . $coreFilename . '.php';
 
-    $userFilename = str_replace(TEMPLATES_PATH,'',$filename);
-    $userFilepath = TEMPLATES_PATH . $filename . '.php';
+    $userFilename = str_replace(USER_TEMPLATES_PATH,'',$filename);
+    $userFilepath = USER_TEMPLATES_PATH . $userFilename . '.php';
     
     return is_file($coreFilepath || $userFilepath);
 }
@@ -374,11 +374,28 @@ function getEnabledLangs() {
 }
 
 function getLaguageSelector() {
-    $lis = ['<div class="language-selector"><details><summary>' . $_SESSION['CURRENT_LANGUAGE'] . '</summary><div class="lang-options">'];
+    $cl = $_SESSION['CURRENT_LANGUAGE'] ?? 'ES';
+    $lis = ['<div class="language-selector"><details><summary>' . $cl . '</summary><div class="lang-options">'];
     foreach(getEnabledLangs() as $lang) {
-        if($lang === $_SESSION['CURRENT_LANGUAGE']) continue;
-        $lis[] = '<a class="lang-item" href="/switchlang/' . $lang . '">' . $lang . '</a>';
+        if($lang === $cl) continue;
+        $lis[] = '<a class="lang-item" href="/' . strtolower($lang) . '/' . implode('/',nqv::getVars()) . '">' . $lang . '</a>';
     }
     array_push($lis,' </div></details></div>');
     return implode($lis);
+}
+
+function getOvoEditor() {
+    $path = TEMPLATES_PATH . 'ovo-editor/ovo-editor-includes.php';
+    if(is_file($path)) include $path;
+}
+
+// Devuelve la url absoluta inclyendo el idiom
+function getUrl($url) {
+    return '/' . strtolower($_SESSION['CURRENT_LANGUAGE']) . '/' . $url;
+}
+
+function getPageLink($slug): string {
+    $page = nqv::get('pages',['slug'=>$slug,'lang'=>$_SESSION['CURRENT_LANGUAGE']]);
+    if(!empty($page[0])) return '<a href="' . getUrl($slug) . '">' . $page[0]['title'] . '</a>';
+    else return '';
 }
