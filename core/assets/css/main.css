@@ -128,6 +128,10 @@ a {
     text-decoration: inherit;
 }
 
+.bg-ovo-primary {
+	background-color: var(--header-bg-color);
+}
+
 .center-center {
     height:100%;
     display:flex;

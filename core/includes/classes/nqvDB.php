@@ -319,4 +319,243 @@ class nqvDB {
             throw new Exception('La transacción no es válida o nunca se inició');
         }
     }
+
+    public static function exportDatabase( array $excludeTables = [], string $type = 'full'): string {
+
+        self::getConnection();
+
+        if (!in_array($type, ['full','structure','data'])) throw new Exception('Tipo de exportación inválido: ' . $type);
+
+        $filename = nqvBackup::buildFilename(nqvBackup::CATEGORY_DATABASE, $type, 'sql');
+        $outputFile = BKP_PATH . $filename;
+
+        $excludeLookup = array_flip(
+            array_filter($excludeTables, fn($t) => self::isTable($t))
+        );
+
+        $handle = fopen($outputFile, 'w');
+        if (!$handle) throw new Exception('No se pudo crear el archivo.');
+        $write = fn($text) => fwrite($handle, $text);
+
+        $write("-- Export generado el " . date('Y-m-d H:i:s') . "\n");
+        $write("-- Base de datos: `" . DB_NAME . "`\n\n");
+        $write("SET FOREIGN_KEY_CHECKS=0;\n\n");
+
+        $tables = self::getTablenames(true);
+
+        foreach ($tables as $table) {
+
+            if (isset($excludeLookup[$table])) continue;
+
+            self::checkTable($table);
+
+            /* =========================
+            ESTRUCTURA
+            ========================== */
+            if ($type === 'full' || $type === 'structure') {
+
+                $write("DROP TABLE IF EXISTS `$table`;\n");
+
+                $create = self::select("SHOW CREATE TABLE `$table`");
+
+                if (!empty($create[0]['Create Table'])) {
+                    $write($create[0]['Create Table'] . ";\n\n");
+                }
+            }
+
+            /* =========================
+            DATOS
+            ========================== */
+            if ($type === 'full' || $type === 'data') {
+
+                $rows = self::select("SELECT * FROM `$table`");
+
+                if (!empty($rows)) {
+
+                    foreach ($rows as $row) {
+
+                        $columns = [];
+                        $values  = [];
+
+                        foreach ($row as $col => $value) {
+
+                            $columns[] = "`$col`";
+
+                            if (is_null($value)) {
+                                $values[] = "NULL";
+                            } else {
+                                $escaped = self::$connection->real_escape_string($value);
+                                $values[] = "'$escaped'";
+                            }
+                        }
+
+                        $write(
+                            "INSERT INTO `$table` (" .
+                            implode(',', $columns) .
+                            ") VALUES (" .
+                            implode(',', $values) .
+                            ");\n"
+                        );
+                    }
+
+                    $write("\n");
+                }
+            }
+        }
+
+        $write("SET FOREIGN_KEY_CHECKS=1;\n");
+
+        fclose($handle);
+        return $outputFile;
+    }
+
+    public static function importDatabase(string $filePath, string $mode = 'replace'): bool {
+        if (!file_exists($filePath)) throw new Exception('El archivo no existe.');
+
+        if (!in_array($mode, ['replace', 'truncate', 'append'])) throw new Exception('Modo de importación inválido.');
+
+        self::getConnection();
+
+        $sql = file_get_contents($filePath);
+
+        if ($sql === false) throw new Exception('No se pudo leer el archivo.');
+
+        self::$connection->begin_transaction();
+
+        try {
+
+            self::$connection->query("SET FOREIGN_KEY_CHECKS=0");
+
+            if ($mode === 'truncate') {
+                foreach (self::getTablenames(true) as $table) self::$connection->query("TRUNCATE TABLE `$table`");
+            }
+
+            if ($mode === 'append') {
+                // eliminamos DROP TABLE del dump
+                $sql = preg_replace('/DROP TABLE IF EXISTS .*?;/i', '', $sql);
+            }
+
+            if ($mode === 'truncate') {
+                // eliminamos DROP + CREATE del dump
+                $sql = preg_replace('/DROP TABLE IF EXISTS .*?;/i', '', $sql);
+                $sql = preg_replace('/CREATE TABLE .*?;\n\n/s', '', $sql);
+            }
+
+            // Ejecutar múltiples queries
+            if (!self::$connection->multi_query($sql)) {
+                throw new Exception(self::$connection->error);
+            }
+
+            // Consumir resultados
+            do {
+                if ($result = self::$connection->store_result()) {
+                    $result->free();
+                }
+            } while (self::$connection->more_results() && self::$connection->next_result());
+
+            self::$connection->query("SET FOREIGN_KEY_CHECKS=1");
+
+            self::$connection->commit();
+
+            return true;
+
+        } catch (Exception $e) {
+
+            self::$connection->rollback();
+            throw $e;
+        }
+    }
+
+    public static function resolveServerBackup(string $filename): string {
+        if(empty($filename)) throw new Exception('No se indicó archivo.');
+
+        $filePath = realpath(BKP_PATH . '/' . $filename);
+
+        if(
+            !$filePath ||
+            !str_starts_with($filePath, realpath(BKP_PATH)) ||
+            pathinfo($filePath, PATHINFO_EXTENSION) !== 'sql'
+        ) throw new Exception('Archivo inválido.');
+
+        return $filePath;
+    }
+
+    public static function resolveUploadedBackup(array $file): string {
+
+        if(empty($file) || $file['error'] === UPLOAD_ERR_NO_FILE)
+            throw new Exception('No se subió ningún archivo.');
+
+        if($file['error'] !== UPLOAD_ERR_OK)
+            throw new Exception('Error en la subida.');
+
+        if(pathinfo($file['name'], PATHINFO_EXTENSION) !== 'sql')
+            throw new Exception('Solo se permiten archivos .sql.');
+
+        $tmpPath = sys_get_temp_dir() . '/' . uniqid('import_',true) . '.sql';
+
+        if(!move_uploaded_file($file['tmp_name'],$tmpPath))
+            throw new Exception('No se pudo procesar el archivo subido.');
+
+        return $tmpPath;
+    }
+
+    public static function importFromRequest(string $mode = 'replace'): bool {
+
+        $serverFile = $_POST['server_file'] ?? null;
+        $uploadFile = $_FILES['upload_file'] ?? null;
+
+        if(
+            empty($serverFile) &&
+            (empty($uploadFile) || $uploadFile['error'] === UPLOAD_ERR_NO_FILE)
+        ) throw new Exception('Debe seleccionar o subir un archivo.');
+
+        if(
+            !empty($serverFile) &&
+            !empty($uploadFile) &&
+            $uploadFile['error'] !== UPLOAD_ERR_NO_FILE
+        ) throw new Exception('Seleccione solo una opción.');
+
+        $isUpload = false;
+
+        if(!empty($serverFile)) {
+            $filePath = self::resolveServerBackup($serverFile);
+        } else {
+            $filePath = self::resolveUploadedBackup($uploadFile);
+            $isUpload = true;
+        }
+
+        try {
+
+            $result = self::importDatabase($filePath,$mode);
+
+            if($isUpload && file_exists($filePath)) unlink($filePath);
+
+            return $result;
+
+        } catch(Exception $e) {
+
+            if($isUpload && file_exists($filePath)) unlink($filePath);
+
+            throw $e;
+        }
+    }
+
+    private static function buildBackupFilename(string $category = 'db', string $type = 'full', string $extension = 'sql'): string {
+
+        if(!in_array($type,['full','structure','data']))
+            throw new Exception('Tipo inválido para nombre de backup.');
+
+        $project = defined('APP_NAME') ? APP_NAME : 'ovo';
+        $timestamp = date('Ymd_His');
+
+        return sprintf(
+            '%s_%s_%s_%s.%s',
+            $project,
+            $category,
+            $type,
+            $timestamp,
+            $extension
+        );
+    }
+
 }

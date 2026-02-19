@@ -170,6 +170,8 @@ define('APP_TITLE',$_ENV['APP_TITLE']);
 define('APP_DESCRIPTION',$_ENV['APP_DESCRIPTION']);
 define('APP_AUTHOR',$_ENV['APP_AUTHOR']);
 
+define('BKP_PATH',dirname(ROOT_PATH) . DIRECTORY_SEPARATOR . APP_NAME . '-bkp' . DIRECTORY_SEPARATOR);
+
 try {
     if(!nqvDB::isTable('users')) {
         try {

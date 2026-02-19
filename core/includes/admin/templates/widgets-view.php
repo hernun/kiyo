@@ -1,6 +1,7 @@
 
 <?php if(user_is_logged() && userIs('root')):?>
     <?php
+    nqvNotifications::flush();
     $widgets = nqv::get('widgets');
     ?>
     <div class="px-4">
