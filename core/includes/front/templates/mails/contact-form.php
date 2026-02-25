@@ -12,4 +12,4 @@ else $img = is_file($filepath) ? 'data:image/png;base64,' . base64_encode(file_g
 <p><?= $_POST['message'] ?>
 <br/>
 <p>---</p>
-<p>Este mensaje fue enviado porque se utilizó esta dirección de correo electrónico para registrarse en <?php echo APP_NAME?>. Si no reconocés esta acción o creés que alguien ingresó tu dirección por error, podés ignorar este mensaje. No responder a este correo. Si necesitás ayuda, contactanos en <?php echo URL?> .</p>
+<p>Este mensaje fue enviado a través del formulario de contacto de <strong><?php echo URL?></strong>. Si no sos el administrador de  <strong><?php echo APP_TITLE?></strong> por favor comunicate con nosotros a través de otros medios. No respondas a este correo. Muchas gracias, y disculpas por el inconveniente.</p>
