@@ -5,12 +5,15 @@
         </div>
         <nav class="desktop">
             <ul class="langES">
-                <li><?= getPageLink('contact') ?></li>
-                <li><?= getPageLink('cucu') ?></li>
+                <?php foreach(getHeaderMenuItems('ES') as $slug):?>
+                    <li><?= getPageLink($slug) ?></li>
+                <?php endforeach?>
                 <li><?php echo getLaguageSelector()?></li>
             </ul>
             <ul class="langEN">
-                <li><a href="">Contact</a></li>
+                <?php foreach(getHeaderMenuItems('EN') as $slug):?>
+                    <li><?= getPageLink($slug) ?></li>
+                <?php endforeach?>
                 <li><?php echo getLaguageSelector()?></li>
             </ul>
         </nav>
@@ -42,9 +45,11 @@
         mobile.classList.add('open');
     });
 
-    closeBtn.addEventListener('click', () => {
-        mobile.classList.remove('open');
-    });
+    if(closeBtn) {
+        closeBtn.addEventListener('click', () => {
+            mobile.classList.remove('open');
+        });
+    }
 
     mobile.querySelectorAll('a').forEach(link => {
         link.addEventListener('click', () => {

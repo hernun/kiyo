@@ -6,6 +6,11 @@ $table = new nqvDbTable($tablename);
 $fields = $table->getTableFields();
 $formId = 'create-' . $tablename;
 $object = new nqvPages(['id'=>$id]);
+if(!$object->exists()) {
+    nqvNotifications::add('La página con id "' . $id . '" no existe','error');
+    header('location:/admin/pages');
+    exit;
+}
 $page = $object->getData();
 $properties = $object->getProperties();
 $showtitle = empty($properties['showtitle']) ? 'off':$properties['showtitle'];
@@ -144,5 +149,5 @@ nqvNotifications::flush();
     window.ovoFormId = '<?= $formId ?>';
 </script>
 
-<script src="/core/assets/js/editor/ovo-editor-init.js"></script>
+<script src="<?= getAsset('js/editor/ovo-editor-init.js') ?>"></script>
 

@@ -16,8 +16,8 @@ $stmt->bind_param('i',$id);
 $result = nqvDB::parseSelect($stmt);
 $item = @$result[0];
 
-if($tablename === 'config' && $item['slug'] === 'home-widgets') {
-    include_template('home-widgets',$item);
+if($tablename === 'config' && isTemplate($item['slug'])) {
+    include_template($item['slug'],$item);
     return;
 }
 

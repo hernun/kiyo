@@ -117,12 +117,10 @@ class nqvMainImages {
     }
 
     public function save(?array $data = []): int|bool {
-        $this->slug = createSlug(pathinfo($this->get('name'),PATHINFO_FILENAME),'-','mainimages',$this->slug);
-        $slug = $this->get_slug();
 
-        $types = 's';
-        $vars = [$slug];
-        $fields = ['slug = ?'];
+        $types = '';
+        $vars = [];
+        $fields = [];
 
         foreach ($this->fields as $k => $fieldInfo) {
             if (array_key_exists($k, $data)) $this->$k = $data[$k];
@@ -207,7 +205,7 @@ class nqvMainImages {
     public function getSrc(?string $sufix = null, ?string $path = null, string $glue = '-'): ?string {
         $path = is_null($path) ? $this->getBaseFilepath():$path;
         $info = pathinfo($path);
-        if($sufix) $path = $info['dirname'].'/'.$info['filename'].$glue.$sufix.'.'.$info['extension'];
+        if($sufix && $sufix !== 'full') $path = $info['dirname'].'/'.$info['filename'].$glue.$sufix.'.'.$info['extension'];
         if(!is_file($path)) return null;
         return url($path) . '?v=' . filemtime($path);
     }

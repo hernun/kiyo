@@ -53,10 +53,10 @@ INSERT INTO `config` SET `name` = 'version', `slug` = 'version',`value` = '2.0.0
 INSERT INTO `config` SET `name` = 'Modo Mantenimiento', `slug` = 'maintenance-mode',`value` = '1',`created_at` = NOW(), `created_by` = 0;
 INSERT INTO `config` SET `name` = 'Vistas accesibles en modo mantenimiento', `slug` = 'maintenance-enabled-templates',`value` = 'login,password-reset',`created_at` = NOW(), `created_by` = 0;
 INSERT INTO `config` SET `name` = 'Plantilla del Modo Mantenimiento', `slug` = 'maintenance-template',`value` = 'maintenance',`created_at` = NOW(), `created_by` = 0;
-INSERT INTO `config` SET `name` = 'Permisos', `slug` = 'permissions',`value` = '{"admin":{"crud":["adds","advertisers","pages","images","mainimages","tags","users"]}}',`created_at` = NOW(), `created_by` = 0;
-INSERT INTO `config` SET `name` = 'Permisos adicionales', `slug` = 'additional-permissions',`value` = 'tables,permissions',`created_at` = NOW(), `created_by` = 0;
+INSERT INTO `config` SET `name` = 'Permisos', `slug` = 'permissions',`value` = '{"admin":{"crud":["adds","advertisers","header-menu","images","mainimages","pages","tags","users"]}}',`created_at` = NOW(), `created_by` = 0;
+INSERT INTO `config` SET `name` = 'Permisos adicionales', `slug` = 'additional-permissions',`value` = 'tables,permissions,header-menu',`created_at` = NOW(), `created_by` = 0;
 INSERT INTO `config` SET `name` = 'Home Widgets', `slug` = 'home-widgets',`value` = '[1,2]',`created_at` = NOW(), `created_by` = 0;
-INSERT INTO `config` SET `name` = 'Items en menú Contenido', `slug` = 'items-admin',`value` = '{"admin":["pages","advertisers","pages"]}',`created_at` = NOW(), `created_by` = 0;
+INSERT INTO `config` SET `name` = 'Items en menú Contenido (admin)', `slug` = 'items-admin',`value` = '{"admin":["pages","advertisers","pages"]}',`created_at` = NOW(), `created_by` = 0;
 INSERT INTO `config` SET `name` = 'Mostrar pie de página en Admin', `slug` = 'admin_footer',`value` = 0,`created_at` = NOW(), `created_by` = 0;
 INSERT INTO `config` SET `name` = 'Mostrar pie de página en Front', `slug` = 'front_footer',`value` = 1,`created_at` = NOW(), `created_by` = 0;
 INSERT INTO `config` SET `name` = 'Mostrar encabezado de página en Admin', `slug` = 'admin_header',`value` = 1,`created_at` = NOW(), `created_by` = 0;
@@ -65,6 +65,7 @@ INSERT INTO `config` SET `name` = 'Configuración de correo', `slug` = 'mail-set
 INSERT INTO `config` SET `name` = 'Página de inicio', `slug` = 'homepage',`value` = '{"ES":{"page_id":0}}',`created_at` = NOW(), `created_by` = 0;
 INSERT INTO `config` SET `name` = 'Propiedades por defecto en Páginas', `slug` = 'pagesdefaultproperties',`value` = '{"showtitle":"on","mainimageformat":"banner"}',`created_at` = NOW(), `created_by` = 0;
 INSERT INTO `config` SET `name` = 'Activar publicidades', `slug` = 'adds-enabled',`value` = 0,`created_at` = NOW(), `created_by` = 0;
+INSERT INTO `config` SET `name` = 'Menú del encabezado (front)', `slug` = 'header-menu',`value` = '{"ES":["contacto"],"EN":["contacto"]}',`created_at` = NOW(), `created_by` = 0;
 
 CREATE TABLE `mainimages` (
  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
@@ -190,3 +191,4 @@ INSERT INTO `widgets` SET `name` = 'Reset OVO DB',`description` = 'Esta acción 
 INSERT INTO `widgets` SET `name` = 'Test Mail & Password Reset', `description` = 'Permite probar el envío de emails y el flujo de recuperación de contraseña', `slug` = 'test-mail-reset', `public` = 1, `order` = 6, `created_at` = NOW(), `created_by` = 0, `modified_at` = NOW();
 INSERT INTO `widgets` SET `name` = 'Exportar Full Backup', `description` = 'Crea un fichero de exportación completo, que incluye la base de datos y el directorio de uploads. No exporta código, sólo exporta el alma de tu proyecto.', `slug` = 'full-backup-export', `public` = 1, `order` = 6, `created_at` = NOW(), `created_by` = 0, `modified_at` = NOW();
 INSERT INTO `widgets` SET `name` = 'Importar Full Backup', `description` = 'Importa un fichero de exportación completo, creado por la utilidad de exportación full backup. No importa código.', `slug` = 'full-backup-import', `public` = 1, `order` = 6, `created_at` = NOW(), `created_by` = 0, `modified_at` = NOW();
+INSERT INTO `widgets` SET `name` = 'Elementos del menú principal del front', `description` = 'Permite seleccionar y ordenar las páginas que se muestran en el menú del encabezado del Front, según el idioma seleccionado.', `slug` = 'header-menu', `public` = 1, `order` = 6, `created_at` = NOW(), `created_by` = 0, `modified_at` = NOW();

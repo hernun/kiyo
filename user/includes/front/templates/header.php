@@ -4,16 +4,7 @@
             <div class="logo"><a href="/"><img src="<?php echo getAsset('images/logo.png')?>" /></a></div>
         </div>
         <nav class="desktop">
-            <ul>
-                <li><?= getPageLink('completed-work') ?></li>
-                <li><?= getPageLink('velador-studio') ?></li>
-                <li><?= getPageLink('education') ?></li>
-                <li><?= getPageLink('services') ?></li>
-                <li><?= getPageLink('kiyo-music') ?></li>
-                <li><?= getPageLink('bio') ?></li>
-                <li><?= getPageLink('contact') ?></li>
-                <li><?php echo getLaguageSelector()?></li>
-            </ul>
+            <?php include_template_part('menu-items')?>
         </nav>
         <nav class="tablet mobile">
             <div class="hamburger menu-trigger">
@@ -22,14 +13,18 @@
             <div class="d-flex justify-content-center align-items-center"><a class="lang-button" href="">ES</a></div>
             <div class="mobile-menu">
                 <ul>
-                    <li class="close"><div class="close-button">X</div></li>
-                    <li><?= getPageLink('completed-work') ?></li>
-                    <li><?= getPageLink('velador-studio') ?></li>
-                    <li><?= getPageLink('education') ?></li>
-                    <li><?= getPageLink('services') ?></li>
-                    <li><?= getPageLink('kiyo-music') ?></li>
-                    <li><?= getPageLink('bio') ?></li>
-                    <li><?= getPageLink('contact') ?></li>
+                    <ul class="langES">
+                        <?php foreach(getHeaderMenuItems('ES') as $slug):?>
+                            <li><?= getPageLink($slug) ?></li>
+                        <?php endforeach?>
+                        <li><?php echo getLaguageSelector()?></li>
+                    </ul>
+                    <ul class="langEN">
+                        <?php foreach(getHeaderMenuItems('EN') as $slug):?>
+                            <li><?= getPageLink($slug) ?></li>
+                        <?php endforeach?>
+                        <li><?php echo getLaguageSelector()?></li>
+                    </ul>
                 </ul>
             </div>
         </nav>
@@ -44,9 +39,11 @@
         mobile.classList.add('open');
     });
 
-    closeBtn.addEventListener('click', () => {
-        mobile.classList.remove('open');
-    });
+    if(closeBtn) {
+        closeBtn.addEventListener('click', () => {
+            mobile.classList.remove('open');
+        });
+    }
 
     mobile.querySelectorAll('a').forEach(link => {
         link.addEventListener('click', () => {

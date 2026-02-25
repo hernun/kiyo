@@ -80,7 +80,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     const allOptions = Array.from(tableSelect.options);
 
-    const perms = <?php echo json_encode(json_decode($permissions ?? '{}', true),JSON_UNESCAPED_UNICODE | JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT) ?>;
+    const perms = <?php echo json_encode($perms ?? [],JSON_UNESCAPED_UNICODE | JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT) ?>;
 
     function resetTableSelect() {
         tableSelect.querySelectorAll('option').forEach(opt => {

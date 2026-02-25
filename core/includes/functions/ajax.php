@@ -50,3 +50,13 @@ function ajax_save_home_widgets_list() {
     }
     return;
 }
+
+function ajax_save_header_menu() {
+    $lang = $_POST['lang'];
+    $list = json_decode(base64_decode($_POST['list']), true);
+
+    $menu = nqv::getConfig('header-menu');
+    $menu[$lang] = $list;
+    nqv::setConfig('header-menu',json_encode($menu));
+    exit;
+}

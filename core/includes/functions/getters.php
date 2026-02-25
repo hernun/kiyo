@@ -75,6 +75,13 @@ function get_user_filepath($filename,$path): string {
     return cleanslashes($path . $filename) . '.php';
 }
 
+function include_template_part(string $filename): void{
+    $userFilepath = get_user_filepath($filename,USER_PARTS_PATH);
+    $coreFilepath = get_core_filepath($filename,PARTS_PATH);
+    if(is_file($userFilepath)) include($userFilepath);
+    elseif(is_file($coreFilepath)) include($coreFilepath);
+}
+
 function include_template(string $filename, array $args = [], bool $print = true, $path = null){
     $filepath = null;
     $userFilepath = get_user_filepath($filename,$path);
@@ -248,8 +255,7 @@ function isTemplate(string $filename) {
 
     $userFilename = str_replace(USER_TEMPLATES_PATH,'',$filename);
     $userFilepath = USER_TEMPLATES_PATH . $userFilename . '.php';
-    
-    return is_file($coreFilepath || $userFilepath);
+    return is_file($coreFilepath) || is_file($userFilepath);
 }
 
 function isTemplatePath(string $path) {
@@ -398,4 +404,9 @@ function getPageLink($slug): string {
     $page = nqv::get('pages',['slug'=>$slug,'lang'=>$_SESSION['CURRENT_LANGUAGE']]);
     if(!empty($page[0])) return '<a href="' . getUrl($slug) . '">' . $page[0]['title'] . '</a>';
     else return '';
+}
+
+function getHeaderMenuItems($lang) {
+    $menuItems = nqv::getConfig('header-menu');
+    return !empty($menuItems[$lang]) ? $menuItems[$lang]:[];
 }

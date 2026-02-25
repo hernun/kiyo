@@ -10,7 +10,14 @@ document.addEventListener('DOMContentLoaded', () => {
         holder: 'editorjs-content',
         data: window.editorJsData || undefined,
         tools: {
-            header: Header,
+            header: {
+                class: Header,
+                inlineToolbar: true,
+                config: {
+                    levels: [2,3,4,5,6],
+                    defaultLevel: 5
+                }
+            },
             list: List,
             paragraph: {
                 class: Paragraph,
@@ -19,8 +26,14 @@ document.addEventListener('DOMContentLoaded', () => {
             embed: {
                 class: OvoEmbed
             },
+            embedgallery: {
+                class: OvoEmbedGallery
+            },
             shortcode: {
                 class: OvoShortcode
+            },
+            spacer: {
+                class: OvoSpacer
             }
         }
     });

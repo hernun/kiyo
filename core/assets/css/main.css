@@ -335,6 +335,30 @@ footer.ovo {
 	color:black;
 }
 
+/* Contenedor principal de la galería */
+.ovo-embed-gallery-wrapper {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 16px;
+    margin-top: 1rem;
+}
+
+/* Cada embed individual */
+.ovo-embed-gallery-item-inner {
+    position: relative;
+    background: #f8f9fa;
+    border-radius: 4px;
+    overflow: hidden;
+    padding-top: 8px;
+}
+
+/* Iframe responsive */
+.ovo-embed-gallery-item-inner iframe {
+    width: 100%;
+    height: 200px;
+    display: block;
+}
+
 @media screen and (max-width: 1680px) {
 	:root {
 		--first-width:1680px;

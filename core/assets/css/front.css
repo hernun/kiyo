@@ -77,6 +77,10 @@ header nav .hamburger svg {
     height:100%;
 }
 
+h1, h2, h3, h4, h5 {
+    margin: 1.25rem 0;
+}
+
 .mobile-menu {
     position:fixed;
     top:0;
@@ -190,6 +194,10 @@ footer .ovo-social img {
     position:relative;
 }
 
+.page .main-image {
+    margin-bottom: 2rem;
+}
+
 /* OVO EMBED */
 
 .ovo-embed-responsive {
@@ -216,7 +224,11 @@ footer .ovo-social img {
     width: 300px;
     left: 0;
     top: 0;
-    height: 200px;
+    min-height: 200px;
+}
+
+.ovo-spacer {
+    height: 40px;
 }
 
 @media (max-width: 1400px) {

@@ -14,7 +14,7 @@ $indexes = [];
 ?>
 <div class="container">
     <h1 class="my-5">Home Widgets</h1>
-    <div id="widgets-menu-manager" class="d-flex flex-colun justify-content-between mb-5 gap-4">
+    <div id="menu-manager" class="d-flex flex-colun justify-content-between mb-5 gap-4">
         <div id="origin" class="border rounded p-3 w-100">
             <?php foreach($widgets as $k => $widget_array):?>
                 <?php if(in_array($widget_array['id'],(array) $widgets)):?>
@@ -74,12 +74,13 @@ $indexes = [];
         });
     }
 
-    $('#widgets-menu-manager .item').draggable({
+    $('#menu-manager .item').draggable({
         revert: "invalid",
         cursor: "move",
         zIndex: 100,
         connectToSortable: "#destiny"
     });
+    
     $( "#destiny" ).sortable({
         receive: function (event, ui) {      
              setWigetsList();
