@@ -103,22 +103,23 @@ class nqvMail {
             $this->manager->Port       = $driver['port'] ?? 587;
             $this->manager->SMTPAuth   = $driver['smtp_auth'] ?? true;
 
-            if(!empty($driver['smtp_secure'])) {
-                $this->manager->SMTPSecure = $driver['smtp_secure'];
-            }
+            if(!empty($driver['smtp_secure'])) $this->manager->SMTPSecure = $driver['smtp_secure'];
+            if(isset($driver['smtp_auto_tls'])) $this->manager->SMTPAutoTLS = $driver['smtp_auto_tls'];
 
-            if(isset($driver['smtp_auto_tls'])) {
-                $this->manager->SMTPAutoTLS = $driver['smtp_auto_tls'];
+            // Usuario / Password
+            if ($driver['type'] === 'smtp') {
+                // Leer desde constantes si existen
+                if (defined('SMTP_USERNAME') && defined('SMTP_PASSWORD')) {
+                    $this->manager->Username = SMTP_USERNAME;
+                    $this->manager->Password = SMTP_PASSWORD;
+                } else {
+                    if (!empty($driver['username'])) $this->manager->Username = $driver['username'];
+                    if (!empty($driver['password'])) $this->manager->Password = $driver['password'];
+                }
+            } else {
+                if (!empty($driver['username'])) $this->manager->Username = $driver['username'];
+                if (!empty($driver['password'])) $this->manager->Password = $driver['password'];
             }
-
-            if(!empty($driver['username'])) {
-                $this->manager->Username = $driver['username'];
-            }
-
-            if(!empty($driver['password'])) {
-                $this->manager->Password = $driver['password'];
-            }
-
         } elseif($driver['type'] === 'ses') {
 
             $this->manager->Host = $driver['endpoint'] ?? '';

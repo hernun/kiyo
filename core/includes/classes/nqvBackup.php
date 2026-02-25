@@ -111,6 +111,45 @@ class nqvBackup {
         return $zipPath;
     }
 
+    private static function normalizePermissions(string $path): void {
+        if(!is_dir($path)) return;
+        $iterator = new RecursiveIteratorIterator(
+            new RecursiveDirectoryIterator($path, RecursiveDirectoryIterator::SKIP_DOTS),
+            RecursiveIteratorIterator::SELF_FIRST
+        );
+        foreach($iterator as $item) {
+            if($item->isDir()) chmod($item->getRealPath(), 0755);
+            else chmod($item->getRealPath(), 0644);
+        }
+
+        chmod($path,0755);
+    }
+
+    private static function safeExtractZip(ZipArchive $zip, string $destination): void {
+        for($i = 0; $i < $zip->numFiles; $i++) {
+            $entry = $zip->getNameIndex($i);
+            if(str_contains($entry,'..') || str_starts_with($entry,'/') || str_starts_with($entry,'\\')) throw new Exception('ZIP contiene rutas inválidas.');
+
+            $targetPath = $destination . '/' . $entry;
+            $realTargetDir = dirname($targetPath);
+
+            if(!is_dir($realTargetDir) && !mkdir($realTargetDir,0755,true)) throw new Exception('No se pudo crear directorio: ' . $realTargetDir);
+
+            if(str_ends_with($entry,'/')) continue;
+
+            $stream = $zip->getStream($entry);
+            if(!$stream) throw new Exception('Error leyendo entrada del ZIP.');
+
+            $out = fopen($targetPath,'w');
+            if(!$out) throw new Exception('Error creando archivo: ' . $targetPath);
+
+            while(!feof($stream)) fwrite($out,fread($stream,8192));
+
+            fclose($stream);
+            fclose($out);
+        }
+    }
+
     public static function importFullBackup(string $zipPath, string $mode = 'replace'): void {
 
         if(!file_exists($zipPath))
@@ -124,8 +163,10 @@ class nqvBackup {
         if($zip->open($zipPath) !== true)
             throw new Exception('No se pudo abrir el ZIP.');
 
-        $zip->extractTo($tmpDir);
+        self::safeExtractZip($zip,$tmpDir);
         $zip->close();
+
+        self::normalizePermissions($tmpDir);
 
         $dbFile = $tmpDir . '/database.sql';
 

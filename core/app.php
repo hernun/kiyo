@@ -129,6 +129,9 @@ if(empty($_ENV)) {
 
 define('ENV', $_ENV['ENVIRONMENT']);
 
+define('SMTP_USERNAME', $_EVV['SMTP_USERNAME'] ?? '');
+define('SMTP_PASSWORD', $_EVV['SMTP_PASSWORD'] ?? '');
+
 $versionFilePath = 'version.json';
 if(is_file($versionFilePath)){
     # Leer versión del proyecto si existe
