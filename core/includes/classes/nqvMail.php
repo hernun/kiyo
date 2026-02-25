@@ -8,7 +8,7 @@ class nqvMail {
     private $ErrorInfo;
     private $options = [];
     private $defaults = [
-        'from' => ['address'=> ADMIN_EMAIL, 'name' => APP_NAME],
+        'from' => ['address'=> ADMIN_EMAIL_SENDER, 'name' => APP_NAME],
         'reply' => ['address'=> ADMIN_EMAIL_SENDER, 'name' => 'No responder'],
         'isHtml' => true,
         'template' => '',
@@ -93,48 +93,64 @@ class nqvMail {
     }
 
 
-    private function configureTransport(){
+	private function configureTransport() {
 
-        $driver = $this->getDriver();
+	    $driver = $this->getDriver();
 
-        if(in_array($driver['type'], ['smtp','gmail'])) {
+	    $this->manager->isSMTP(); // importante
+	    #$this->manager->SMTPDebug  = 2;
+	    $this->manager->Debugoutput = 'error_log';
+	    $this->manager->Timeout = 10;
 
-            $this->manager->Host       = $driver['host'] ?? '';
-            $this->manager->Port       = $driver['port'] ?? 587;
-            $this->manager->SMTPAuth   = $driver['smtp_auth'] ?? true;
+	    if (in_array($driver['type'], ['smtp','gmail'])) {
 
-            if(!empty($driver['smtp_secure'])) $this->manager->SMTPSecure = $driver['smtp_secure'];
-            if(isset($driver['smtp_auto_tls'])) $this->manager->SMTPAutoTLS = $driver['smtp_auto_tls'];
+	        $this->manager->Host = $driver['host'] ?? '';
+	        $this->manager->Port = $driver['port'] ?? 587;
 
-            // Usuario / Password
-            if ($driver['type'] === 'smtp') {
-                // Leer desde constantes si existen
-                if (defined('SMTP_USERNAME') && defined('SMTP_PASSWORD')) {
-                    $this->manager->Username = SMTP_USERNAME;
-                    $this->manager->Password = SMTP_PASSWORD;
-                } else {
-                    if (!empty($driver['username'])) $this->manager->Username = $driver['username'];
-                    if (!empty($driver['password'])) $this->manager->Password = $driver['password'];
-                }
-            } else {
-                if (!empty($driver['username'])) $this->manager->Username = $driver['username'];
-                if (!empty($driver['password'])) $this->manager->Password = $driver['password'];
-            }
-        } elseif($driver['type'] === 'ses') {
+	        // Autenticación
+	        $this->manager->SMTPAuth = $driver['smtp_auth'] ?? true;
 
-            $this->manager->Host = $driver['endpoint'] ?? '';
-            $this->manager->Port = 587;
-            $this->manager->SMTPAuth = true;
-        }
+	        // Seguridad
+	        if (!empty($driver['smtp_secure'])) {
+	            $this->manager->SMTPSecure = $driver['smtp_secure'];
+	        }
 
-        // From del driver
-        if(!empty($driver['from'])) {
-            $this->manager->setFrom(
-                $driver['from']['address'],
-                $driver['from']['name']
-            );
-        }
-    }
+	        if (isset($driver['smtp_auto_tls'])) {
+	            $this->manager->SMTPAutoTLS = (bool) $driver['smtp_auto_tls'];
+	        }
+
+	        // Usuario / Password
+	        if ($driver['type'] === 'smtp') {
+
+	            // Prioridad a constantes
+	            if (defined('SMTP_USERNAME') && defined('SMTP_PASSWORD')) {
+	                $this->manager->Username = SMTP_USERNAME;
+	                $this->manager->Password = SMTP_PASSWORD;
+	            } else {
+	                $this->manager->Username = $driver['username'] ?? '';
+	                $this->manager->Password = $driver['password'] ?? '';
+	            }
+
+	        } else { // gmail
+	            $this->manager->Username = $driver['username'] ?? '';
+	            $this->manager->Password = $driver['password'] ?? '';
+	        }
+
+	    } elseif ($driver['type'] === 'ses') {
+
+	        $this->manager->Host = $driver['endpoint'] ?? '';
+	        $this->manager->Port = 587;
+	        $this->manager->SMTPAuth = true;
+	    }
+
+	    // From
+	    if (!empty($driver['from']['address'])) {
+	        $this->manager->setFrom(
+	            $driver['from']['address'],
+	            $driver['from']['name'] ?? ''
+	        );
+	    }
+	}
 
     private function htmlToText(string $html): string {
 

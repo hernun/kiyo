@@ -129,8 +129,8 @@ if(empty($_ENV)) {
 
 define('ENV', $_ENV['ENVIRONMENT']);
 
-define('SMTP_USERNAME', $_EVV['SMTP_USERNAME'] ?? '');
-define('SMTP_PASSWORD', $_EVV['SMTP_PASSWORD'] ?? '');
+define('SMTP_USERNAME', $_ENV['SMTP_USERNAME'] ?? '');
+define('SMTP_PASSWORD', $_ENV['SMTP_PASSWORD'] ?? '');
 
 $versionFilePath = 'version.json';
 if(is_file($versionFilePath)){
