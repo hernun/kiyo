@@ -1,8 +1,6 @@
 <?php
 $formId = 'email-form';
 
-#_log([$_POST,@$_SESSION[$formId . '_token']]);
-
 if(submitted($formId)) {
     $options = [
         'to' => [['address' => ADMIN_EMAIL, 'name' => APP_NAME]],

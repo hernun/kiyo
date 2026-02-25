@@ -12,28 +12,16 @@
             </div>
             <div class="d-flex justify-content-center align-items-center"><a class="lang-button" href="">ES</a></div>
             <div class="mobile-menu">
-                <ul>
-                    <ul class="langES">
-                        <?php foreach(getHeaderMenuItems('ES') as $slug):?>
-                            <li><?= getPageLink($slug) ?></li>
-                        <?php endforeach?>
-                        <li><?php echo getLaguageSelector()?></li>
-                    </ul>
-                    <ul class="langEN">
-                        <?php foreach(getHeaderMenuItems('EN') as $slug):?>
-                            <li><?= getPageLink($slug) ?></li>
-                        <?php endforeach?>
-                        <li><?php echo getLaguageSelector()?></li>
-                    </ul>
-                </ul>
+                <?php include_template_part('menu-items')?>
             </div>
         </nav>
     </div>
 </header>
+
 <script>
     const mobile = document.querySelector('.mobile-menu');
     const trigger = document.querySelector('.menu-trigger');
-    const closeBtn = document.querySelector('.close-button');
+    const closeBtn = mobile.querySelector('.close-button');
 
     trigger.addEventListener('click', () => {
         mobile.classList.add('open');

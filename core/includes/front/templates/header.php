@@ -4,18 +4,7 @@
             <div class="logo"><img src="<?php echo getAsset('images/logo-white.png')?>" /></div>
         </div>
         <nav class="desktop">
-            <ul class="langES">
-                <?php foreach(getHeaderMenuItems('ES') as $slug):?>
-                    <li><?= getPageLink($slug) ?></li>
-                <?php endforeach?>
-                <li><?php echo getLaguageSelector()?></li>
-            </ul>
-            <ul class="langEN">
-                <?php foreach(getHeaderMenuItems('EN') as $slug):?>
-                    <li><?= getPageLink($slug) ?></li>
-                <?php endforeach?>
-                <li><?php echo getLaguageSelector()?></li>
-            </ul>
+            <?php include_template_part('menu-items')?>
         </nav>
         <nav class="tablet mobile">
             <div class="hamburger menu-trigger">
@@ -23,14 +12,7 @@
             </div>
             <div class="d-flex justify-content-center align-items-center"><a class="lang-button" href="">ES</a></div>
             <div class="mobile-menu">
-                <ul class="langES">
-                    <li class="close"><div class="close-button">X</div></li>
-                    <li><?= getPageLink('contact') ?></li>
-                </ul>
-                <ul class="langEN">
-                    <li class="close"><div class="close-button">X</div></li>
-                    <li><a href="">Contact</a></li>
-                </ul>
+                <?php include_template_part('menu-items')?>
             </div>
         </nav>
     </div>
@@ -39,7 +21,7 @@
 <script>
     const mobile = document.querySelector('.mobile-menu');
     const trigger = document.querySelector('.menu-trigger');
-    const closeBtn = document.querySelector('.close-button');
+    const closeBtn = mobile.querySelector('.close-button');
 
     trigger.addEventListener('click', () => {
         mobile.classList.add('open');
