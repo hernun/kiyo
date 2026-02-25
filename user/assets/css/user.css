@@ -13,13 +13,11 @@ body.front {
 }
 
 header.front {
-    background: #ececec;
     margin:0;
     height: var(--header-height-front);
     display:flex;
     justify-content: center;
     width: 100%;
-    border-bottom:2px solid #e3e3e3;
 }
 
 header.front .header-container {
@@ -107,7 +105,7 @@ main.headered.footered {
 
 footer.ovo {
     position: relative;
-    background-color: #ececec;
+    background-color: #f3f3f3;
     color: black;
     padding: 2rem;
     border-top: 2px solid #e3e3e3;
