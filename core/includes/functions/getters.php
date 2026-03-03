@@ -381,10 +381,11 @@ function getEnabledLangs() {
 
 function getLaguageSelector() {
     $cl = $_SESSION['CURRENT_LANGUAGE'] ?? 'ES';
-    $lis = ['<div class="language-selector"><details><summary>' . $cl . '</summary><div class="lang-options">'];
+    $lis = ['<div class="language-selector nav-link"><details><summary>' . $cl . '</summary><div class="lang-options">'];
     foreach(getEnabledLangs() as $lang) {
         if($lang === $cl) continue;
-        $lis[] = '<a class="lang-item" href="/' . strtolower($lang) . '/' . implode('/',nqv::getVars()) . '">' . $lang . '</a>';
+        if(isFront()) $lis[] = '<a class="lang-item" href="/' . strtolower($lang) . '/' . implode('/',nqv::getVars()) . '">' . $lang . '</a>';
+        else $lis[] = '<a class="lang-item" href="/' . strtolower($lang) . '/admin">' . $lang . '</a>';
     }
     array_push($lis,' </div></details></div>');
     return implode($lis);
