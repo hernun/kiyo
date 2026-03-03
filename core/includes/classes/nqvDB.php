@@ -236,6 +236,7 @@ class nqvDB {
             try {
                 foreach($fields as $field) {
                     $k = $field['Field'];
+                    if($saveType === 'insert' && $k === 'modified_at') continue;
                     if($k === 'created_by') {
                         if($saveType === 'insert') $vars[$k] = nqv::getCurrentUser()->get('id');
                         else continue;

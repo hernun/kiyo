@@ -617,3 +617,20 @@ function htmlToEditorJS($html) {
 
     return json_encode(['blocks' => $blocks], JSON_UNESCAPED_UNICODE | JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP);
 }
+
+function copyDirectory(string $source, string $destination): bool {
+    if (!is_dir($source)) return false;
+    if (!is_dir($destination)) if (!mkdir($destination, 0755, true)) return false;
+    $iterator = new DirectoryIterator($source);
+    foreach ($iterator as $item) {
+        if ($item->isDot()) continue;
+        $srcPath = $item->getPathname();
+        $dstPath = $destination . DIRECTORY_SEPARATOR . $item->getFilename();
+        if ($item->isDir()) {
+            if (!copyDirectory($srcPath, $dstPath)) return false;
+        } else {
+            if (!copy($srcPath, $dstPath)) return false;
+        }
+    }
+    return true;
+}

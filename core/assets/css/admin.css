@@ -153,3 +153,41 @@ main.headered.footered {
 #homepage-selector-form {
     min-height:calc(100vh - var(--header-height-admin) * 2);
 }
+
+.translang-selector {
+    margin: 1rem;
+    position: relative;
+	display: inline-block;
+	font-family: inherit;
+	text-transform: uppercase;
+	z-index:999;
+	font-size:.9rem;
+}
+
+.translang-selector summary {
+	list-style: none;
+	cursor: pointer;
+}
+
+
+/* Contenedor dropdown */
+.translang-selector .lang-options {
+	position: absolute;
+	min-width:100px;
+	border-radius:5px;
+	border:1px solid #efefef;
+	margin-top: 3px;
+}
+
+/* Links */
+.translang-selector .lang-options a {
+	display: block;
+	padding: 6px 10px;
+	text-decoration: none;
+	color: inherit;
+}
+
+.translang-selector .lang-options a:hover {
+	background-color: #f8f8f8;
+	color:black;
+}

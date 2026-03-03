@@ -14,6 +14,9 @@
         <link href="<?= getAsset('jquery-ui-1.13.3/jquery-ui.min.css') ?>" rel="stylesheet" />
         <link href="<?= getAsset('fontawesome/css/all.min.css') ?>" rel="stylesheet" />
         <link href="<?= getAsset('bootstrap-5.3.3-dist/css/bootstrap.min.css') ?>" rel="stylesheet" />
+        <?php if(isAdmin()):?>
+            <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        <?php endif?>
 
         <link
             rel="stylesheet"

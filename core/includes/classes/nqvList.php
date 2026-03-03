@@ -22,6 +22,7 @@ class nqvList {
     protected $total;
     protected $pagenumber = null;
     protected $showsearch = true;
+    protected $showSubtitle = true;
 
     public function __construct($tablename) {
         $this->tablename = $tablename;
@@ -307,7 +308,17 @@ class nqvList {
         return $this->getName();
     }
 
+    public function showSubtitle() {
+        $this->showSubtitle = true;
+    }
+        
+    public function hideSubtitle() {
+        $this->showSubtitle = false;
+    }
+
+
     public function getSubTitle() {
+        if(!$this->showSubtitle) return null;
         if($this->count() === 1) $title = $this->getSingularName();
         else $title = $this->getName();
         return 'Hay ' . $this->count() . ' ' . $title;

@@ -430,6 +430,8 @@ class nqvDbObject {
 
     public function delete(): bool {
         try {
+            $mainimage = nqvMainImages::getByElementId($this->getTablename(),$this->get_id());
+            $mainimage->delete();
             $d = nqvDB::delete($this->tbl_name, $this->get_id());
             if(!$d) throw new Exception('No se pudo borrar ' . $this->tbl_name .' '. $this->get_id());
             $output = true;

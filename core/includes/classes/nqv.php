@@ -188,6 +188,64 @@ class nqv {
         }
     }
 
+    /**
+     * Ejecuta una consulta SELECT genérica sobre una tabla.
+     *
+     * Permite construir dinámicamente cláusulas WHERE (con AND / OR),
+     * ORDER BY y LIMIT utilizando prepared statements.
+     *
+     * @param string $tablename  Nombre de la tabla.
+     *                           Debe existir (validado mediante nqvDB::isTable()).
+     *
+     * @param array  $fields     Condiciones WHERE.
+     *                           Formato:
+     *                           [
+     *                               'campo' => 'valor',              // campo = ?
+     *                               'campo%not' => 'valor',          // campo <> ?
+     *                               'campo%or' => 'valor',           // OR campo = ?
+     *                               'campo%ornot' => 'valor',        // OR campo <> ?
+     *                               'campo%in' => '1,2,3'            // OR FIND_IN_SET(campo, ?)
+     *                           ]
+     *
+     *                           - Las condiciones sin sufijo se agregan con AND.
+     *                           - Las condiciones con %or, %ornot o %in se agregan con OR.
+     *                           - Todos los valores se bindean como string ("s").
+     *
+     * @param array  $order      Ordenamiento.
+     *                           Formato:
+     *                           [
+     *                               'campo' => 'ASC',
+     *                               'otro_campo' => 'DESC'
+     *                           ]
+     *                           Los campos se validan con nqvDB::isField().
+     *
+     * @param array  $limit      Límite de resultados.
+     *                           Formato:
+     *                           [cantidad]
+     *                           [offset, cantidad]
+     *
+     * @return array             Resultado del SELECT parseado mediante
+     *                           nqvDB::parseSelect().
+     *                           Retorna array vacío si la tabla no existe.
+     *
+     * @example
+     * nqvDB::get('users',
+     *     ['status' => 'active', 'role%or' => 'admin'],
+     *     ['created_at' => 'DESC'],
+     *     [0, 10]
+     * );
+     *
+     * Genera:
+     * SELECT * FROM users
+     * WHERE status = ? OR role = ?
+     * ORDER BY `created_at` DESC
+     * LIMIT 0, 10
+     *
+     * @note
+     * - Los parámetros WHERE se bindean usando prepared statements.
+     * - ORDER BY y LIMIT se insertan directamente (validados previamente).
+     * - Todos los parámetros se tipan como string ("s").
+     */
     public static function get(string $tablename, array $fields = [], array $order = [], array $limit = []) {
         if(!nqvDB::isTable($tablename)) return [];
         $sql = 'SELECT * FROM ' . $tablename;

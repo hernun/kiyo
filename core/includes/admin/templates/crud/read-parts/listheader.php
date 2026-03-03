@@ -7,11 +7,13 @@
             <div class="button-new-item"><?php echo $this->getRemoveButton()?></div>
             -->
             <div class="title-container">
-                <span class="title"><a href="<?php echo getAdminUrl()?>database/<?php echo $this->getTablename()?>"><?php echo $this->getTitle()?></a></span> <span class="separator">|</span> <span class="subtitle"><?php echo $this->getSubTitle()?>
+                <span class="title"><a href="<?php echo getAdminUrl()?>database/<?php echo $this->getTablename()?>"><?php echo $this->getTitle()?></a></span> <span class="separator">
+                    <?php if($this->showSubtitle):?>
+                        |</span> <span class="subtitle"><?php echo $this->getSubTitle()?>
+                    <?php endif?>
                 <?php if($fl = $this->getCurrentFilterLabel()) echo ' <span class="separator">|</span> ' .$fl?></span>
                 <div>
-                    <span class="disc-space">Hay <?php echo formatBytes(disk_free_space("/"));?> disponibles</span> |
-                    <span class="disc-space"><a href="/admin/add-tags/<?php echo $this->getTablename()?>">Agregar tags</a></span>
+                    <span class="disc-space">Hay <?php echo formatBytes(disk_free_space("/"));?> disponibles</span>
                 </div>
             </div>
         </div>

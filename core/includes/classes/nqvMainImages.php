@@ -116,6 +116,21 @@ class nqvMainImages {
         return !empty($this->id);
     }
 
+    public function copy($tablename,$element_id) {
+        $origin = dirname($this->getBaseFilepath());
+        $destiny = dirname($this->getCopyFilepath($tablename,$element_id));
+        copyDirectory($origin,$destiny);
+    }
+
+    public function duplicate($tablename,$element_id) {
+        $data = $this->getData();
+        unset($data['id']);
+        $mainimage = new nqvMainImages($data);
+        $mainimage->set('tablename',$tablename);
+        $mainimage->set('element_id',$element_id);
+        if($mainimage->save()) $this->copy($tablename,$element_id);
+    }
+
     public function save(?array $data = []): int|bool {
 
         $types = '';
@@ -172,6 +187,18 @@ class nqvMainImages {
             UPLOADS_PATH,
             $this->tablename,
             $this->element_id,
+            $this->slug,
+            $this->get_extension()
+        );
+    }
+
+    public function getCopyFilepath($tablename,$element_id): string {
+        $this->set_slug();
+        return sprintf(
+            '%simages/%s/%d/%s.%s',
+            UPLOADS_PATH,
+            $tablename,
+            $element_id,
             $this->slug,
             $this->get_extension()
         );

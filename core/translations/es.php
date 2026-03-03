@@ -97,5 +97,6 @@ $translations = [
     'Please enter your name.' => 'Por favor ingresa tu nombre.',
     'Please enter a valid email.' => 'Por favor ingresa un correo válido.',
     'Please enter a subject.' => 'Por favor ingresa un asunto.',
-    'Please enter a message.' => 'Por favor ingresa un mensaje.'
+    'Please enter a message.' => 'Por favor ingresa un mensaje.',
+    'Page translator' => 'Traductor de páginas'
 ];
