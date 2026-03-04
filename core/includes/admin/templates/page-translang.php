@@ -78,6 +78,7 @@ if(submitted($formId)) {
 }
 nqvNotifications::flush();
 ?>
+
 <div class="my-4">
     <?php if(nqv::userCan(['create',$tablename])):?>
         <?php $list = new nqvList($tablename)?>

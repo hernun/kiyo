@@ -9,16 +9,34 @@ class App {
         // --- Legacy routing ---
         [$mm, $template] = array_values(self::parseMainHttoQuery());
         $mainClass = ['ovo'];
+        $page = null;
+        $alternates = [];
 
         // --- Layout state ---
         if (hasHeader()) $mainClass[] = 'headered';
         if (hasFooter()) $mainClass[] = 'footered';
+
+        if ($template === 'page') {
+            $slug = \nqv::getVars(0);
+            $pages = \nqv::get('pages', [
+                'slug' => $slug,
+                'lang' => $_SESSION['CURRENT_LANGUAGE']
+            ]);
+
+            $page = $pages[0] ?? null;
+        }
+
+        if($page) {
+            $alternates = \nqv::get('pages',['slug' => $page['slug'],'lang%not' => $_SESSION['CURRENT_LANGUAGE']]);
+        }
 
         // --- Compartimos variables al render ---
         $data = [
             'mm'         => $mm,
             'template'   => $template,
             'mainClass'  => $mainClass,
+            'page'  => $page ?? null,
+            'alternates' => $alternates
         ];
 
         return new Response($data);

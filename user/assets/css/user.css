@@ -14,6 +14,8 @@ body.front {
 
 header.front {
     margin:0;
+	margin-top:3rem;
+	margin-bottom:2rem;
     height: var(--header-height-front);
     display:flex;
     justify-content: center;
@@ -99,6 +101,10 @@ main.headered.footered {
     padding-bottom:2rem;
 }
 
+.page .main-image {
+	margin-bottom:6rem;
+}
+
 .page .main-image img {
     border-radius: 10px;
 }
@@ -114,7 +120,7 @@ footer.ovo {
 }
 
 footer .ovo-social {
-    justify-content: flex-start;
+    justify-content: center;
     display:flex;
     gap:1rem;
     flex-wrap:wrap;
@@ -207,27 +213,17 @@ header.front nav .mobile-menu  ul .close-button:hover {
     background-color: #f3f3f3;
 }
 
-@media screen and (max-width: 1440px)  {
-    footer .ovo-social {
-        justify-content: start;
-        align-items: start;
-    }
+.ovo-embed-gallery-item-inner {
+    background-color:white;
+}
 
+@media screen and (max-width: 1440px)  {
     header.front {
         padding:0 2rem;
     }
 }
 
 @media screen and (max-width: 960px) {
-    footer.ovo {
-        justify-content: start;
-        flex-direction: column;
-    }
-
-    footer .footer-column {
-        flex-direction: column;
-    }
-
     #page-content {
         margin-top: 2rem;
     }

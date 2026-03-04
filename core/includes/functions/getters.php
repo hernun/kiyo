@@ -122,8 +122,14 @@ function getAsset(string $path): string {
     $userPath = USER_PATH . 'assets/' . ltrim($path, '/');
     $corePath = CORE_PATH . 'assets/' . ltrim($path, '/');
     $path = is_file($userPath) ? $userPath:$corePath;
+    _log($path);
     if(!is_file($path)) return '';
     return str_replace(ROOT_PATH, '/', $path) . '?v=' . ASSETVERSION;
+}
+
+function getStylesheetLinkTag(string $assetPath) {
+    $path = getAsset($assetPath);
+    return !empty($path) ? '<link href="' . $path . '" rel="stylesheet" />':null;
 }
 
 

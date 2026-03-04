@@ -104,7 +104,7 @@
 
                     if (!type || !id) return '';
 
-                    const height = (type === 'track' || type === 'episode') ? 152 : 380;
+                    const height = (type === 'track' || type === 'episode') ? 200 : 380;
 
                     return `
                         <div class="ovo-spotify-embed">
@@ -141,7 +141,7 @@
 
                 if (e.service === 'youtube') {
                     const videoId = new URL(e.url).searchParams.get('v') || e.url.split('/').pop();
-                    iframeHtml = `<iframe src="https://www.youtube.com/embed/${videoId}" frameborder="0" allowfullscreen loading="lazy"></iframe>`;
+                    iframeHtml = `<div class="video-embed"><iframe src="https://www.youtube.com/embed/${videoId}" frameborder="0" allowfullscreen loading="lazy"></iframe></div>`;
                 } else if (e.service === 'vimeo') {
                     const id = new URL(e.url).pathname.split('/').filter(Boolean).pop();
                     iframeHtml = `<iframe src="https://player.vimeo.com/video/${id}" frameborder="0" allowfullscreen loading="lazy"></iframe>`;
@@ -149,7 +149,7 @@
                     const parts = new URL(e.url).pathname.split('/').filter(Boolean);
                     const type = parts[0].startsWith('intl-') ? parts[1] : parts[0];
                     const id = parts[0].startsWith('intl-') ? parts[2] : parts[1];
-                    const height = (type === 'track' || type === 'episode') ? 152 : 380;
+                    const height = (type === 'track' || type === 'episode') ? 200 : 380;
                     iframeHtml = `<iframe src="https://open.spotify.com/embed/${type}/${id}" width="100%" height="${height}" frameborder="0" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>`;
                 }
 
