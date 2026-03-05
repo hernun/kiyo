@@ -9,6 +9,11 @@
         <?php include_template('favicon')?>
         <meta name="theme-color" content="#222">
 
+        <!-- JS -->
+        <script src="<?= getAsset('js/jquery-3.7.1.min.js') ?>" ></script>
+        <script src="<?= getAsset('jquery-ui-1.13.3/jquery-ui.min.js') ?>" ></script>
+        <script src="<?= getAsset('bootstrap-5.3.3-dist/js/bootstrap.bundle.min.js') ?>" ></script>
+
         <?php if(isFront()):?>
             <link rel="canonical" href="<?= $this->getUrl() ?>" />
             <link rel="alternate" hreflang="<?= strtolower($_SESSION['CURRENT_LANGUAGE']) ?>" href="<?= $this->getUrl() ?>" />
@@ -63,14 +68,10 @@
         <!-- CSS -->
         <?php
             echo getStylesheetLinkTag('css/globals.css');
+            echo getStylesheetLinkTag('css/main.css');
             echo getStylesheetLinkTag('css/' . nqv::getSection() . '.css');
             echo getStylesheetLinkTag('css/user.css');
         ?>
-
-        <!-- JS -->
-        <script src="<?= getAsset('js/jquery-3.7.1.min.js') ?>" defer></script>
-        <script src="<?= getAsset('jquery-ui-1.13.3/jquery-ui.min.js') ?>" defer></script>
-        <script src="<?= getAsset('bootstrap-5.3.3-dist/js/bootstrap.bundle.min.js') ?>" defer></script>
 
         <script src="<?= getAsset('js/nqv-swap.js') ?>"></script>
         <script src="<?= getAsset('js/nqv.js') ?>"></script>
