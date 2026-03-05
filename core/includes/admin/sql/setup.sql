@@ -66,6 +66,9 @@ INSERT INTO `config` SET `name` = 'Página de inicio', `slug` = 'homepage',`valu
 INSERT INTO `config` SET `name` = 'Propiedades por defecto en Páginas', `slug` = 'pagesdefaultproperties',`value` = '{"showtitle":"on","mainimageformat":"banner"}',`created_at` = NOW(), `created_by` = 0;
 INSERT INTO `config` SET `name` = 'Activar publicidades', `slug` = 'adds-enabled',`value` = 0,`created_at` = NOW(), `created_by` = 0;
 INSERT INTO `config` SET `name` = 'Menú del encabezado (front)', `slug` = 'header-menu',`value` = '{"ES":["contacto"],"EN":["contacto"]}',`created_at` = NOW(), `created_by` = 0;
+INSERT INTO `config` SET `name` = 'JSON-LD para SEO', `slug` = 'json-seo', `value` = '', `created_at` = NOW(), `created_by` = 0;
+INSERT INTO `config` SET `name` = 'Redes Sociales', `slug` = 'socials',`value` = '{}',`created_at` = NOW(), `created_by` = 0;
+INSERT INTO `config` SET `name` = 'Footer', `slug` = 'footer-content',`value` = '{}',`created_at` = NOW(), `created_by` = 0;
 
 CREATE TABLE `mainimages` (
  `id` bigint unsigned NOT NULL AUTO_INCREMENT,

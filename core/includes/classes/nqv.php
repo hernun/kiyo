@@ -426,7 +426,7 @@ class nqv {
         return empty($_SESSION['referers']) ? '':array_pop($_SESSION['referers']);
     }
 
-    public static function getConfig($slug) {
+    public static function getConfig($slug,?bool $raw = false) {
         if(empty(self::$config)) {
             $config = self::get('config');
             foreach($config as $conf) {
@@ -436,7 +436,7 @@ class nqv {
         }
         if(!isset(self::$config[$slug])) return null;
         else {
-            if(isValidJson(self::$config[$slug]['value'])) return json_decode(self::$config[$slug]['value'],true);
+            if(isValidJson(self::$config[$slug]['value']) && !$raw) return json_decode(self::$config[$slug]['value'],true);
             else return (string) self::$config[$slug]['value'];
         }
     }

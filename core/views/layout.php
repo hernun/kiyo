@@ -76,17 +76,18 @@
         <script src="<?= getAsset('js/nqv-swap.js') ?>"></script>
         <script src="<?= getAsset('js/nqv.js') ?>"></script>
         <script src="<?= getAsset('js/nqv-image-preview.js') ?>"></script>
-        <script type="application/ld+json">
-            {
-            "@context": "https://schema.org",
-            "@type": "Organization",
-            "name": "<?= APP_TITLE ?>",
-            "url": "<?= URL ?>",
-            "logo": "<?= URL . getAsset('images/logo.png') ?>",
-            "description": "<?= $this->getDescription() ?>",
-            "sameAs": []
-            }
-        </script>
+
+        <?php $jsonld = nqv::getConfig('json-seo');?>
+        <?php if(!empty($jsonld)):?>
+            <?php 
+                $redes = nqv::getConfig('socials');
+                $jsonld['sameAs'] = [];
+                foreach($redes as $red) $jsonld['sameAs'][] = $red['url'];
+            ?>
+            <script type="application/ld+json">
+                <?php echo json_encode($jsonld, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT)?>
+            </script>
+        <?php endif?>
 
         <style><?php foreach(getEnabledLangs() as $lang){
             if ($lang === $_SESSION['CURRENT_LANGUAGE']) continue;
