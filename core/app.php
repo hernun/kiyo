@@ -177,7 +177,9 @@ define('BKP_PATH',dirname(ROOT_PATH) . DIRECTORY_SEPARATOR . APP_NAME . '-bkp' .
 try {
     if(!nqvDB::isTable('users')) {
         try {
-            setupSql();
+            nqvDB::importDatabase(SQL_PATH . 'setup.sql');
+            header('location:/admin');
+            exit;
         } catch(Exception $e) {
             echo $e->getMessage();
         }

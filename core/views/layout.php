@@ -58,6 +58,13 @@
             <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
         <?php endif?>
 
+        <?php $font = getMainFont();?>
+        <?php if($font && $font['family'] != 'gotham'):?>
+            <link href="<?= $font['url'] ?>" rel="stylesheet">
+        <?php else:?>
+            <?php include(CORE_PATH . '/assets/css/gotham.php');?>
+        <?php endif?>
+
         <link
             rel="stylesheet"
             href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"
@@ -92,6 +99,10 @@
         <style><?php foreach(getEnabledLangs() as $lang){
             if ($lang === $_SESSION['CURRENT_LANGUAGE']) continue;
                 echo '.lang' . $lang . ' {display:none;}';
+            }
+
+            if($font && $font['family'] != 'gotham') {
+                echo 'body {font-family: ' . $font['family'] . ', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif}';
             }
         ?></style>
     </head>

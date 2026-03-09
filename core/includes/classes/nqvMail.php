@@ -27,17 +27,9 @@ class nqvMail {
 
     protected function createMailer(): PHPMailer {
         $mailer = new PHPMailer(true);
-        $mailer->isSMTP();
         $mailer->CharSet  = 'UTF-8';
         $mailer->Encoding = 'base64';
         return $mailer;
-    }
-
-    private function initMailer(): void {
-        $this->manager = new PHPMailer(true);
-        $this->manager->isSMTP();
-        $this->manager->CharSet  = 'UTF-8';
-        $this->manager->Encoding = 'base64';
     }
 
     protected function setConfig() {
@@ -50,11 +42,26 @@ class nqvMail {
     }
 
     protected function getDriver() {
+        $driver = [];
         if(empty($this->config['active'])) throw new Exception('Error de configuración en Mail Settings: falta driver activo');
         if(empty($this->config['drivers'])) throw new Exception('Error de configuración en Mail Settings: faltan los drivers');
         $active = $this->config['active'];
         if(empty($this->config['drivers'][$active])) throw new Exception("El driver activo '{$active}' no existe en Mail Settings");
-        return $this->config['drivers'][$active];
+
+        $driver = $this->config['drivers'][$active];
+
+        if(!empty($_ENV['SMTP_HOST'])) {
+            if(!empty($_ENV['SMTP_DRIVER_TYPE'])) $driver['type'] = $_ENV['SMTP_DRIVER_TYPE'];
+            if(!empty($_ENV['SMTP_HOST'])) $driver['host'] = $_ENV['SMTP_HOST'];
+            if(!empty($_ENV['SMTP_PORT'])) $driver['port'] = $_ENV['SMTP_PORT'];
+            if(!empty($_ENV['SMTP_AUTH'])) $driver['smtp_auth'] = $_ENV['SMTP_AUTH'];
+            if(!empty($_ENV['SMTP_SECURE'])) $driver['smtp_secure'] = $_ENV['SMTP_SECURE'];
+            if(!empty($_ENV['SMTP_AUTO_TLS'])) $driver['smtp_auto_tls'] = $_ENV['SMTP_AUTO_TLS'];
+            if(!empty($_ENV['SMTP_FROM_ADDRESS'])) $driver['from']['address'] = $_ENV['SMTP_FROM_ADDRESS'];
+            if(!empty($_ENV['SMTP_FROM_NAME'])) $driver['from']['name'] = $_ENV['SMTP_FROM_NAME'];
+        }
+
+        return $driver;
     }
 
     private function option(string $key, mixed $default = null): mixed {
@@ -97,10 +104,14 @@ class nqvMail {
 
 	    $driver = $this->getDriver();
 
-	    $this->manager->isSMTP(); // importante
-	    #$this->manager->SMTPDebug  = 2;
-	    $this->manager->Debugoutput = 'error_log';
-	    $this->manager->Timeout = 10;
+	    $this->manager->isSMTP();
+        if(!empty($_ENV['SMTP_DEBUG'])) $this->manager->SMTPDebug  = 4;
+        $this->manager->Debugoutput = function($str, $level) {
+            _log(LOGS_PATH . 'phpmailer_smtp.log', date('Y-m-d H:i:s').' ['.$level.'] '.$str.PHP_EOL, FILE_APPEND);
+        };
+        $this->manager->Timeout = 10;
+        $this->manager->getSMTPInstance()->Timelimit = 5;
+        $this->manager->SMTPKeepAlive = false;
 
 	    if (in_array($driver['type'], ['smtp','gmail'])) {
 

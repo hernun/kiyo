@@ -678,7 +678,7 @@ class nqv {
         $result = nqvDB::parseSelect($stmt);
         $element = $result[0] ?? null;
         if(!$element) throw new Exception('No existe un elemento con id ' . $element_id . ' en ' . $$tablename);
-        $mainImageName = $element['slug'];
+        $mainImageName = $element['slug'] ?? implode('-',['image',$tablename,$element_id]);
 
         if(!filesIsEmpty()) {
 

@@ -6,6 +6,8 @@ use OVO\Http\Response;
 
 class App {
     public static function handle(Request $request): Response {
+        self::cors();
+
         // --- Legacy routing ---
         [$mm, $template] = array_values(self::parseMainHttoQuery());
         $mainClass = ['ovo'];
@@ -40,6 +42,34 @@ class App {
         ];
 
         return new Response($data);
+    }
+
+    protected static function cors() {
+        $allowedOrigins = [
+            'https://kiyo.ar',
+            'https://ovo.nqv'
+        ];
+
+        $origin = $_SERVER['HTTP_ORIGIN'] ?? null;
+
+        if ($origin) {
+            header('Vary: Origin');
+            if (!in_array($origin, $allowedOrigins, true)) {
+                http_response_code(403);
+                exit('Origin not allowed');
+            }
+
+            header("Access-Control-Allow-Origin: $origin");
+        }
+
+        header('Access-Control-Allow-Methods: GET, POST, PUT, PATCH, DELETE, OPTIONS');
+        header('Access-Control-Allow-Headers: Content-Type, Authorization, X-Requested-With, Accept, Origin');
+        header('Access-Control-Max-Age: 86400');
+
+        if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+            http_response_code(204);
+            exit;
+        }
     }
 
     public static function parseMainHttoQuery() {

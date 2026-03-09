@@ -1,3 +1,23 @@
+CREATE TABLE `session_types` (
+ `id` bigint unsigned NOT NULL AUTO_INCREMENT,
+ `name` varchar(125) NOT NULL,
+ `slug` varchar(255) DEFAULT NULL,
+ `created_at` DATETIME DEFAULT CURRENT_TIMESTAMP,
+ `modified_at` DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+ PRIMARY KEY (`id`),
+ UNIQUE KEY `UQI` (`name`),
+ UNIQUE KEY `slug_unique` (`slug`(191))
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+INSERT INTO `session_types` SET `name` = 'root', `slug` = 'root';
+INSERT INTO `session_types` SET `name` = 'admin', `slug` = 'admin';
+INSERT INTO `session_types` SET `name` = 'editor', `slug` = 'editor';
+INSERT INTO `session_types` SET `name` = 'moderator', `slug` = 'moderator';
+INSERT INTO `session_types` SET `name` = 'contributor', `slug` = 'contributor';
+INSERT INTO `session_types` SET `name` = 'member', `slug` = 'member';
+INSERT INTO `session_types` SET `name` = 'subscriber', `slug` = 'subscriber';
+INSERT INTO `session_types` SET `name` = 'guest', `slug` = 'guest';
+
 CREATE TABLE `users` (
  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
  `name` varchar(125) NOT NULL,
@@ -18,25 +38,6 @@ CREATE TABLE `users` (
 
 INSERT INTO `users` SET `name`='Hernán',`lastname`='Mancuso',`email`='hernun@navequeva.com.ar',`password`='fake',`session_types_id`=1,`status`='active',`created_by`=0;
 
-CREATE TABLE `session_types` (
- `id` bigint unsigned NOT NULL AUTO_INCREMENT,
- `name` varchar(125) NOT NULL,
- `slug` varchar(255) DEFAULT NULL,
- `created_at` DATETIME DEFAULT CURRENT_TIMESTAMP,
- `modified_at` DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
- PRIMARY KEY (`id`),
- UNIQUE KEY `UQI` (`name`)
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
-INSERT INTO `session_types` SET `name` = 'root', `slug` = 'root';
-INSERT INTO `session_types` SET `name` = 'admin', `slug` = 'admin';
-INSERT INTO `session_types` SET `name` = 'editor', `slug` = 'editor';
-INSERT INTO `session_types` SET `name` = 'moderator', `slug` = 'moderator';
-INSERT INTO `session_types` SET `name` = 'contributor', `slug` = 'contributor';
-INSERT INTO `session_types` SET `name` = 'member', `slug` = 'member';
-INSERT INTO `session_types` SET `name` = 'subscriber', `slug` = 'subscriber';
-INSERT INTO `session_types` SET `name` = 'guest', `slug` = 'guest';
-
 CREATE TABLE `config` (
  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
  `name` varchar(255) DEFAULT NULL,
@@ -46,12 +47,12 @@ CREATE TABLE `config` (
  `modified_at` DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
  `created_by` bigint unsigned NOT NULL,
  PRIMARY KEY (`id`),
- UNIQUE KEY `name` (`name`)
+ UNIQUE KEY `name` (`name`(191))
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 INSERT INTO `config` SET `name` = 'version', `slug` = 'version',`value` = '2.0.0',`created_at` = NOW(), `created_by` = 0;
 INSERT INTO `config` SET `name` = 'Modo Mantenimiento', `slug` = 'maintenance-mode',`value` = '1',`created_at` = NOW(), `created_by` = 0;
-INSERT INTO `config` SET `name` = 'Vistas accesibles en modo mantenimiento', `slug` = 'maintenance-enabled-templates',`value` = 'login,password-reset',`created_at` = NOW(), `created_by` = 0;
+INSERT INTO `config` SET `name` = 'Vistas accesibles en modo mantenimiento', `slug` = 'maintenance-enabled-templates',`value` = 'login,password-reset,api',`created_at` = NOW(), `created_by` = 0;
 INSERT INTO `config` SET `name` = 'Plantilla del Modo Mantenimiento', `slug` = 'maintenance-template',`value` = 'maintenance',`created_at` = NOW(), `created_by` = 0;
 INSERT INTO `config` SET `name` = 'Permisos', `slug` = 'permissions',`value` = '{"admin":{"crud":["adds","advertisers","header-menu","images","mainimages","pages","tags","users"]}}',`created_at` = NOW(), `created_by` = 0;
 INSERT INTO `config` SET `name` = 'Permisos adicionales', `slug` = 'additional-permissions',`value` = 'tables,permissions,header-menu',`created_at` = NOW(), `created_by` = 0;
@@ -61,14 +62,16 @@ INSERT INTO `config` SET `name` = 'Mostrar pie de página en Admin', `slug` = 'a
 INSERT INTO `config` SET `name` = 'Mostrar pie de página en Front', `slug` = 'front_footer',`value` = 1,`created_at` = NOW(), `created_by` = 0;
 INSERT INTO `config` SET `name` = 'Mostrar encabezado de página en Admin', `slug` = 'admin_header',`value` = 1,`created_at` = NOW(), `created_by` = 0;
 INSERT INTO `config` SET `name` = 'Mostrar encabezado de página en Front', `slug` = 'front_header',`value` = 1,`created_at` = NOW(), `created_by` = 0;
-INSERT INTO `config` SET `name` = 'Configuración de correo', `slug` = 'mail-settings', `value` = '{"active":"mailhog","drivers":{"mailhog":{"type":"smtp","host":"127.0.0.1","port":1025,"smtp_auth":false,"smtp_secure":false,"smtp_auto_tls":false,"from":{"address":"no-reply@nqv.ar.test","name":"OVO"}},"smtp":{"type":"smtp","host":"","port":587,"smtp_auth":true,"smtp_secure":"tls","smtp_auto_tls":true,"from":{"address":"","name":""}},"gmail":{"type":"gmail","host":"smtp.gmail.com","port":587,"smtp_auth":true,"smtp_secure":"tls","smtp_auto_tls":true,"from":{"address":"","name":""}},"ses":{"type":"ses","region":"","endpoint":"","from":{"address":"","name":""}}}}', `created_at` = NOW(), `created_by` = 0;
+INSERT INTO `config` SET `name` = 'Configuración de correo', `slug` = 'mail-settings', `value` = '{"active":"mailhog","drivers":{"mailhog":{"type":"smtp","host":"127.0.0.1","port":1025,"smtp_auth":false,"smtp_secure":false,"smtp_auto_tls":false,"from":{"address":"no-reply@nqv.ar","name":"OVO"}},"smtp":{"type":"smtp","host":"","port":587,"smtp_auth":true,"smtp_secure":"tls","smtp_auto_tls":true,"from":{"address":"","name":""}},"gmail":{"type":"gmail","host":"smtp.gmail.com","port":587,"smtp_auth":true,"smtp_secure":"tls","smtp_auto_tls":true,"from":{"address":"","name":""}},"ses":{"type":"ses","region":"","endpoint":"","from":{"address":"","name":""}}}}', `created_at` = NOW(), `created_by` = 0;
 INSERT INTO `config` SET `name` = 'Página de inicio', `slug` = 'homepage',`value` = '{"ES":{"page_id":0}}',`created_at` = NOW(), `created_by` = 0;
 INSERT INTO `config` SET `name` = 'Propiedades por defecto en Páginas', `slug` = 'pagesdefaultproperties',`value` = '{"showtitle":"on","mainimageformat":"banner"}',`created_at` = NOW(), `created_by` = 0;
 INSERT INTO `config` SET `name` = 'Activar publicidades', `slug` = 'adds-enabled',`value` = 0,`created_at` = NOW(), `created_by` = 0;
 INSERT INTO `config` SET `name` = 'Menú del encabezado (front)', `slug` = 'header-menu',`value` = '{"ES":["contacto"],"EN":["contacto"]}',`created_at` = NOW(), `created_by` = 0;
-INSERT INTO `config` SET `name` = 'JSON-LD para SEO', `slug` = 'json-seo', `value` = '', `created_at` = NOW(), `created_by` = 0;
+INSERT INTO `config` SET `name` = 'JSON-LD para SEO', `slug` = 'json-seo', `value` = '{}', `created_at` = NOW(), `created_by` = 0;
 INSERT INTO `config` SET `name` = 'Redes Sociales', `slug` = 'socials',`value` = '{}',`created_at` = NOW(), `created_by` = 0;
 INSERT INTO `config` SET `name` = 'Footer', `slug` = 'footer-content',`value` = '{}',`created_at` = NOW(), `created_by` = 0;
+INSERT INTO `config` SET `name` = 'Fuente predeterminada', `slug` = 'fonts',`value` = '{}',`created_at` = NOW(), `created_by` = 0;
+INSERT INTO `config` SET `name` = 'Fuentes disponibles', `slug` = 'fonts-list',`value` = '{}',`created_at` = NOW(), `created_by` = 0;
 
 CREATE TABLE `mainimages` (
  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
@@ -132,18 +135,18 @@ CREATE TABLE `advertisers` (
 
 CREATE TABLE IF NOT EXISTS `pages` (
     `id` bigint unsigned NOT NULL AUTO_INCREMENT,
-    `title` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
-    `content` text CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci,
-    `description` text CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci,
-    `slug` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
-    `properties` text CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci,
-    `lang` varchar(2) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci,
+    `title` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+    `content` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
+    `description` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
+    `slug` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+    `properties` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
+    `lang` varchar(2) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
     `created_at` DATETIME DEFAULT CURRENT_TIMESTAMP,
     `modified_at` DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     `created_by` bigint unsigned NOT NULL,
     PRIMARY KEY (`id`),
-    UNIQUE INDEX `unique_slug_lang` (`slug`,`lang`);
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
+    UNIQUE KEY `unique_slug_lang` (`slug`(191), `lang`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE `tags` (
  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
@@ -152,7 +155,7 @@ CREATE TABLE `tags` (
  `modified_at` DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
  `created_by` bigint unsigned NOT NULL,
  PRIMARY KEY (`id`),
- UNIQUE KEY `value` (`value`)
+ UNIQUE KEY `value` (`value`(191))
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE `categories` (
@@ -167,8 +170,8 @@ CREATE TABLE `categories` (
  `modified_at` DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
  `created_by` bigint unsigned NOT NULL DEFAULT '0',
  PRIMARY KEY (`id`),
- UNIQUE KEY `Name` (`name`),
- UNIQUE KEY `AltName` (`name`)
+ UNIQUE KEY `Name` (`name`(191)),
+ UNIQUE KEY `AltName` (`altname`(191))
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE `widgets` (
@@ -182,7 +185,7 @@ CREATE TABLE `widgets` (
  `modified_at` DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
  `created_by` bigint unsigned NOT NULL DEFAULT '0',
  PRIMARY KEY (`id`),
- UNIQUE KEY `Name` (`name`)
+ UNIQUE KEY `Name` (`name`(191))
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 INSERT INTO `widgets` SET `name` = 'Página de inicio',`description` = 'Establecer una página como landing page del sitio para cada idioma habilitado',`slug` = 'homepage',`public` = 1, `order` = 0,`created_at` = NOW(),`created_by` = 0,`modified_at` = NOW();
@@ -195,3 +198,7 @@ INSERT INTO `widgets` SET `name` = 'Test Mail & Password Reset', `description` =
 INSERT INTO `widgets` SET `name` = 'Exportar Full Backup', `description` = 'Crea un fichero de exportación completo, que incluye la base de datos y el directorio de uploads. No exporta código, sólo exporta el alma de tu proyecto.', `slug` = 'full-backup-export', `public` = 1, `order` = 6, `created_at` = NOW(), `created_by` = 0, `modified_at` = NOW();
 INSERT INTO `widgets` SET `name` = 'Importar Full Backup', `description` = 'Importa un fichero de exportación completo, creado por la utilidad de exportación full backup. No importa código.', `slug` = 'full-backup-import', `public` = 1, `order` = 6, `created_at` = NOW(), `created_by` = 0, `modified_at` = NOW();
 INSERT INTO `widgets` SET `name` = 'Elementos del menú principal del front', `description` = 'Permite seleccionar y ordenar las páginas que se muestran en el menú del encabezado del Front, según el idioma seleccionado.', `slug` = 'header-menu', `public` = 1, `order` = 6, `created_at` = NOW(), `created_by` = 0, `modified_at` = NOW();
+INSERT INTO `widgets` SET `name` = 'Redes sociales', `description` = 'Agregar o eliminar enlaces a redes sociales.', `slug` = 'socials', `public` = 1, `order` = 6, `created_at` = NOW(), `created_by` = 0, `modified_at` = NOW();
+INSERT INTO `widgets` SET `name` = 'Contenido del footer del front', `description` = 'Permite agregar o eliminar enlaces en el footer.', `slug` = 'footer-content', `public` = 1, `order` = 6, `created_at` = NOW(), `created_by` = 0, `modified_at` = NOW();
+INSERT INTO `widgets` SET `name` = 'Selector de fuentes', `description` = 'Permite incorporar fuentes de Google Fonts y establecer la fuente predeterminada.', `slug` = 'fonts', `public` = 1, `order` = 6, `created_at` = NOW(), `created_by` = 0, `modified_at` = NOW();
+INSERT INTO `widgets` SET `name` = 'Selector de Google Fonts', `description` = 'Permite incorporar fuentes de Google Fonts y establecer la fuente predeterminada.', `slug` = 'fonts-list', `public` = 1, `order` = 6, `created_at` = NOW(), `created_by` = 0, `modified_at` = NOW();

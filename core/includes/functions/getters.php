@@ -122,7 +122,6 @@ function getAsset(string $path): string {
     $userPath = USER_PATH . 'assets/' . ltrim($path, '/');
     $corePath = CORE_PATH . 'assets/' . ltrim($path, '/');
     $path = is_file($userPath) ? $userPath:$corePath;
-    _log($path);
     if(!is_file($path)) return '';
     return str_replace(ROOT_PATH, '/', $path) . '?v=' . ASSETVERSION;
 }
@@ -167,20 +166,6 @@ function getFrontForm(string $filename, array $args = [], $print = true) {
 function isDashboard() {
     $dashboardTemplates = ['login','dashboard'];
     return in_array(nqv::getVars(0),$dashboardTemplates);
-}
-
-function setupSql() {
-    $sql = file_get_contents(SQL_PATH . 'setup.sql');
-    try {
-        nqvDB::beginTransaction();
-        foreach(array_filter(explode(';',$sql)) as $query) nqvDB::query($query);
-        nqvDB::commit();
-    } catch (\Throwable $e) {
-        nqvDB::rollback();
-        throw $e;
-    }
-    header('location:/admin' . implode('/' , nqv::getVars()));
-    exit;
 }
 
 function user_is_logged() {
@@ -416,4 +401,10 @@ function getPageLink($slug): string {
 function getHeaderMenuItems($lang) {
     $menuItems = nqv::getConfig('header-menu');
     return !empty($menuItems[$lang]) ? $menuItems[$lang]:[];
+}
+
+function getMainFont() {
+    $font = nqv::getConfig('fonts');
+    if(!empty($font) && !empty($font['family'])) return $font;
+    else return ['family'=>'gotham','utl'=>''];
 }
