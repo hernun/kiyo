@@ -46,6 +46,7 @@ class App {
 
     protected static function cors() {
         $allowedOrigins = [
+            URL,
             'https://kiyo.ar',
             'https://ovo.nqv'
         ];
