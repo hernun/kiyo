@@ -405,6 +405,19 @@ function getHeaderMenuItems($lang) {
 
 function getMainFont() {
     $font = nqv::getConfig('fonts');
+
     if(!empty($font) && !empty($font['family'])) return $font;
-    else return ['family'=>'gotham','utl'=>''];
+
+    return [
+        'family' => 'Gotham',
+        'url' => '',
+        'heading' => [
+            'line-height' => 1.2,
+            'letter-spacing' => -0.01
+        ],
+        'body' => [
+            'line-height' => 1.6,
+            'letter-spacing' => 0
+        ]
+    ];
 }

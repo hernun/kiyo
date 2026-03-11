@@ -58,12 +58,13 @@
             <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
         <?php endif?>
 
-        <?php $font = getMainFont();?>
-        <?php if($font && $font['family'] != 'gotham'):?>
+        <?php $font = getMainFont(); ?>
+
+        <?php if(!empty($font['url'])): ?>
             <link href="<?= $font['url'] ?>" rel="stylesheet">
-        <?php else:?>
-            <?php include(CORE_PATH . '/assets/css/gotham.php');?>
-        <?php endif?>
+        <?php else: ?>
+            <?php include(CORE_PATH . '/assets/css/gotham.php'); ?>
+        <?php endif ?>
 
         <link
             rel="stylesheet"
@@ -96,15 +97,61 @@
             </script>
         <?php endif?>
 
-        <style><?php foreach(getEnabledLangs() as $lang){
-            if ($lang === $_SESSION['CURRENT_LANGUAGE']) continue;
-                echo '.lang' . $lang . ' {display:none;}';
+        <?php
+            $headingLH = $font['heading']['line-height'] ?? 1.2;
+            $headingLS = $font['heading']['letter-spacing'] ?? -0.01;
+
+            $bodyLH = $font['body']['line-height'] ?? 1.6;
+            $bodyLS = $font['body']['letter-spacing'] ?? 0;
+
+            $langCSS = '';
+            foreach(getEnabledLangs() as $lang) {
+                if ($lang === $_SESSION['CURRENT_LANGUAGE']) continue;
+                $langCSS .= ".lang$lang{display:none;}";
+            }
+        ?>
+
+        <style>
+
+            <?= $langCSS ?>
+
+            :root {
+
+                --font-family-main: <?= $font['family'] ?>;
+
+                --heading-line-height: <?= $headingLH ?>;
+                --heading-letter-spacing: <?= $headingLS ?>px;
+
+                --body-line-height: <?= $bodyLH ?>;
+                --body-letter-spacing: <?= $bodyLS ?>px;
+
             }
 
-            if($font && $font['family'] != 'gotham') {
-                echo 'body {font-family: ' . $font['family'] . ', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif}';
+            body {
+                font-family:
+                    var(--font-family-main),
+                    system-ui,
+                    -apple-system,
+                    BlinkMacSystemFont,
+                    "Segoe UI",
+                    Roboto,
+                    sans-serif;
+
+                line-height: var(--body-line-height);
+                letter-spacing: var(--body-letter-spacing);
             }
-        ?></style>
+
+            h1,
+            h2,
+            h3,
+            h4,
+            h5,
+            h6 {
+                line-height: var(--heading-line-height);
+                letter-spacing: var(--heading-letter-spacing);
+            }
+
+        </style>
     </head>
 
     <body class="<?= nqv::getSection() ?>">

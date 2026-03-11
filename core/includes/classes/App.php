@@ -46,16 +46,22 @@ class App {
 
     protected static function cors() {
         $allowedOrigins = [
-            URL,
-            'https://kiyo.ar',
-            'https://ovo.nqv'
+            'https://kiyo.ar'
         ];
 
         $origin = $_SERVER['HTTP_ORIGIN'] ?? null;
 
         if ($origin) {
             header('Vary: Origin');
-            if (!in_array($origin, $allowedOrigins, true)) {
+
+            $allowed = in_array($origin, $allowedOrigins, true);
+
+            // permitir *.nqv y *.nqv.ar
+            if (!$allowed && preg_match('#^https://[a-z0-9\-]+\.(nqv|nqv\.ar)$#i', $origin)) {
+                $allowed = true;
+            }
+
+            if (!$allowed) {
                 http_response_code(403);
                 exit('Origin not allowed');
             }

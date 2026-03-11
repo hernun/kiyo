@@ -192,10 +192,6 @@ main.headered.footered {
 	color:black;
 }
 
-#googlefont-preview {
-    font-size:2rem;
-}
-
 #googlefont-preview.unknown {
     color:red;
 }
