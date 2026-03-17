@@ -201,6 +201,7 @@ function userIsActive(): bool {
 
 function currentSessionTypeIs(string $type) {
     $typeId = nqv::getCurrentSessionTypeNameId();
+    if(empty($typeId)) return false;
     $typeName = new nqvSession_types(['id' => $typeId]);
     if(empty($typeName) || !$typeName->exists()) return false;
     return $type === $typeName->get('slug') || $typeName->get('slug') === 'root';
@@ -332,7 +333,8 @@ function isBackendUser($role) {
 }
 
 function hasHeader() {
-    if(!user_is_logged()) return false;
+    if(nqv::getConfig('maintenance-mode') && !user_is_logged()) return false;
+    elseif(isAdmin() && !user_is_logged()) return false;
     elseif(isAdmin() && nqv::getConfig('admin_header')) return true;
     elseif(isFront() && nqv::getConfig('front_header')) return true;
     return false;
