@@ -8,7 +8,7 @@ else $img = is_file($filepath) ? 'data:image/png;base64,' . base64_encode(file_g
 <?php if($img):?>
     <img src="<?php echo $img?>" alt="logo" />
 <?php endif?>
-<h2><?php echo $_POST['name']?> escribió:</h2>
+<h2><?php echo $_POST['name']?> (<?php echo $_POST['email']?> ) escribió:</h2>
 <p><?= $_POST['message'] ?>
 <br/>
 <p>---</p>
